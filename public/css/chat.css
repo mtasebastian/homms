@@ -1,0 +1,192 @@
+.chat{
+    background: transparent;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 360px;
+    max-width: 100%;
+}
+
+.chat .chatcont{
+    padding: 0px;
+    width: 360px;
+    max-width: 100%;
+    margin-bottom: -2px !important;
+    border-bottom: none;
+    border-right: none;
+}
+
+.chat #chatbtn{
+    width: 100%;
+    background: transparent;
+    position: relative;
+}
+
+.chat #chatbtn .btnchat{
+    display: block;
+    background: #ffffff;
+    width: 76px;
+    height: 76px;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    border-radius: 50%;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+.chat #chatbtn i{
+    font-size: 3rem;
+    margin: 22px auto;
+}
+
+.chat .users{
+    padding-top: 1rem;
+    position: relative;
+}
+
+.chat .users .closemchat{
+    position: absolute;
+    top: 1.6rem;
+    right: 1.6rem;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+.chat .users .list{
+    height: 360px;
+}
+
+.chat .messages{
+    height: 400px;
+}
+
+.chat .users .list li{
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: 600;
+    position: relative;
+}
+
+.chat .users .list li:hover{
+    background: #fafafa;
+    border-radius: 10px;
+}
+
+.chat .users .list li span{
+    display: inline-block;
+    width: 2.3rem;
+    height: 2.3rem;
+    position: relative;
+    margin-right: 1rem;
+    margin-top: 4px;
+}
+
+.chat .users .list li .name{
+    display: inline-block;
+    height: 2.5rem;
+    vertical-align: top;
+}
+
+.chat .users .list li .name small{
+    display: block;
+    font-weight: 400;
+    color: #666;
+}
+
+.chat .users .list li .icon{
+    font-size: 1.2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.chat .users .list li .fa-circle{
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1rem;
+    position: absolute;
+    font-size: 0.8rem;
+}
+
+.chat .chathead{
+    border-bottom: solid 1px #dddddd;
+    position: relative;
+    margin-bottom: 0px;
+}
+
+.chat .chathead label{
+    font-size: 1.3rem;
+    display: inline-block;
+    vertical-align: bottom;
+    margin-bottom: 3px;
+    font-weight: 600;
+}
+
+.chat .chathead i{
+    display: inline-block;
+    font-size: 1.8rem;
+    margin-right: 0.5rem;
+    margin-left: 0.4rem;
+}
+
+.chat .chathead .closechat{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1.3rem;
+    font-size: 1.5rem;
+    color: #666;
+    cursor: pointer;
+}
+
+.chat .messages{
+    overflow: auto;
+}
+
+.chat .messages .message i{
+    font-size: 1.8rem;
+    vertical-align: top;
+    margin-right: 0.3rem;
+    color: #999999;
+    margin-top: 2px;
+}
+
+.chat .messages .message.right i{
+    margin-left: 0.3rem;
+    color: #241571 !important;
+}
+
+.chat .messages .message p{
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: #ffffff;
+    display: inline-block;
+    max-width: 60%;
+    background: #241571;
+    border-radius: 0.5rem;
+}
+
+.chat .messages .message.left p{
+    border-top-left-radius: 0px;
+}
+
+.chat .messages .message.right p{
+    text-align: left;
+    border-top-right-radius: 0px;
+    background: #ffffff;
+    color: #333333;
+}
+
+.chat .messages .message.right{
+    text-align: right;
+}
+
+.chat #frmchat{
+    margin: 1rem;
+}
+
+.chat .chatmsg{
+    outline: none !important;
+    height: 40px;
+}

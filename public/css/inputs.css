@@ -1,0 +1,262 @@
+
+.input-group-text{
+    padding: 0.8rem;
+}
+
+.inputg input[type="text"]{
+    border-right: none;
+}
+
+.inputl input[type="email"], .inputl input[type="password"]{
+    border-left: none;
+}
+
+.inputg .input-group-text{
+    position: relative;
+    border-left: none;
+}
+
+.inputl .input-group-text{
+    position: relative;
+    border-right: none;
+}
+
+.inputg .input-group-text::before{
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60%;
+    border-left: solid 1px #ced4da;
+}
+
+.bg-add{
+    background: #241571;
+}
+
+.text-add{
+    color: #241571;
+}
+
+.btn{
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.btn-add, .btn-add:hover{
+    background: #241571;
+    color: #FFF;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.btn-add:hover{
+    font-weight: 800;
+}
+
+.btn-add:active{
+    background: #241571 !important;
+    color: #FFF !important;
+    font-weight: 600;
+}
+
+.actions .fa-solid{
+    font-size: 1.2rem;
+}
+
+.tmain{
+    width: 280px;
+}
+
+.tclose{
+    color: #FFF !important;
+}
+
+.tcont{
+    position: relative;
+}
+
+.tcont .fa-xmark{
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 1.4rem;
+    color: #FFF;
+}
+
+.tcont .tcheck{
+    font-size: 2rem;
+    vertical-align: middle;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.tcont .ttitle{
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0px;
+    margin-top: 1rem;
+}
+
+.tcont .tmessage{
+    font-size: 0.9rem;
+    font-weight: 300;
+    margin: 0px;
+    margin-bottom: 1rem;
+}
+
+.badge{
+    border-radius: 2vw !important;
+    letter-spacing: 2px;
+}
+
+.modal-dialog .modal-title{
+    color: #241571;
+    font-size: 1.6rem;
+}
+
+.modal-dialog .form-data label{
+    font-weight: 600;
+}
+
+button:disabled{
+    cursor: not-allowed;
+    opacity: 0.25 !important;
+}
+
+.rjusty{
+    text-align: right;
+    display: block;
+}
+
+.totaltxt{
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.totalamt{
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.citems{
+    background: #241571;
+    font-size: 0.7vw;
+    text-align: center;
+    color: #ffffff;
+    padding: 0.8rem 1rem;
+    font-weight: 800;
+    border: solid 1px #dddddd;
+}
+
+.citems:hover{
+    background: #fafafa;
+    color: #333333;
+    cursor: pointer;
+}
+
+.selected_items{
+    max-height: 300px;
+    overflow: auto;
+}
+
+.selected_items .item .itemname{
+    font-size: 1rem;
+    color: #241571;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.selected_items .item .total{
+    font-size: 0.9rem;
+    color: #000000;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.selected_items .item .nav{
+    border: solid 1px #dddddd;
+    border-radius: 1.2vw;
+}
+
+.selected_items .item .nav .btns{
+    position: relative;
+}
+
+.selected_items .item .nav .btns .fa-solid{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.selected_items .item .nav .qty{
+    padding: 0.5rem 1rem;
+    font-weight: 800;
+}
+
+.charges .item .chname{
+    text-align: center;
+    display: block;
+    padding: 0 1rem 0.5rem;
+}
+
+.charges .item .chval{
+    font-size: 0.8rem;
+    text-align: center;
+    display: block;
+    padding: 0 0.5rem 1.2rem;
+    letter-spacing: 1px;
+}
+
+.charges .item.active{
+    background: #241571;
+    color: #ffffff;
+    border: none !important;
+}
+
+.totals .subtot{
+    border-bottom: dashed 1px #dddddd;
+}
+
+.totals .ltxt{
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.totals .rtxt, .totals .rtxt span{
+    font-size: 1.1rem;
+    text-align: right;
+    font-weight: 600;
+}
+
+.reviewlist .item span{
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: inline-block;
+    letter-spacing: 1px;
+}
+
+.reviewlist .item .times{
+    color: #666666;
+}
+
+textarea{
+    height: 80px;
+    resize: none;
+}
+
+.dropdown-menu{
+    margin-top: -4px !important;
+    overflow: hidden;
+}
+
+.max_hcont{
+    max-height: 300px;
+    overflow: auto;
+}

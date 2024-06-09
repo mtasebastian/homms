@@ -1,0 +1,177 @@
+.modal-title{
+    font-weight: 600;
+}
+
+.modal-footer button{
+    font-size: 1.1rem;
+}
+
+.list_cont{
+    max-height: 300px;
+    overflow: auto;
+}
+
+.list_cont ul{
+    list-style: none;
+    padding: 0px;
+}
+
+.xlist{
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.xlist ul li{
+    position: relative;
+}
+
+.xlist ul li .edit{
+    position: absolute;
+    top: 10px;
+    right: 45px;
+}
+
+.xlist ul li .delete{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.xlist .none{
+    text-align: center;
+    padding: 10px 5px;
+    color: #666;
+    letter-spacing: 1px;
+}
+
+.requiredp{
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    background: #FFF;
+    border: solid 1px #999;
+    border-radius: 5px;
+    padding: 8px;
+    margin-top: 2px;
+    margin-left: 10px;
+}
+
+.requiredp::before{
+    position: absolute;
+    content: "";
+    border-left: solid 8px transparent;
+    border-right: solid 8px transparent;
+    border-bottom: solid 8px #666;
+    margin-top: -17px;
+    margin-left: 6px;
+}
+
+.requiredp::after{
+    position: absolute;
+    content: "";
+    border-left: solid 8px transparent;
+    border-right: solid 8px transparent;
+    border-bottom: solid 8px #fff;
+    margin-top: -16px;
+    margin-left: 6px;
+}
+
+.requiredp .img{
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.register{
+    color: #666;
+}
+
+.register a{
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.loginbox{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    max-width: 360px;
+    background-color: #FFFFFF;
+}
+
+.loginbox .img{
+    display: block;
+    width: 40%;
+    height: auto;
+    margin: CALC((40%/2)*-1) auto 1rem;
+    background: #FFFFFF;
+    padding: 0.5rem;
+}
+
+.loginbox .ltitle{
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.loginbox label{
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.loginbox .forgot{
+    font-size: 0.9rem;
+    color: #241571;
+    display: block;
+    font-weight: 600;
+}
+
+.registerbox{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 600px;
+    background-color: #FFFFFF;
+}
+
+.registerbox .img{
+    display: block;
+    width: 120px;
+    height: auto;
+    margin: CALC((120px/2)*-1) auto 1rem;
+    background: #FFFFFF;
+    padding: 0.5rem;
+}
+
+.registerbox .rtitle{
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.registerbox .rdesc{
+    text-align: center;
+    color: #666;
+    width: 80%;
+}
+
+.registerbox hr{
+    margin: 10px 0px 20px;
+    border: none;
+    border-top: dashed 1px #666;
+}
+
+.btnapprove{
+    position: absolute;
+    left: 15px;
+}
+
+@media only screen and (max-width: 768px) {
+    .registerbox{
+        width: 90% !important;
+    }
+}

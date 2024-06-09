@@ -1,0 +1,516 @@
+@font-face{
+    font-family: "Visby Regular";
+    src: url("Visby/VisbyRoundCF-Regular.eot");
+    src: url("Visby/VisbyRoundCF-Regular.woff") format("woff"),
+    url("Visby/VisbyRoundCF-Regular.otf") format("opentype");
+}
+
+@font-face{
+    font-family: "Visby Light";
+    src: url("Visby/VisbyRoundCF-Light.eot");
+    src: url("Visby/VisbyRoundCF-Light.woff") format("woff"),
+    url("Visby/VisbyRoundCF-Light.otf") format("opentype");
+}
+
+@font-face{
+    font-family: "Visby Bold";
+    src: url("Visby/VisbyRoundCF-Bold.eot");
+    src: url("Visby/VisbyRoundCF-Bold.woff") format("woff"),
+    url("Visby/VisbyRoundCF-Bold.otf") format("opentype");
+}
+
+html{
+    overflow: hidden;
+}
+
+*{
+    font-family: "Visby Regular";
+    font-size: 13px;
+}
+
+*::-webkit-scrollbar{
+    width: 10px;
+    border-radius: 5px;
+}
+
+*::-webkit-scrollbar-track{
+    background: #f1f1f1;
+}
+
+*::-webkit-scrollbar-thumb{
+    background: #888;
+}
+
+*::-webkit-scrollbar-thumb:hover{
+    background: #555;
+}
+
+body{
+    background: #FFFFFF;
+}
+
+.bgimg{
+    background: url("../images/bg.jpg") center no-repeat;
+    background-size: 100% auto;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+.main{
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+.sidebar{
+    width: 340px;
+}
+
+.img-cont{
+    width: 40%;
+}
+
+.navtitle{
+    position: relative;
+}
+
+.navtitle .blink{
+    text-decoration: none;
+    position: absolute;
+    top: 50%;
+    right: 2rem;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #241571;
+}
+
+.mbody{
+    background: #f3f2f7;
+    width: calc(100vw - 300px);
+}
+
+.mtitle{
+    font-family: "Visby Bold";
+    font-size: 1.8rem;
+    color: #333333;
+    height: 75px;
+}
+
+.mcontent{
+    height: calc(100vh - 75px);
+    overflow: hidden;
+}
+
+.mtitle .fa-solid{
+    font-size: 1.8rem;
+    margin-right: 0.5rem;
+}
+
+.rtitle{
+    font-weight: 600;
+    color: #333333;
+}
+
+.rtitle span{
+    font-size: 1.5rem;
+    color: #241571;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.rtitle small{
+    font-size: 1.2rem;
+    color: #666666;
+}
+
+.msubtitle{
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-align: center;
+    color: #241571;
+}
+
+.mtitle span{
+    font-size: 2rem;
+    color: #fcb040;
+    font-weight: 800;
+}
+
+.mlist{
+    list-style: none;
+    padding: 0px;
+}
+
+.mlist li{
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.mlist li:hover a{
+    font-weight: 800;
+}
+
+.mlist li:hover .msublist a{
+    font-weight: 800;
+}
+
+.mlist li a{
+    color: #666;
+    padding: 12px 30px;
+    margin: 0 3.5rem;
+    position: relative;
+}
+
+.mlist li a.collapsible::after{
+    content: "🢑";
+    font-size: 2.2rem;
+    color: #999;
+    position: absolute;
+    right: 30px;
+    top: -12px;
+}
+
+.mlist li a.collapsible.collapsed::after{
+    content: "🢓";
+    top: 13px;
+}
+
+.mlist li.active{
+    border-left: solid 5px #241571;
+    border-right: solid 5px #ffffff;
+}
+
+.mlist li.active a{
+    color: #241571;
+    background: #82eefd;
+    font-weight: 800;
+    border-radius: 10px;
+    margin: 0 CALC(3.5rem - 5px);
+}
+
+.mlist li a .fa-solid{
+    font-size: 1.2rem;
+    margin-right: 1rem;
+}
+
+.mlist li.active a .fa-solid{
+    color: #241571;
+    font-weight: 600;
+}
+
+.msublist{
+    list-style: none;
+    padding: 0px;
+}
+
+.msublist li a{
+    font-size: 1rem;
+    text-decoration: none;
+    padding: 10px 30px 10px 55px !important;
+    display: block;
+    color: #666;
+}
+
+.msublist li:hover a{
+    font-weight: 600 !important;
+}
+
+.rpermissioncont{
+    max-height: 300px;
+    overflow: hidden;
+    position: relative;
+}
+
+.rpermissioncont .permcont{
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+}
+
+.rpermission, .rpermission ul{
+    list-style: none;
+    padding: 0px;
+}
+
+.rpermission .card-header{
+    cursor: pointer;
+    background: #ffffff;
+    border-bottom: none;
+    border-top: solid 1px #dddddd;
+    position: relative;
+}
+
+.rpermission .card-header .indi{
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%) rotate(3.142rad);
+}
+
+.rpermission .card-header.collapsed .indi{
+    transform: translateY(-50%) rotate(0);
+}
+
+.rpermissioncont .rpermission:first-child .card-header{
+    border-top: none;
+}
+
+.rpermission .card-body{
+    border-top: solid 1px #dddddd;
+    background: #fafafa;
+}
+
+.rpermission .card-body .form-check-label{
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.rpermission h5{
+    font-size: 1rem;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #333333;
+    padding: 6px 5px 0px;
+}
+
+.clickable{
+    text-decoration: underline;
+    color: #0d6efd;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.optlist{
+    max-height: 200px;
+    overflow: auto;
+    border-top: solid 1px #dddddd;
+}
+
+.table th{
+    vertical-align: middle;
+}
+
+.table tr.active{
+    background: #dddddd;
+}
+
+.to{
+    height: 2.4rem;
+    font-weight: 600;
+}
+
+.form-check-label{
+    cursor: pointer;
+}
+
+.xsteps{
+    margin-bottom: 1rem;
+}
+
+.xsteps ul{
+    list-style: none;
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+}
+
+.xsteps ul li{
+    display: inline-block;
+    padding: 0.5rem;
+}
+
+.xsteps ul li .ocircle{
+    background: #cccccc;
+    border-radius: 50%;
+    width: 1.8rem;
+    height: 1.8rem;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.xsteps ul li .ocircle .numstep{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.9rem;
+    color: #FFFFFF;
+}
+
+.xsteps ul li .numtext{
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: #999999;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+    font-weight: 800;
+}
+
+.xsteps ul li .aright{
+    color: #999999;
+    position: relative;
+    top: 2px;
+    font-size: 1.2rem;
+}
+
+.xsteps ul li{
+    display: inline-block;
+    padding: 0.5rem;
+}
+
+.xsteps ul li.active .ocircle{
+    background: #241571;
+}
+
+.xsteps ul li.active .numtext{
+    color: #000000;
+}
+
+.hoverable tr{
+    cursor: pointer;
+}
+
+.hoverable tr:hover td{
+    background: #fafafa;
+    font-weight: 600;
+}
+
+.list-group-item{
+    cursor: pointer;
+}
+
+.list-group-item:hover{
+    background: #fafafa;
+    font-weight: 600;
+}
+
+.itemcont{
+    position: relative;
+}
+
+.itemclose{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: #999999;
+}
+
+.xitem{
+    border-radius: 1.2vw;
+    position: relative;
+}
+
+.xitem .shadow{
+    background: #333333;
+    opacity: 0.5;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    border-radius: 1.2vw;
+    z-index: 1;
+    visibility: hidden;
+}
+
+.xitem .click{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    visibility: hidden;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.xitem .click .fa-solid{
+    position: absolute;
+    font-size: 2.5rem;
+    color: #fafafa;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.xitem:hover .shadow, .xitem:hover .click{
+    visibility: visible;
+}
+
+.xitem .itemimg{
+    border-top-left-radius: 1.2vw;
+    border-top-right-radius: 1.2vw;
+}
+
+.xitem .itemname{
+    font-size: 1rem;
+    letter-spacing: 1px;
+    padding: 5px;
+    text-align: center;
+}
+
+.xitem .itemprice{
+    font-size: 1rem;
+    letter-spacing: 1px;
+    font-weight: 600;
+    padding: 0 5px 0.5rem;
+    text-align: center;
+}
+
+.profile_name{
+    width: 70%;
+    text-align: center;
+}
+
+.profile_name h6{
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.profile_name h5{
+    color: #241571;
+    font-weight: 600;
+}
+
+.pagination{
+    margin-bottom: 0px;
+}
+
+.pagination li span, .pagination li a{
+    border-radius: 0px !important;
+}
+
+.table-hover tr td{
+    cursor: pointer;
+}
+
+.cbox .fa-solid, .cbox span{
+    vertical-align: middle;
+    font-size: 1.1rem;
+}
+
+.cbox span{
+    font-size: 1rem;
+    margin-left: 5px;
+    font-weight: 600;
+}
+
+@media only screen and (max-width: 768px) {
+    .bgimg{
+        background: url("../images/bg.jpg") center no-repeat;
+        background-size: auto 100% !important;
+    }
+}

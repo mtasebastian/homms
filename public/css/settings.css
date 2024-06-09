@@ -1,0 +1,44 @@
+.sys_setup li .nav-link{
+    color: #666;
+    padding: 10px 20px;
+}
+
+.sys_setup li .nav-link.active{
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #000;
+}
+
+.sysref .nav-link{
+    color: #666;
+    padding: 15px;
+    margin-left: 10px;
+    position: relative;
+    margin-right: -1px;
+    border: solid 1px #dddddd;
+    border-top: none;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: #fafafa;
+    cursor: pointer;
+}
+
+.sysref .nav-link:first-child{
+    border-top: solid 1px #dddddd;
+}
+
+.sysref .nav-link.active{
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #000;
+    border: solid 1px #CCC;
+    border-right: solid 1px #FFF;
+    background: #FFF;
+}
+
+.sysrefcont{
+    border: solid 1px #CCC;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
