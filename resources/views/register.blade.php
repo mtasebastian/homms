@@ -2,6 +2,7 @@
 @section('content')
 <div class="bgimg"></div>
 <div class="registerbox shadow border-light rounded-4 pb-5">
+    <a href="{{ route('login') }}" class="rclose"><i class="fa-solid fa-left-long"></i>Back to Login</a>
     <img class="img shadow-sm border-light rounded-4" src="{{ asset('images/logo.jpg') }}">
     <h5 class="my-t rtitle">HOA Account Registration</h5>
     <p class="rdesc mx-auto">Fill up the following information. The values given are subject for verification before approval.</p>
@@ -82,7 +83,7 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col col-md-6 col-sm-6"><button class="btn w-100 btn-add py-2 shadow-sm"><b>Log In</b></button></div>
+            <div class="col col-md-6 col-sm-6"><button class="btn w-100 btn-add py-2 shadow-sm"><b>Register</b></button></div>
             <div class="col col-md-6 col-sm-6"><button class="btn w-100 btn-light border py-2 shadow-sm"><b>Reset</b></button></div>
         </div>
     </form>

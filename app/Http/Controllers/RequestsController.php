@@ -47,4 +47,10 @@ class RequestsController extends Controller
         }
         return $qrCode;
     }
+
+    public function getqrcode(Request $request)
+    {
+        $data = $request->all();
+        return view("requests.qrcode", compact(["data"]));
+    }
 }

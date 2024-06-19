@@ -85,7 +85,7 @@ class SettingsController extends Controller
         {
             $user = new User();
             $user->name = $request->txtname;
-            $user->user_role = $request->txtrole;
+            $user->role_id = $request->txtrole;
             $user->email = $request->txtemail;
             $user->mobileno = $request->txtmobileno;
             $user->password = bcrypt($request->txtpassword);
@@ -112,7 +112,7 @@ class SettingsController extends Controller
         {
             $user = User::find($request->txtuserid);
             $user->name = $request->txtname;
-            $user->user_role = $request->txtrole;
+            $user->role_id = $request->txtrole;
             $user->email = $request->txtemail;
             $user->mobileno = $request->txtmobileno;
             if($request->txtpassword){

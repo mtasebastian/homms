@@ -80,6 +80,7 @@
                             <td class="align-middle">{{ $req->request_status }}</td>
                             <td class="align-middle">{{ date("m/d/y", strtotime($req->created_at)) }}</td>
                             <td class="actions align-middle text-center">
+                                <button class="btn btn-white p-1 px-2 mx-1 border-success" onclick="viewqrcode({{ $req->qr_code }})"><i class="fa-solid fa-qrcode text-dark"></i></button>
                                 <button class="btn btn-white p-1 px-2 mx-1 border-success" onclick="editreq({{ $req->id }})"><i class="fa-solid fa-pen-to-square text-success"></i></button>
                                 <button class="btn btn-white p-1 px-2 mx-1 border-danger" onclick="deletereq({{ $req->id }})"><i class="fa-solid fa-trash-alt text-danger"></i></button>
                             </td>
@@ -227,11 +228,24 @@
                     <input type="hidden" id="compdelid" name="compdelid">
                     <h5 class="text-center">Delete Request?</h5>
                 </div>
-                <div class="modal-footer p-5 py-3 justify-content-md-center border-0">
+                <div class="modal-footer p-4 pb-4 pt-2 justify-content-md-center border-0">
                     <button type="submit" class="btn btn-danger me-2 px-3 py-2 rounded-3"><i class="fa-solid fa-trash-alt"></i>&nbsp;&nbsp;Ok</button>
                     <button type="button" class="btn btn-light border py-2 px-3 rounded-3" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="viewreqqr" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content rounded-4">
+            <div class="modal-header p-4 py-3">
+                <h5 class="modal-title" id="searchresidentLabel">Scan QR Code</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <iframe class="iframe" id="reqqrcode" src="#"></iframe>
+            </div>
         </div>
     </div>
 </div>
@@ -337,6 +351,12 @@
     function deletereq(id){
         $("#compdelid").val(id);
         $("#deletereq").modal("show");
+    }
+
+
+    function viewqrcode(qrcode){
+        $("#reqqrcode").attr("src", "{{ route('getqrcode') }}?qrcode=" + qrcode);
+        $("#viewreqqr").modal("show");
     }
 </script>
 @endsection

@@ -23,6 +23,8 @@ Route::get('/login', function(){
 Route::post('/checklogin',  'App\Http\Controllers\Controller@checklogin')->name('checklogin');
 Route::get('/logout',  'App\Http\Controllers\Controller@logout')->name('logout');
 
+Route::get('/getqrcode',  'App\Http\Controllers\RequestsController@getqrcode')->name('getqrcode');
+
 // Registration
 Route::get('/register/index',  'App\Http\Controllers\RegisterController@index')->name('register');
 Route::post('/register/save',  'App\Http\Controllers\RegisterController@register')->name('register.save');

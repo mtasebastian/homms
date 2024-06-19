@@ -83,14 +83,14 @@
 </div>
 <div class="modal fade" id="addreferential" tabindex="-1" aria-labelledby="addreferentialLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog">
-        <div class="modal-content rounded-5">
-            <div class="modal-header p-5 py-4">
+        <div class="modal-content rounded-4">
+            <div class="modal-header p-4 py-3">
                 <h5 class="modal-title" id="addreferentialLabel">Add Referential</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="post" id="frmreferential" action="{{ route('settings.add_referential') }}">
             @csrf
-            <div class="modal-body p-5 py-4">
+            <div class="modal-body p-4 py-3">
                 <input type="hidden" id="txtreferentialid" name="txtreferentialid">
                 <div class="form-data mb-3">
                     <label for="txtreferentialmod" class="form-label">Module</label>
@@ -115,7 +115,7 @@
                 </div>
                 <input type="hidden" name="txtchoices" id="txtchoices">
             </div>
-            <div class="modal-footer p-5 py-4">
+            <div class="modal-footer p-4 py-3">
                 <button type="submit" class="btn btn-add mx-2 px-3 py-2 rounded-3"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save Referential</button>
                 <button type="button" class="btn btn-light border py-2 px-3 rounded-3" data-bs-dismiss="modal">Close</button>
             </div>

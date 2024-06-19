@@ -9,48 +9,63 @@
       <a href="#" class="text-decoration-none"><h5>{{ auth()->user()->name }}</h5></a>
     </div>
     <ul class="flex-column mb-auto mlist">
+      @if($checker->routePermission('dashboard'))
       <li class="nav-item {{ Route::is('dashboard') ? 'active' : '' }}">
         <a href="{{ route('dashboard') }}" class="nav-link">
           <i class="fa-solid fa-chart-line"></i>
           Dashboard
         </a>
       </li>
+      @endif
+      @if($checker->routePermission('financials.index'))
       <li class="nav-item {{ Route::is('financials.index') ? 'active' : '' }}">
         <a href="{{ route('financials.index') }}" class="nav-link">
           <i class="fa-solid fa-coins"></i>
           Financials
         </a>
       </li>
+      @endif
+      @if($checker->routePermission('requests.index'))
       <li class="nav-item {{ Route::is('requests.index') ? 'active' : '' }}">
         <a href="{{ route('requests.index') }}" class="nav-link">
           <i class="fa-solid fa-person-circle-question"></i>
           Requests
         </a>
       </li>
+      @endif
+      @if($checker->routePermission('residents.index'))
       <li class="nav-item {{ Route::is('residents.index') ? 'active' : '' }}">
         <a href="{{ route('residents.index') }}" class="nav-link">
           <i class="fa-solid fa-house"></i>
           Residents
         </a>
       </li>
+      @endif
+      @if($checker->routePermission('complaints.index'))
       <li class="nav-item {{ Route::is('complaints.index') ? 'active' : '' }}">
         <a href="{{ route('complaints.index') }}" class="nav-link">
           <i class="fa-solid fa-flag"></i>
           Complaints
         </a>
       </li>
+      @endif
+      @if($checker->routePermission('visitors.index'))
       <li class="nav-item {{ Route::is('visitors.index') ? 'active' : '' }}">
         <a href="{{ route('visitors.index') }}" class="nav-link">
           <i class="fa-solid fa-address-book"></i>
           Visitors
         </a>
       </li>
+      @endif
+      @if($checker->routePermission('reports.index'))
       <li class="nav-item">
         <a href="#" class="nav-link">
           <i class="fa-solid fa-file-excel"></i>
           Reports
         </a>
       </li>
+      @endif
+      @if($checker->routePermission('settings.users') || $checker->routePermission('settings.roles'))
       <li>
         <a href="#" class="nav-link collapsible {{ Route::is('settings.users') || Route::is('settings.roles') || Route::is('settings.referentials') || Route::is('settings.system_setup') ? '' : 'collapsed' }}" data-bs-toggle="collapse" data-bs-target="#settings-collapse" aria-expanded="true">
           <i class="fa-solid fa-gear"></i>
@@ -85,6 +100,7 @@
           </ul>
         </div>
       </li>
+      @endif
       <li>
         <a href="{{ route('logout') }}" class="nav-link">
           <i class="fa-solid fa-right-from-bracket"></i>

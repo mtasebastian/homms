@@ -7,7 +7,7 @@
     border-right: none;
 }
 
-.inputl input[type="email"], .inputl input[type="password"]{
+.inputl input[type="text"], .inputl input[type="email"], .inputl input[type="password"]{
     border-left: none;
 }
 
