@@ -11,10 +11,10 @@
         @endif
         @include('layouts.navtitle', ['navtitle' => 'User Roles'])
         <div class="mcontent">
-            <div class="card m-3 mx-5 p-3 shadow border-light rounded-4">
+            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
                 <form method="get" action="{{ route('settings.roles') }}">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-3 mb-md-0">
                         <div class="input-group inputg">
                             <input type="text" class="form-control py-2 px-3" name="txtrolesearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
                             <div class="input-group-append">
@@ -24,7 +24,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 mb-3 mb-md-0">
                         <div class="input-group inputg">
                             <input type="text" class="form-control datepicker py-2 px-3" name="txtroledatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
                             <div class="input-group-append">
@@ -34,7 +34,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 mb-3 mb-md-0">
                         <div class="input-group inputg">
                             <input type="text" class="form-control datepicker py-2 px-3" name="txtroledateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
                             <div class="input-group-append">
@@ -44,55 +44,53 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-secondary py-2 px-4 rounded-3">Submit Search</button>
-                        <button type="button" class="btn btn-add py-2 px-4 rounded-3 float-end" onclick="addrole()"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add Role</button>
+                    <div class="col-md-4 text-end">
+                        <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
+                        <button type="button" class="btn btn-add py-2 px-4 rounded-3 btn-sm-100" onclick="addrole()"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add Role</button>
                     </div>
                 </div>
                 </form>
             </div>
-            <div class="card m-3 mx-5 p-3 shadow border-light rounded-4">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Role</th>
-                            <th scope="col">Description</th>
-                            <th scope="col" class="text-center">Status</th>
-                            <th scope="col">Created At</th>
-                            <th scope="col" class="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($roles as $role)
-                        <tr id="{{ $role->id }}">
-                            <td>{{ $role->id }}</td>
-                            <td>{{ $role->role }}</td>
-                            <td>{{ $role->description }}</td>
-                            <td class="text-center"><label class="badge {{ $role->roleStatus() }} p-2 px-3">{{ $role->status() }}</label></td>
-                            <td>{{ date("m/d/Y", strtotime($role->created_at)) }}</td>
-                            <td class="actions text-center">
-                                <button class="btn btn-white border-success p-1 px-2 mx-1" onclick="editrole({{ $role->id }})"><i class="fa-solid fa-pen-to-square text-success"></i></button>
-                                <button class="btn btn-white border-danger p-1 px-2 mx-1" onclick="deleterole({{ $role->id }})"><i class="fa-solid fa-trash-alt text-danger"></i></button>
-                            </td>
-                            @php
-                                $rpers = "";
-                                $rolepermissions = $role->permissions;
-                                foreach($rolepermissions as $rolepermission){
-                                    $rpers .= "|" . $rolepermission->route;
-                                }
-                            @endphp
-                            <input type="hidden" class="routelist" value="{{ substr($rpers, 1) }}">
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                <i class="idetail">Note: Click a row to view options</i>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="align-top tbl-d-none">ID</th>
+                                <th scope="col" class="align-top">Role</th>
+                                <th scope="col" class="align-top tbl-d-none">Description</th>
+                                <th scope="col" class="align-top text-center">Status</th>
+                                <th scope="col" class="align-top">Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($roles as $role)
+                            <tr id="{{ $role->id }}" onclick="optrole({{ $role->id }})">
+                                <td class="tbl-d-none">{{ $role->id }}</td>
+                                <td>{{ $role->role }}</td>
+                                <td class="tbl-d-none">{{ $role->description }}</td>
+                                <td class="text-center"><label class="badge {{ $role->roleStatus() }} p-2 px-3">{{ $role->status() }}</label></td>
+                                <td>{{ date("m/d/Y", strtotime($role->created_at)) }}</td>
+                                @php
+                                    $rpers = "";
+                                    $rolepermissions = $role->permissions;
+                                    foreach($rolepermissions as $rolepermission){
+                                        $rpers .= "|" . $rolepermission->route;
+                                    }
+                                @endphp
+                                <input type="hidden" class="routelist" value="{{ substr($rpers, 1) }}">
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <div class="modal fade" id="addrole" tabindex="-1" aria-labelledby="addroleLabel" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
                 <h5 class="modal-title" id="addroleLabel">Add Role</h5>
@@ -166,7 +164,7 @@
                 </div>
             </div>
             <div class="modal-footer p-4 py-3">
-                <button type="submit" class="btn btn-add mx-2 px-3 py-2 rounded-3"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save Role</button>
+                <button type="submit" class="btn btn-add mx-2 px-3 py-2 rounded-3"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save</button>
                 <button type="button" class="btn btn-light border py-2 px-3 rounded-3" data-bs-dismiss="modal">Close</button>
             </div>
             </form>
@@ -174,7 +172,7 @@
     </div>
 </div>
 <div class="modal fade" id="deleterole" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog xs-modal">
         <div class="modal-content rounded-4">
             <form method="post" action="{{ route('settings.delete_role') }}">
             @csrf
@@ -182,7 +180,7 @@
                 <input type="hidden" id="txtroledelid" name="txtroledelid">
                 <h5 class="text-center">Delete Role?</h5>
             </div>
-            <div class="modal-footer p-4 pb-4 pt-2 justify-content-md-center border-0">
+            <div class="modal-footer p-4 pb-4 pt-2 d-block text-center border-0">
                 <button type="submit" class="btn btn-danger me-2 px-3 py-2 rounded-3"><i class="fa-solid fa-trash-alt"></i>&nbsp;&nbsp;Ok</button>
                 <button type="button" class="btn btn-light border py-2 px-3 rounded-3" data-bs-dismiss="modal">Cancel</button>
             </div>
@@ -190,7 +188,30 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="optrole" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog xs-modal">
+        <div class="modal-content rounded-4">
+            <div class="modal-header p-4 py-3">
+                <h5 class="modal-title" id="optroleLabel">Options</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 py-3 m-3 text-center">
+                <div class="row">
+                    <div class="col-6 p-2"><button class="btn btn-info text-white p-2 w-100 fs-6" onclick="editrole()"><i class="fa-solid fa-pen-to-square me-2 fs-5"></i>Edit</button></div>
+                    <div class="col-6 p-2"><button class="btn btn-danger p-2 w-100 fs-6" onclick="deleterole()"><i class="fa-solid fa-trash-alt me-2 fs-5"></i>Delete</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    let role_id = "";
+
+    function optrole(id){
+        role_id = id;
+        $("#optrole").modal("show");
+    }
+
     function addrole(){
         $("#addroleLabel").text("Add Role");
         $("#frmrole").attr("action", "{{ route('settings.add_role') }}");
@@ -203,13 +224,15 @@
     }
 
     function editrole(id){
+        $("#optrole").modal("hide");
+        id = role_id;
         const obj = $("#" + id);
         $("#addroleLabel").text("Edit Role");
         $("#frmrole").attr("action", "{{ route('settings.update_role') }}");
         $("#txtroleid").val(id);
         $("#txtrole").val(obj.find("td").eq(1).text());
         $("#txtroledesc").val(obj.find("td").eq(2).text());
-        $("#chkrolestatus").attr("checked", (obj.find("td").eq(3).text() == "Enabled" ? true : false));
+        $("#chkrolestatus").attr("checked", (obj.find("td").eq(3).text() == "ENABLED" ? true : false));
         $("#rpermissioncont .form-check-input").attr("checked", false);
         $("#rpermissioncont .collapse").removeClass("show");
         const arr = obj.find(".routelist").val().split("|");
@@ -221,6 +244,8 @@
     }
 
     function deleterole(id){
+        $("#optrole").modal("hide");
+        role_id = id;
         $("#txtroledelid").val(id);
         $("#deleterole").modal("show");
     }

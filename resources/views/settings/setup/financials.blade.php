@@ -12,9 +12,9 @@
                 <input type="number" class="form-control py-2 px-3 rounded-3" id="finbillamt">
             </div>
             <div class="form-data text-center">
-                <button type="button" class="btn btn-add me-3" onclick="saveBill()" id="btnaddbill">Submit Bill</button>
-                <button type="button" class="btn btn-secondary me-3" onclick="deleteBill()" id="btnremovebill">Delete Bill</button>
-                <button type="button" class="btn btn-default border" onclick="resetBill()" id="btnresetbill">Reset</button>
+                <button type="button" class="btn btn-add px-3 py-2 rounded-3 me-3" onclick="saveBill()" id="btnaddbill">Submit Bill</button>
+                <button type="button" class="btn btn-secondary px-3 py-2 rounded-3 me-3" onclick="deleteBill()" id="btnremovebill">Delete Bill</button>
+                <button type="button" class="btn btn-default px-3 py-2 rounded-3 border" onclick="resetBill()" id="btnresetbill">Reset</button>
             </div>
         </div>
     </div>
@@ -24,7 +24,6 @@
                 <tr>
                     <th scope="col">Bill Name</th>
                     <th scope="col">Amount</th>
-                    <th scope="col" class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody id="tblfinancials">
@@ -46,10 +45,9 @@
                     $("#tblfinancials").html("<tr><td colspan='3' class='text-center'>No bills has been added</td></tr>");
                 }
                 $.each(data, function(i, item){
-                    $("#tblfinancials").append("<tr id='bill" + item.id + "'>" +
+                    $("#tblfinancials").append("<tr id='bill" + item.id + "' onclick='editBill(" + item.id + ")'>" +
                         "<td class='align-middle'>" + item.bill_name + "</td>" +
                         "<td class='align-middle'>" + parseFloat(item.bill_amt).toFixed(2) + "</td>" +
-                        "<td class='align-middle text-center'><button class='btn btn-white p-1 px-2 mx-1 border-success' onclick='editBill(" + item.id + ")'><i class='fa-solid fa-pen-to-square text-success'></i></button></td>" +
                     "</tr>");
                 });
             }
@@ -66,6 +64,8 @@
 
     function editBill(id){
         const obj = $("#bill" + id);
+        $("#tblfinancials tr").removeClass("active");
+        $("#tblfinancials #bill" + id).addClass("active");
         $("#finbillid").val(id);
         $("#finbillname").val(obj.find("td").eq(0).text());
         $("#finbillamt").val(obj.find("td").eq(1).text());

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Requests;
 use App\Models\RefSetup;
 use Carbon\Carbon;
@@ -13,7 +14,7 @@ class RequestsController extends Controller
     {
         $params = ['reqs', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["reqtype", "reqstatus"])->with("referential")->get();
-        $reqs = Requests::with(["reqBy", "appBy", "chkBy"])->paginate(20);
+        $reqs = Requests::with(["reqBy", "appBy", "chkBy"])->paginate(10);
         return view("requests.index", compact($params));
     }
 
@@ -52,5 +53,20 @@ class RequestsController extends Controller
     {
         $data = $request->all();
         return view("requests.qrcode", compact(["data"]));
+    }
+
+    public function findrequest(Request $request)
+    {
+        $req = Requests::where("qr_code", $request->qrcode)->with("reqBy")->first();
+        return $req;
+    }
+
+    public function checkrequest(Request $request)
+    {
+        $req = Requests::find($request->id);
+        $req->request_status = "Checked";
+        $req->checked_by = Auth::user()->id;
+        $req->save();
+        return "success";
     }
 }

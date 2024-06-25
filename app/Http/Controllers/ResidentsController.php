@@ -18,7 +18,46 @@ class ResidentsController extends Controller
         $params = ['residents', 'provinces', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["phase", "housecolor", "citizenship", "relation", "vehicletype", "pettype"])->with("referential")->get();
         $provinces = Provinces::get();
-        $residents = Residents::with(["occupants", "vehicles", "pets"])->paginate(20);
+        $residents = Residents::with(["occupants", "vehicles", "pets"])->paginate(10);
+        if($request->searchkey != null){
+            $residents = Residents::with(["occupants", "vehicles", "pets"])->where("name", "like", "%" . $request->searchkey . "%")->paginate(10);
+            $searchkey = $request->searchkey;
+            array_push($params, ['searchkey']);
+            if($request->datefrom != null && $request->dateto == null){
+                $residents = Residents::with(["occupants", "vehicles", "pets"])->where("name", "like", "%" . $request->searchkey . "%")->whereDate("created_at", Carbon::parse($request->datefrom)->format("Y-m-d"))->paginate(10);
+                $datefrom = $request->datefrom;
+                array_push($params, ['datefrom']);
+            }
+            elseif($request->datefrom == null && $request->dateto != null){
+                $residents = Residents::with(["occupants", "vehicles", "pets"])->where("name", "like", "%" . $request->searchkey . "%")->whereDate("created_at", Carbon::parse($request->dateto)->format("Y-m-d"))->paginate(10);
+                $dateto = $request->dateto;
+                array_push($params, ['dateto']);
+            }
+            elseif($request->datefrom != null && $request->dateto != null){
+                $residents = Residents::with(["occupants", "vehicles", "pets"])->where("name", "like", "%" . $request->searchkey . "%")->whereBetween(DB::raw("DATE(created_at)"), [Carbon::parse($request->datefrom)->format("Y-m-d"), Carbon::parse($request->dateto)->format("Y-m-d")])->paginate(10);
+                $datefrom = $request->datefrom;
+                $dateto = $request->dateto;
+                array_push($params, ['datefrom', 'dateto']);
+            }
+        }
+        elseif($request->searchkey == null){
+            if($request->datefrom != null && $request->dateto == null){
+                $residents = Residents::with(["occupants", "vehicles", "pets"])->whereDate("created_at", Carbon::parse($request->datefrom)->format("Y-m-d"))->paginate(10);
+                $datefrom = $request->datefrom;
+                array_push($params, ['datefrom']);
+            }
+            elseif($request->datefrom == null && $request->dateto != null){
+                $residents = Residents::with(["occupants", "vehicles", "pets"])->whereDate("created_at", Carbon::parse($request->dateto)->format("Y-m-d"))->paginate(10);
+                $dateto = $request->dateto;
+                array_push($params, ['dateto']);
+            }
+            elseif($request->datefrom != null && $request->dateto != null){
+                $residents = Residents::with(["occupants", "vehicles", "pets"])->whereDate("created_at", ">=", Carbon::parse($request->datefrom)->format("Y-m-d"))->whereDate("created_at", "<=", Carbon::parse($request->dateto)->format("Y-m-d"))->paginate(10);
+                $datefrom = $request->datefrom;
+                $dateto = $request->dateto;
+                array_push($params, ['datefrom', 'dateto']);
+            }
+        }
         return view("residents.index", compact($params));
     }
 

@@ -2,8 +2,8 @@
     <div class="toast show rounded-4 align-items-center {{ $type != '' ? 'bg-' . $type : '' }} text-white" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" id="toast_bg">
         <div class="d-flex tcont">
             <div class="toast-body mx-2 row">
-                <div class="col-md-2"><i class="fa-solid fa-check-circle tcheck"></i></div>
-                <div class="col-md-10">
+                <div class="col-2"><i class="fa-solid fa-check-circle tcheck"></i></div>
+                <div class="col-10">
                     <h6 class="ttitle mx-2" id="toast_type">{{ $type == "success" ? 'Success' : 'Error' }}</h6>
                     <p class="tmessage mx-2" id="toast_msg">{{ $message }}</p>
                 </div>

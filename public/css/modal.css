@@ -189,16 +189,41 @@
 
 .iframe{
     width: 100%;
-    height: 280px;
+    height: 250px;
     overflow: hidden;
 }
 
+.xs-modal{
+    top: 10%;
+    width: 280px;
+}
+
+.qr-modal{
+    top: 10%;
+    width: 300px;
+}
+
 @media only screen and (max-width: 768px) {
+    .xs-modal, .qr-modal{
+        left: 50%;
+        transform: translateX(-50%) !important;
+    }
+
     .loginbox, .registerbox{
         width: 90% !important;
     }
 
+    .registerbox{
+        position: relative;
+        top: 1rem;
+        left: unset;
+        display: block;
+        transform: unset;
+        margin: 10px auto;
+        padding-top: 1rem;
+    }
+
     .registerbox .img{
-        margin-top: 5rem;
+        margin-top: 4rem;
     }
 }

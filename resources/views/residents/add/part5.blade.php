@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-7">
+    <div class="col-md-7 mb-3 mb-md-0">
         <div class="xlist">
             <p class="none">No pet has been added</p>
             <ul class="list-group" id="respets"></ul>

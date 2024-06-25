@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class Residents extends Model
 {
@@ -24,7 +25,10 @@ class Residents extends Model
 
     public function getFullAddressAttribute()
     {
-        return "Brgy. " . ucwords(strtolower($this->barangay->name)) . " " . $this->hoaaddress . ", " . ucwords(strtolower($this->city->name)) . (str_contains(strtolower($this->city->name), 'city') ? ', ' : ' City, ') . ucwords(strtolower($this->province->name));
+        return ($this->barangay ? "Brgy. " . ucwords(strtolower($this->barangay->name)) : "") . 
+            " " . $this->hoaaddress . ", " .
+            ($this->city ? ucwords(strtolower($this->city->name)) . (str_contains(strtolower($this->city->name), 'city') ? ', ' : ' City, ') : "") .
+            ($this->province ? ucwords(strtolower($this->province->name)) : "");
     }
 
     public function province()
@@ -44,7 +48,7 @@ class Residents extends Model
 
     public function status()
     {
-        return ($this->home_status == 1) ? "Active" : "Inactive";
+        return ($this->home_status == 1) ? "ACTIVE" : "INACTIVE";
     }
 
     public function occupants()
@@ -65,5 +69,13 @@ class Residents extends Model
     public function balance()
     {
         return $this->hasOne("App\Models\Financials", "resident_id", "id")->latest();
+    }
+
+    public function residentStatus()
+    {
+        switch($this->home_status){
+            case "1": return "bg-info text-white"; break;
+            case "0": return "bg-light text-dark"; break;
+        }
     }
 }

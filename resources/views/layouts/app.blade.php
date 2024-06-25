@@ -15,6 +15,7 @@
         <link href="{{ asset('css') }}/modal.css" rel="stylesheet">
         <link href="{{ asset('css') }}/chat.css" rel="stylesheet">
         <link href="{{ asset('css') }}/inputs.css" rel="stylesheet">
+        <link href="{{ asset('css') }}/custom_size.css" rel="stylesheet">
         <script src="{{ asset('js') }}/bootstrap_5.2.3.min.js"></script>
         <script src="{{ asset('js') }}/jquery_3.7.1.min.js"></script>
         <script src="{{ asset('js') }}/pusher_8.2.0.min.js"></script>

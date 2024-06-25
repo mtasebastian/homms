@@ -11,10 +11,10 @@
         @endif
         @include('layouts.navtitle', ['navtitle' => 'Referentials'])
         <div class="mcontent">
-            <div class="card m-3 mx-5 p-3 shadow border-light rounded-4">
+            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
                 <form method="get" action="{{ route('settings.referentials') }}">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-3 mb-md-0">
                         <div class="input-group inputg">
                             <input type="text" class="form-control py-2 px-3" name="txtreferentialsearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
                             <div class="input-group-append">
@@ -24,7 +24,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 mb-3 mb-md-0">
                         <div class="input-group inputg">
                             <input type="text" class="form-control datepicker py-2 px-3" name="txtreferentialdatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
                             <div class="input-group-append">
@@ -34,7 +34,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 mb-3 mb-md-0">
                         <div class="input-group inputg">
                             <input type="text" class="form-control datepicker py-2 px-3" name="txtreferentialdateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
                             <div class="input-group-append">
@@ -44,45 +44,45 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-secondary py-2 px-4 rounded-3">Submit Search</button>
-                        <button type="button" class="btn btn-add py-2 px-4 rounded-3 float-end" onclick="addreferential()"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add Referential</button>
+                    <div class="col-md-4 text-end">
+                        <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
+                        <button type="button" class="btn btn-add py-2 px-4 rounded-3 btn-sm-100" onclick="addreferential()"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add Referential</button>
                     </div>
                 </div>
                 </form>
             </div>
-            <div class="card m-3 mx-5 p-3 shadow border-light rounded-4">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Created At</th>
-                            <th scope="col" class="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($referentials as $referential)
-                        <tr id="{{ $referential->id }}">
-                            <td>{{ $referential->id }}</td>
-                            <td>{{ $referential->name }}</td>
-                            <td>{{ $referential->description }}</td>
-                            <td>{{ date("m/d/Y", strtotime($referential->created_at)) }}</td>
-                            <td class="actions text-center">
-                                <button class="btn btn-white border-success p-1 px-2 mx-1" onclick="editreferential({{ $referential->id }})"><i class="fa-solid fa-pen-to-square text-success"></i></button>
-                            </td>
-                            <input type="hidden" class="referential" value="{{ json_encode($referential) }}">
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                <i class="idetail">Note: Click a row to view options</i>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th scope="col" class="align-top tbl-d-none">ID</th>
+                                <th scope="col" class="align-top">Name</th>
+                                <th scope="col" class="align-top">Description</th>
+                                <th scope="col" class="align-top">Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($referentials as $referential)
+                            <tr id="{{ $referential->id }}" onclick="optref({{ $referential->id }})">
+                                <td class="tbl-d-none">{{ $referential->id }}</td>
+                                <td>{{ $referential->name }}</td>
+                                <td>{{ $referential->description }}</td>
+                                <td>{{ date("m/d/Y", strtotime($referential->created_at)) }}</td>
+                                <input type="hidden" class="referential" value="{{ json_encode($referential) }}">
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                    <div class="d-flex"><div class="mx-auto">{{ $referentials->links() }}</div></div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <div class="modal fade" id="addreferential" tabindex="-1" aria-labelledby="addreferentialLabel" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
                 <h5 class="modal-title" id="addreferentialLabel">Add Referential</h5>
@@ -116,15 +116,35 @@
                 <input type="hidden" name="txtchoices" id="txtchoices">
             </div>
             <div class="modal-footer p-4 py-3">
-                <button type="submit" class="btn btn-add mx-2 px-3 py-2 rounded-3"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save Referential</button>
+                <button type="submit" class="btn btn-add mx-2 px-3 py-2 rounded-3"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save</button>
                 <button type="button" class="btn btn-light border py-2 px-3 rounded-3" data-bs-dismiss="modal">Close</button>
             </div>
             </form>
         </div>
     </div>
 </div>
+<div class="modal fade" id="optref" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog xs-modal">
+        <div class="modal-content rounded-4">
+            <div class="modal-header p-4 py-3">
+                <h5 class="modal-title" id="optrefLabel">Options</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 py-3 m-3 text-center">
+                <button class="btn btn-info text-white p-2 w-100 fs-6" onclick="editreferential()"><i class="fa-solid fa-pen-to-square me-2 fs-5"></i>Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    let ref_id = "";
     let list = [];
+
+    function optref(id){
+        ref_id = id;
+        $("#optref").modal("show");
+    }
+
     function addreferential(){
         $("#addreferentialLabel").text("Add Referential");
         $("#frmreferential").attr("action", "{{ route('settings.add_referential') }}");
@@ -134,8 +154,8 @@
         $("#txtreferentialdesc").val("");
         $("#refchoices").html("<li class='mb-2 add'>" +
             "<div class='row mx-0'>" +
-                "<div class='col-md-10 ps-0'><input type='text' class='form-control py-2 px-3 rounded-3 new' placeholder='Please enter a choice'></div>" +
-                "<div class='col-md-2 pe-0'><button type='button' class='btn btn-add w-100 py-2 px-4 rounded-3'><i class='fa-solid fa-plus'></i></button></div>" +
+                "<div class='col-9 col-md-10 ps-0'><input type='text' class='form-control py-2 px-3 rounded-3 new' placeholder='Please enter a choice'></div>" +
+                "<div class='col-3 col-sm-2 pe-0'><button type='button' class='btn btn-add w-100 py-2 px-4 rounded-3'><i class='fa-solid fa-plus'></i></button></div>" +
             "</div>" +
         "</li>");
         refaction();
@@ -149,15 +169,15 @@
         $.each(list, function(x, item){
             html += "<li class='mb-2 minus'>" +
                 "<div class='row mx-0'>" +
-                    "<div class='col-md-10 ps-0'><input type='text' class='form-control py-2 px-3 rounded-3 border-0 item' value='" + item + "' readonly></div>" +
-                    "<div class='col-md-2 pe-0'><button type='button' class='btn btn-white w-100 py-2 px-4 rounded-3 text-danger border-danger'><i class='fa-solid fa-trash-alt'></i></button></div>" +
+                    "<div class='col-9 col-md-10 ps-0'><input type='text' class='form-control py-2 px-3 rounded-3 border-0 item' value='" + item + "' readonly></div>" +
+                    "<div class='col-3 col-md-2 pe-0'><button type='button' class='btn btn-white w-100 py-2 px-4 rounded-3 text-danger border-danger'><i class='fa-solid fa-trash-alt'></i></button></div>" +
                 "</div>" +
             "</li>";
         });
         html += "<li class='mb-2 add'>" +
             "<div class='row mx-0'>" +
-                "<div class='col-md-10 ps-0'><input type='text' class='form-control py-2 px-3 rounded-3 new' placeholder='Please enter a choice'></div>" +
-                "<div class='col-md-2 pe-0'><button type='button' class='btn btn-add w-100 py-2 px-4 rounded-3'><i class='fa-solid fa-plus'></i></button></div>" +
+                "<div class='col-9 col-md-10 ps-0'><input type='text' class='form-control py-2 px-3 rounded-3 new' placeholder='Please enter a choice'></div>" +
+                "<div class='col-3 col-md-2 pe-0'><button type='button' class='btn btn-add w-100 py-2 px-4 rounded-3'><i class='fa-solid fa-plus'></i></button></div>" +
             "</div>" +
         "</li>";
         $("#refchoices").html(html);
@@ -196,6 +216,8 @@
     }
 
     function editreferential(id){
+        $("#optref").modal("hide");
+        id = ref_id;
         const obj = $("#" + id);
         $("#addreferentialLabel").text("Edit Referential");
         $("#frmreferential").attr("action", "{{ route('settings.update_referential') }}");

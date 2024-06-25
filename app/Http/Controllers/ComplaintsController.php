@@ -13,7 +13,7 @@ class ComplaintsController extends Controller
     {
         $params = ['complaints', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["comptype", "compstatus"])->with("referential")->get();
-        $complaints = Complaints::paginate(20);
+        $complaints = Complaints::paginate(10);
         return view("complaints.index", compact($params));
     }
 

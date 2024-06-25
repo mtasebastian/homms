@@ -105,4 +105,12 @@
     </div>  
     @endif
 </div>
+<style>
+    @media only screen and (max-width: 768px) {
+        html{
+            overflow-y: auto;
+            padding-bottom: 2rem;
+        }
+    }
+</style>
 @endsection

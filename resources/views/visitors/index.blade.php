@@ -11,10 +11,10 @@
         @endif
         @include('layouts.navtitle', ['navtitle' => 'Visitors'])
         <div class="mcontent">
-            <div class="card m-3 mx-5 p-3 shadow border-light rounded-4">
+            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
                 <form method="get" action="{{ route('visitors.index') }}">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-3 mb-md-0">
                         <div class="input-group inputg">
                             <input type="text" class="form-control py-2 px-3" name="txtvisitorsearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
                             <div class="input-group-append">
@@ -24,7 +24,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 mb-3 mb-md-0">
                         <div class="input-group inputg">
                             <input type="text" class="form-control datepicker py-2 px-3" name="txtvisitordatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
                             <div class="input-group-append">
@@ -34,7 +34,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 mb-3 mb-md-0">
                         <div class="input-group inputg">
                             <input type="text" class="form-control datepicker py-2 px-3" name="txtvisitordateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
                             <div class="input-group-append">
@@ -44,52 +44,58 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-secondary py-2 px-4 rounded-3">Submit Search</button>
-                        <button type="button" class="btn btn-add py-2 px-4 rounded-3 float-end" onclick="addvisitor()"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add visitor</button>
+                    <div class="col-md-4 text-end">
+                        <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
+                        <button type="button" class="btn btn-add py-2 px-4 rounded-3 btn-sm-100" onclick="addvisitor()"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add visitor</button>
                     </div>
                 </div>
                 </form>
             </div>
-            <div class="card m-3 mx-5 p-3 shadow border-light rounded-4">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Visitor Type</th>
-                            <th scope="col">Visitor Name</th>
-                            <th scope="col">Purpose</th>
-                            <th scope="col">Time In</th>
-                            <th scope="col">Time Out</th>
-                            <th scope="col">Created At</th>
-                            <th scope="col" class="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($visitors as $visitor)
-                        <tr id="res_{{ $visitor->id }}">
-                            <td class="align-middle">{{ $visitor->id }}</td>
-                            <td class="align-middle">{{ $visitor->visitor_type }}</td>
-                            <td class="align-middle">{{ $visitor->name }}</td>
-                            <td class="align-middle w-25">{{ $visitor->purpose }}</td>
-                            <td class="align-middle">{{ date("m/d/Y h:i A", strtotime($visitor->time_in)) }}</td>
-                            <td class="align-middle">{{ $visitor->time_out != '' ? date("m/d/Y h:i A", strtotime($visitor->time_out)) : '' }}</td>
-                            <td class="align-middle">{{ date("m/d/y", strtotime($visitor->created_at)) }}</td>
-                            <td class="actions align-middle text-center">
-                                <button class="btn btn-white p-1 px-2 mx-1 border-success {{ $visitor->time_out != '' ? 'invisible' : '' }}" onclick="timeoutvisitor({{ $visitor->id }})"><i class="fa-solid fa-right-from-bracket text-success me-1"></i></button>
-                            </td>
-                            <input type="hidden" class="visitor" value="{{ json_encode($visitor) }}">
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                <i class="idetail">Note: Click a row to view options</i>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="align-top tbl-d-none">ID</th>
+                                <th scope="col" class="align-top tbl-d-none">Visitor Type</th>
+                                <th scope="col" class="align-top">Visitor Name</th>
+                                <th scope="col" class="align-top">Purpose</th>
+                                <th scope="col" class="align-top">Time In</th>
+                                <th scope="col" class="align-top">Time Out</th>
+                                <th scope="col" class="align-top tbl-d-none">Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($visitors as $visitor)
+                            <tr id="res_{{ $visitor->id }}"
+                                @php
+                                    if($visitor->time_out == ''){
+                                        echo "onclick='optvisit(" . $visitor->id . ")'";
+                                    }
+                                @endphp
+                            >
+                                <td class="tbl-d-none">{{ $visitor->id }}</td>
+                                <td class="tbl-d-none">{{ $visitor->visitor_type }}</td>
+                                <td>{{ $visitor->name }}</td>
+                                <td class="w-25">{{ $visitor->purpose }}</td>
+                                <td>{{ date("m/d/Y h:i A", strtotime($visitor->time_in)) }}</td>
+                                <td>{{ $visitor->time_out != '' ? date("m/d/Y h:i A", strtotime($visitor->time_out)) : '' }}</td>
+                                <td class="tbl-d-none">{{ date("m/d/y", strtotime($visitor->created_at)) }}</td>
+                                <input type="hidden" class="visitor" value="{{ json_encode($visitor) }}">
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                    <div class="d-flex"><div class="mx-auto">{{ $visitors->links() }}</div></div>
+                </div>
             </div>
         </div>
     </div>
     <input type="hidden" id="refsetup" value="{{ json_encode($refsetup) }}">
 </div>
 <div class="modal fade" id="addvisitor" tabindex="-1" aria-labelledby="addvisitorLabel" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
                 <h5 class="modal-title" id="addresidentLabel">Add visitor</h5>
@@ -127,7 +133,7 @@
                     </div>
                 </div>
                 <div class="modal-footer p-4 py-3">
-                    <button type="submit" class="btn btn-add mx-2 px-3 py-2 rounded-3"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save Visitor</button>
+                    <button type="submit" class="btn btn-add mx-2 px-3 py-2 rounded-3"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save</button>
                     <button type="button" class="btn btn-light border py-2 px-3 rounded-3" data-bs-dismiss="modal">Close</button>
                 </div>
             </form>
@@ -135,7 +141,7 @@
     </div>
 </div>
 <div class="modal fade" id="timeoutvisitor" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog xs-modal">
         <div class="modal-content rounded-4">
             <form method="post" action="{{ route('visitors.timeout_visitor') }}">
                 @csrf
@@ -143,7 +149,7 @@
                     <input type="hidden" id="visoutid" name="visoutid">
                     <h5 class="text-center">Time Out visitor?</h5>
                 </div>
-                <div class="modal-footer p-5 py-3 justify-content-md-center border-0">
+                <div class="modal-footer p-5 py-3 d-block text-center border-0">
                     <button type="submit" class="btn btn-danger me-2 px-3 py-2 rounded-3"><i class="fa-solid fa-trash-alt"></i>&nbsp;&nbsp;Ok</button>
                     <button type="button" class="btn btn-light border py-2 px-3 rounded-3" data-bs-dismiss="modal">Cancel</button>
                 </div>
@@ -151,10 +157,30 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="optvisit" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog xs-modal">
+        <div class="modal-content rounded-4">
+            <div class="modal-header p-4 py-3">
+                <h5 class="modal-title" id="optvisitLabel">Options</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 py-3 m-3 text-center">
+                <button class="btn btn-info text-white p-2 w-100 fs-6" onclick="timeoutvisitor()"><i class="fa-solid fa-right-from-bracket me-2 fs-5"></i>Time Out</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    let visit_id = "";
+
     $(function(){
         loadRefs();
     });
+
+    function optvisit(id){
+        visit_id = id;
+        $("#optvisit").modal("show");
+    }
 
     function loadRefs(){
         const arr = JSON.parse($("#refsetup").val());
@@ -174,7 +200,9 @@
         $("#addvisitor").modal("show");
     }
 
-    function timeoutvisitor(id){
+    function timeoutvisitor(){
+        $("#optvisit").modal("hide");
+        id = visit_id;
         $("#visoutid").val(id);
         $("#timeoutvisitor").modal("show");
     }

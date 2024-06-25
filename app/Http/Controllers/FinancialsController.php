@@ -18,7 +18,46 @@ class FinancialsController extends Controller
         $params = ['financials', 'refsetup', 'finsetup'];
         $refsetup = RefSetup::whereIn("for", ["mod", "disctype"])->with("referential")->get();
         $finsetup = FinancialSetup::get();
-        $financials = Financials::with("resident")->paginate(20);
+        $financials = Financials::with("resident")->where("created_at", Financials::max("created_at"))->paginate(10);
+        if($request->searchkey != null){
+            $financials = Financials::with("resident")->where("name", "like", "%" . $request->searchkey . "%")->paginate(10);
+            $searchkey = $request->searchkey;
+            array_push($params, ['searchkey']);
+            if($request->datefrom != null && $request->dateto == null){
+                $financials = Financials::with("resident")->where("name", "like", "%" . $request->searchkey . "%")->whereDate("created_at", Carbon::parse($request->datefrom)->format("Y-m-d"))->paginate(10);
+                $datefrom = $request->datefrom;
+                array_push($params, ['datefrom']);
+            }
+            elseif($request->datefrom == null && $request->dateto != null){
+                $financials = Financials::with("resident")->where("name", "like", "%" . $request->searchkey . "%")->whereDate("created_at", Carbon::parse($request->dateto)->format("Y-m-d"))->paginate(10);
+                $dateto = $request->dateto;
+                array_push($params, ['dateto']);
+            }
+            elseif($request->datefrom != null && $request->dateto != null){
+                $financials = Financials::with("resident")->where("name", "like", "%" . $request->searchkey . "%")->whereBetween(DB::raw("DATE(created_at)"), [Carbon::parse($request->datefrom)->format("Y-m-d"), Carbon::parse($request->dateto)->format("Y-m-d")])->paginate(10);
+                $datefrom = $request->datefrom;
+                $dateto = $request->dateto;
+                array_push($params, ['datefrom', 'dateto']);
+            }
+        }
+        elseif($request->searchkey == null){
+            if($request->datefrom != null && $request->dateto == null){
+                $financials = Financials::with("resident")->whereDate("created_at", Carbon::parse($request->datefrom)->format("Y-m-d"))->paginate(10);
+                $datefrom = $request->datefrom;
+                array_push($params, ['datefrom']);
+            }
+            elseif($request->datefrom == null && $request->dateto != null){
+                $financials = Financials::with("resident")->whereDate("created_at", Carbon::parse($request->dateto)->format("Y-m-d"))->paginate(10);
+                $dateto = $request->dateto;
+                array_push($params, ['dateto']);
+            }
+            elseif($request->datefrom != null && $request->dateto != null){
+                $financials = Financials::with("resident")->whereDate("created_at", ">=", Carbon::parse($request->datefrom)->format("Y-m-d"))->whereDate("created_at", "<=", Carbon::parse($request->dateto)->format("Y-m-d"))->paginate(10);
+                $datefrom = $request->datefrom;
+                $dateto = $request->dateto;
+                array_push($params, ['datefrom', 'dateto']);
+            }
+        }
         return view("financials.index", compact($params));
     }
 
@@ -26,7 +65,7 @@ class FinancialsController extends Controller
     {
         $residents = Residents::where("last_name", "like", "%" . $request->key . "%")->orWhere("first_name", "like", "%" . $request->key . "%")->orWhere("middle_name", "like", "%" . $request->key . "%")->with("balance")->get();
         return $residents;
-    } 
+    }
 
     public function generatebills(Request $request)
     {

@@ -9,6 +9,10 @@
     color: #000;
 }
 
+.sysref2{
+    display: none;
+}
+
 .sysref .nav-link{
     color: #666;
     padding: 15px;
@@ -41,4 +45,38 @@
     border-radius: 5px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
+}
+
+@media only screen and (max-width: 768px) {
+    .sys_setup{
+        border: 0px;
+    }
+
+    .sys_setup li{
+        width: CALC(50% - 10px);
+        text-align: center;
+        border: solid 1px #CCC;
+        margin: 5px;
+        border-radius: 5px;
+    }
+
+    .sys_setup li .nav-link.active{
+        color: #FFF;
+        background: #0d6efd;
+        border-color: #0d6efd;
+        display: block;
+        border-radius: 5px;
+    }
+
+    .sysref{
+        display: none;
+    }
+
+    .sysref2{
+        display: block;
+    }
+    
+    .sysrefcont{
+        border: 0px;
+    }
 }

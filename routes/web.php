@@ -24,6 +24,7 @@ Route::post('/checklogin',  'App\Http\Controllers\Controller@checklogin')->name(
 Route::get('/logout',  'App\Http\Controllers\Controller@logout')->name('logout');
 
 Route::get('/getqrcode',  'App\Http\Controllers\RequestsController@getqrcode')->name('getqrcode');
+Route::get('/find_request', 'App\Http\Controllers\RequestsController@findrequest')->name('find_request');
 
 // Registration
 Route::get('/register/index',  'App\Http\Controllers\RegisterController@index')->name('register');
@@ -49,6 +50,7 @@ Route::group(['middleware' => ['auth']], function (){
         Route::get('/', 'App\Http\Controllers\RequestsController@index')->name('requests.index');
         Route::post('/add', 'App\Http\Controllers\RequestsController@addrequest')->name('requests.add_request');
         Route::post('/update', 'App\Http\Controllers\RequestsController@updaterequest')->name('requests.update_request');
+        Route::post('/check', 'App\Http\Controllers\RequestsController@checkrequest')->name('requests.check_request');
         Route::post('/delete', 'App\Http\Controllers\RequestsController@deleterequest')->name('requests.delete_request');
     });
 
@@ -70,6 +72,11 @@ Route::group(['middleware' => ['auth']], function (){
         Route::get('/', 'App\Http\Controllers\VisitorsController@index')->name('visitors.index');
         Route::post('/add', 'App\Http\Controllers\VisitorsController@addvisitor')->name('visitors.add_visitor');
         Route::post('/timeout', 'App\Http\Controllers\VisitorsController@timeoutvisitor')->name('visitors.timeout_visitor');
+    });
+
+    Route::prefix('/reports')->group(function(){
+        Route::get('/', 'App\Http\Controllers\ReportsController@index')->name('reports.index');
+        Route::get('/filter', 'App\Http\Controllers\ReportsController@filter')->name('reports.filter');
     });
 
     // Settings

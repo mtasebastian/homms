@@ -26,4 +26,13 @@ class Complaints extends Model
     {
         return $this->belongsTo("App\Models\User", "report_to", "id");
     }
+
+    public function complaintStatus()
+    {
+        switch($this->status){
+            case "Pending": return "bg-info text-white"; break;
+            case "On-going": return "bg-light text-dark"; break;
+            case "Completed": return "bg-success text-white"; break;
+        }
+    }
 }

@@ -1,0 +1,41 @@
+@media only screen and (max-width: 768px) {
+    .mheader{
+        background: transparent !important;
+        box-shadow: none !important;
+        position: absolute !important;
+        width: 100% !important;
+    }
+
+    .mtitle{
+        padding-top: 3rem !important;
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    .mlist li a {
+        margin: 0 2rem;
+    }
+    
+    .mlist li.active a {
+        margin: 0 CALC(2rem - 5px);
+    }
+
+    .btn-sm-100{
+        width: 100%;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .btn-sm-50{
+        width: CALC(50% - 10px);
+        margin: 0px !important;
+    }
+
+    .btn-me{
+        margin-right: 16px !important;
+    }
+
+    .tbl-d-none{
+        display: none;
+    }
+}

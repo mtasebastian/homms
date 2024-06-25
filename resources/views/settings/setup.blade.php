@@ -6,7 +6,7 @@
         @include('layouts.toast', ['type' => '', 'message' => ''])
         @include('layouts.navtitle', ['navtitle' => 'System Setup'])
         <div class="mcontent">
-            <div class="card m-3 mx-5 p-3 shadow border-light rounded-4">
+            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
                 <ul class="nav nav-tabs sys_setup">
                     <li class="nav-item" id="sys_1">
                         <a class="nav-link active text-" href="#">General Settings</a>

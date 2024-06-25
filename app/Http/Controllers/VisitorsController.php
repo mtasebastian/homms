@@ -13,7 +13,7 @@ class VisitorsController extends Controller
     {
         $params = ['visitors', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["visitortype", "presentedid"])->with("referential")->get();
-        $visitors = Visitors::paginate(20);
+        $visitors = Visitors::paginate(10);
         return view("visitors.index", compact($params));
     }
 

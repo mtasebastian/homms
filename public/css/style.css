@@ -73,6 +73,10 @@ body{
     width: 340px;
 }
 
+.mobile-sidebar{
+    display: none;
+}
+
 .img-cont{
     width: 40%;
 }
@@ -171,17 +175,16 @@ body{
 }
 
 .mlist li a.collapsible::after{
-    content: "🢑";
-    font-size: 2.2rem;
+    content: "\25B2";
+    font-size: 1rem;
     color: #999;
     position: absolute;
     right: 30px;
-    top: -12px;
 }
 
 .mlist li a.collapsible.collapsed::after{
-    content: "🢓";
-    top: 13px;
+    content: "\25BC";
+    top: 12px;
 }
 
 .mlist li.active{
@@ -296,8 +299,17 @@ body{
     border-top: solid 1px #dddddd;
 }
 
-.table th{
-    vertical-align: middle;
+.idetail{
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 5px 5px 20px;
+    color: #666666;
+    font-style: normal;
+    letter-spacing: 1px;
+}
+
+.table th, .table td{
+    padding: 0.8rem;
 }
 
 .table tr.active{
@@ -509,8 +521,65 @@ body{
 }
 
 @media only screen and (max-width: 768px) {
+    .main{
+        display: block;
+        overflow: auto !important;
+    }
+
+    .mcontent{
+        min-height: CALC(100vh - 155px);
+        height: auto !important;
+        overflow-y: auto;
+    }
+
+    .sidebar{
+        display: none !important;
+    }
+
+    .mobile-sidebar{
+        position: fixed;
+        display: block;
+        width: 100%;
+        background: #FFF;
+        height: 80px;
+        z-index: 999;
+    }
+
+    .mobile-sidebar .sm-img{
+        display: block;
+        width: 90px;
+        height: 90px;
+        margin: 10px;
+        border-radius: 5px;
+        border: solid 5px #FFF;
+    }
+
+    .mobile-sidebar .btn-menu{
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: solid 1px #DDDDDD;
+        background: transparent;
+        padding: 0.8rem;
+        height: 42px;
+    }
+
+    .mobile-sidebar .btn-menu i{
+        font-size: 1.6rem;
+        font-weight: 800;
+        margin: 0px !important;
+    }
+
+    .mbody{
+        margin-top: 80px;
+        width: 100% !important;
+        padding-bottom: 75px;
+    }
+
     .bgimg{
         background: url("../images/bg.jpg") center no-repeat;
         background-size: auto 100% !important;
+        position: fixed;
     }
 }

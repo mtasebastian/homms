@@ -15,6 +15,7 @@ use App\Models\Cities;
 use App\Models\Barangays;
 use App\Models\Residents;
 use App\Models\FinancialSetup;
+use App\Helpers\RouteChecker;
 use Carbon\Carbon;
 use DB;
 
@@ -23,24 +24,24 @@ class SettingsController extends Controller
     public function users(Request $request)
     {
         $params = ['users', 'roles'];
-        $users = User::paginate(20);
+        $users = User::paginate(10);
         if($request->txtusersearch != null){
-            $users = User::where("name", "like", "%" . $request->txtusersearch . "%")->paginate(20);
+            $users = User::where("name", "like", "%" . $request->txtusersearch . "%")->paginate(10);
             $searchkey = $request->txtusersearch;
             array_push($params, ['searchkey']);
 
             if($request->txtuserdatefrom != null && $request->txtuserdateto == null){
-                $users = User::where("name", "like", "%" . $request->txtusersearch . "%")->whereDate("created_at", Carbon::parse($request->txtuserdatefrom)->format("Y-m-d"))->paginate(20);
+                $users = User::where("name", "like", "%" . $request->txtusersearch . "%")->whereDate("created_at", Carbon::parse($request->txtuserdatefrom)->format("Y-m-d"))->paginate(10);
                 $datefrom = $request->txtuserdatefrom;
                 array_push($params, ['datefrom']);
             }
             elseif($request->txtuserdatefrom == null && $request->txtuserdateto != null){
-                $users = User::where("name", "like", "%" . $request->txtusersearch . "%")->whereDate("created_at", Carbon::parse($request->txtuserdateto)->format("Y-m-d"))->paginate(20);
+                $users = User::where("name", "like", "%" . $request->txtusersearch . "%")->whereDate("created_at", Carbon::parse($request->txtuserdateto)->format("Y-m-d"))->paginate(10);
                 $dateto = $request->txtuserdateto;
                 array_push($params, ['dateto']);
             }
             elseif($request->txtuserdatefrom != null && $request->txtuserdateto != null){
-                $users = User::where("name", "like", "%" . $request->txtusersearch . "%")->whereBetween(DB::raw("DATE(created_at)"), [Carbon::parse($request->txtuserdatefrom)->format("Y-m-d"), Carbon::parse($request->txtuserdateto)->format("Y-m-d")])->paginate(20);
+                $users = User::where("name", "like", "%" . $request->txtusersearch . "%")->whereBetween(DB::raw("DATE(created_at)"), [Carbon::parse($request->txtuserdatefrom)->format("Y-m-d"), Carbon::parse($request->txtuserdateto)->format("Y-m-d")])->paginate(10);
                 $datefrom = $request->txtuserdatefrom;
                 $dateto = $request->txtuserdateto;
                 array_push($params, ['datefrom', 'dateto']);
@@ -48,17 +49,17 @@ class SettingsController extends Controller
         }
         elseif($request->txtusersearch == null){
             if($request->txtuserdatefrom != null && $request->txtuserdateto == null){
-                $users = User::whereDate("created_at", Carbon::parse($request->txtuserdatefrom)->format("Y-m-d"))->paginate(20);
+                $users = User::whereDate("created_at", Carbon::parse($request->txtuserdatefrom)->format("Y-m-d"))->paginate(10);
                 $datefrom = $request->txtuserdatefrom;
                 array_push($params, ['datefrom']);
             }
             elseif($request->txtuserdatefrom == null && $request->txtuserdateto != null){
-                $users = User::whereDate("created_at", Carbon::parse($request->txtuserdateto)->format("Y-m-d"))->paginate(20);
+                $users = User::whereDate("created_at", Carbon::parse($request->txtuserdateto)->format("Y-m-d"))->paginate(10);
                 $dateto = $request->txtuserdateto;
                 array_push($params, ['dateto']);
             }
             elseif($request->txtuserdatefrom != null && $request->txtuserdateto != null){
-                $users = User::whereDate("created_at", ">=", Carbon::parse($request->txtuserdatefrom)->format("Y-m-d"))->whereDate("created_at", "<=", Carbon::parse($request->txtuserdateto)->format("Y-m-d"))->paginate(20);
+                $users = User::whereDate("created_at", ">=", Carbon::parse($request->txtuserdatefrom)->format("Y-m-d"))->whereDate("created_at", "<=", Carbon::parse($request->txtuserdateto)->format("Y-m-d"))->paginate(10);
                 $datefrom = $request->txtuserdatefrom;
                 $dateto = $request->txtuserdateto;
                 array_push($params, ['datefrom', 'dateto']);
@@ -140,22 +141,22 @@ class SettingsController extends Controller
         $params = ['roles', 'routes'];
         $roles = Roles::get();
         if($request->txtrolesearch != null){
-            $roles = Roles::where("role", "like", "%" . $request->txtrolesearch . "%")->paginate(20);
+            $roles = Roles::where("role", "like", "%" . $request->txtrolesearch . "%")->paginate(10);
             $searchkey = $request->txtrolesearch;
             array_push($params, ['searchkey']);
 
             if($request->txtroledatefrom != null && $request->txtroledateto == null){
-                $roles = Roles::where("role", "like", "%" . $request->txtrolesearch . "%")->whereDate("created_at", Carbon::parse($request->txtroledatefrom)->format("Y-m-d"))->paginate(20);
+                $roles = Roles::where("role", "like", "%" . $request->txtrolesearch . "%")->whereDate("created_at", Carbon::parse($request->txtroledatefrom)->format("Y-m-d"))->paginate(10);
                 $datefrom = $request->txtroledatefrom;
                 array_push($params, ['datefrom']);
             }
             elseif($request->txtroledatefrom == null && $request->txtroledateto != null){
-                $roles = Roles::where("role", "like", "%" . $request->txtrolesearch . "%")->whereDate("created_at", Carbon::parse($request->txtroledateto)->format("Y-m-d"))->paginate(20);
+                $roles = Roles::where("role", "like", "%" . $request->txtrolesearch . "%")->whereDate("created_at", Carbon::parse($request->txtroledateto)->format("Y-m-d"))->paginate(10);
                 $dateto = $request->txtroledateto;
                 array_push($params, ['dateto']);
             }
             elseif($request->txtroledatefrom != null && $request->txtroledateto != null){
-                $roles = Roles::where("role", "like", "%" . $request->txtrolesearch . "%")->whereBetween(DB::raw("DATE(created_at)"), [Carbon::parse($request->txtroledatefrom)->format("Y-m-d"), Carbon::parse($request->txtroledateto)->format("Y-m-d")])->paginate(20);
+                $roles = Roles::where("role", "like", "%" . $request->txtrolesearch . "%")->whereBetween(DB::raw("DATE(created_at)"), [Carbon::parse($request->txtroledatefrom)->format("Y-m-d"), Carbon::parse($request->txtroledateto)->format("Y-m-d")])->paginate(10);
                 $datefrom = $request->txtroledatefrom;
                 $dateto = $request->txtroledateto;
                 array_push($params, ['datefrom', 'dateto']);
@@ -163,40 +164,23 @@ class SettingsController extends Controller
         }
         elseif($request->txtrolesearch == null){
             if($request->txtroledatefrom != null && $request->txtroledateto == null){
-                $roles = Roles::whereDate("created_at", Carbon::parse($request->txtroledatefrom)->format("Y-m-d"))->paginate(20);
+                $roles = Roles::whereDate("created_at", Carbon::parse($request->txtroledatefrom)->format("Y-m-d"))->paginate(10);
                 $datefrom = $request->txtroledatefrom;
                 array_push($params, ['datefrom']);
             }
             elseif($request->txtroledatefrom == null && $request->txtroledateto != null){
-                $roles = Roles::whereDate("created_at", Carbon::parse($request->txtroledateto)->format("Y-m-d"))->paginate(20);
+                $roles = Roles::whereDate("created_at", Carbon::parse($request->txtroledateto)->format("Y-m-d"))->paginate(10);
                 $dateto = $request->txtroledateto;
                 array_push($params, ['dateto']);
             }
             elseif($request->txtroledatefrom != null && $request->txtroledateto != null){
-                $roles = Roles::whereBetween(DB::raw("DATE(created_at)"), [Carbon::parse($request->txtroledatefrom)->format("Y-m-d"), Carbon::parse($request->txtroledateto)->format("Y-m-d")])->paginate(20);
+                $roles = Roles::whereBetween(DB::raw("DATE(created_at)"), [Carbon::parse($request->txtroledatefrom)->format("Y-m-d"), Carbon::parse($request->txtroledateto)->format("Y-m-d")])->paginate(10);
                 $datefrom = $request->txtroledatefrom;
                 $dateto = $request->txtroledateto;
                 array_push($params, ['datefrom', 'dateto']);
             }
         }
-        $notr = [
-            'ignition.healthCheck',
-            'ignition.executeSolution',
-            'ignition.shareReport',
-            'ignition.scripts',
-            'ignition.styles',
-            'login',
-            'checklogin',
-            'logout'
-        ];
-        $routelist = Route::getRoutes();
-        $routes = [];
-        foreach($routelist as $key => $route){
-            if(!in_array($route->getName(), $notr) && $route->getName() != ""){
-                $rname = explode(".", $route->getName());
-                $routes[$rname[0]][$key] = $route->getName();
-            }
-        }
+        $routes = RouteChecker::routeList();
         return view("settings.roles", compact($params));
     }
 
@@ -272,7 +256,7 @@ class SettingsController extends Controller
 
     public function referentials(Request $request)
     {
-        $referentials = Referentials::paginate(20);
+        $referentials = Referentials::paginate(10);
         $modules = Modules::get();
         return view("settings.referentials", compact(['referentials', 'modules']));
     }
