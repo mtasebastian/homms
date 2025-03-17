@@ -74,19 +74,13 @@ class FinancialsController extends Controller
 
         $reslist = json_decode($request->chkreslist, true);
         if($request->btngeneratebills == "all"){
-            $reslist = Residents::get();
+            $reslist = Residents::pluck("id");
         }
         foreach($reslist as $res){
             $resident = Residents::find($res);
             $financial = new Financials();
             $financial->bill_period = Carbon::parse($request->finperiod)->format("Y-m-d");
-            if($request->btngeneratebills == "all"){
-                $resident = $res;
-                $financial->resident_id = $res->id;
-            }
-            else{
-                $financial->resident_id = $res;
-            }
+            $financial->resident_id = $res;
             $financial->bill_amount = $total;
             if($resident->balance == null){
                 $financial->balance = $total;

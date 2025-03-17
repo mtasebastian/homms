@@ -71,6 +71,10 @@ $.fn.reqpop = function(){
 
 $(document).ready(function(){
     $(".datepicker").datepicker();
+    $(".datepickerBig").datepicker({
+        changeMonth: true,
+        changeYear: true
+    });
     $(".timepicker").timepicker();
     $(".ddtrigger").ddtrigger();
     $(".reqpop").each(function(){

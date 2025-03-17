@@ -20,7 +20,7 @@
 }
 
 html{
-    overflow: hidden;
+    overflow: auto;
 }
 
 *{
@@ -49,6 +49,11 @@ body{
     background: #FFFFFF;
 }
 
+.ui-datepicker
+{
+    display: none;
+}
+
 .bgimg{
     background: url("../images/bg.jpg") center no-repeat;
     background-size: 100% auto;
@@ -64,13 +69,13 @@ body{
 .main{
     display: flex;
     flex-wrap: nowrap;
-    height: 100vh;
-    max-height: 100vh;
-    overflow: hidden;
 }
 
 .sidebar{
     width: 340px;
+    position: fixed;
+    height: 100vh;
+    z-index: 999;
 }
 
 .mobile-sidebar{
@@ -82,7 +87,12 @@ body{
 }
 
 .navtitle{
-    position: relative;
+    position: fixed;
+    width: calc(100vw - 300px);
+    top: 0px;
+    background: #FFF;
+    border-bottom: solid 1px #CCC;
+    z-index: 998;
 }
 
 .navtitle .blink{
@@ -99,23 +109,25 @@ body{
 .mbody{
     background: #f3f2f7;
     width: calc(100vw - 300px);
+    margin-left: 340px;
+    margin-top: 75px;
 }
 
 .mtitle{
     font-family: "Visby Bold";
     font-size: 1.8rem;
-    color: #333333;
+    color: #666666;
     height: 75px;
-}
-
-.mcontent{
-    height: calc(100vh - 75px);
-    overflow: hidden;
 }
 
 .mtitle .fa-solid{
     font-size: 1.8rem;
     margin-right: 0.5rem;
+}
+
+.mcontent{
+    min-height: calc(100vh - 95px);
+    padding-bottom: 20px;
 }
 
 .rtitle{

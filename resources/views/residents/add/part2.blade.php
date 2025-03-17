@@ -42,11 +42,11 @@
     <div class="row mb-3">
         <div class="col-md-3 form-data">
             <label for="resdateofbirth" class="form-label">Date of Birth</label>
-            <input type="text" class="form-control py-2 px-3 datepicker rounded-3" name="resdateofbirth" id="resdateofbirth" placeholder="__/__/____" required>
+            <input type="text" class="form-control py-2 px-3 datepickerBig rounded-3" name="resdateofbirth" id="resdateofbirth" placeholder="__/__/____" onchange="computeAge()" required>
         </div>
         <div class="col-md-3 form-data">
             <label for="resage" class="form-label">Age</label>
-            <input type="text" class="form-control py-2 px-3 rounded-3" name="resage" id="resage" placeholder="Enter Age" required>
+            <input type="text" class="form-control py-2 px-3 rounded-3" name="resage" id="resage" placeholder="Enter Age" readonly required>
         </div>
         <div class="col-md-6 form-data">
             <label for="resplaceofbirth" class="form-label">Place of Birth</label>
@@ -135,5 +135,16 @@
         else{
             $("#btnrnext").attr("disabled", false);
         }
+    }
+
+    function computeAge(){
+        const today = new Date();
+        const birth = new Date($("#resdateofbirth").val());
+        let age = today.getFullYear() - birth.getFullYear();
+        const monthDifference = today.getMonth() - birth.getMonth();
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birth.getDate())) {
+            age--;
+        }
+        $("#resage").val(age);
     }
 </script>

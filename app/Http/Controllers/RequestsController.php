@@ -38,6 +38,39 @@ class RequestsController extends Controller
         }
     }
 
+    public function updaterequest(Request $request)
+    {
+        if($request->btnsubmit){
+            $req = Requests::find($request->reqid);
+            $req->request_type = $request->reqtype;
+            $req->type = $request->reqtranstype;
+            $req->address = $request->reqaddress;
+            $req->details = $request->reqdetails;
+            $req->pullout_delivery_date = Carbon::parse($request->reqtransdate)->format("Y-m-d");
+            $req->valid_from = Carbon::parse($request->reqvalidfrom)->format("Y-m-d");
+            $req->valid_to = Carbon::parse($request->reqvalidto)->format("Y-m-d");
+            $req->requested_by = $request->reqrequestedbyid;
+            $req->request_status = $request->reqstatus;
+            $req->save();
+        }
+        elseif($request->btnapprove){
+            $req = Requests::find($request->reqid);
+            $req->request_status = "Approved";
+            $req->approved_by = Auth::user()->id;
+            $req->save();
+            
+            return redirect()->back()->with("success", "Request has been approved.");
+        }
+    }
+
+    public function deleterequest(Request $request)
+    {
+        $request = Requests::find($request->compdelid);
+        $request->delete();
+            
+        return redirect()->back()->with("success", "Request has been deleted.");
+    }
+
     public function genQR($length)
     {
         $characters = "0123456789";

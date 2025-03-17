@@ -27,6 +27,7 @@ class Requests extends Model
     public function requestStatus()
     {
         switch($this->request_status){
+            case "For Approval": return "border text-secondary"; break;
             case "Pending": return "bg-info text-white"; break;
             case "Checked": return "bg-warning text-white"; break;
             case "Approved": return "bg-success text-white"; break;

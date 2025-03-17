@@ -17,7 +17,7 @@ class ResidentsController extends Controller
     {
         $params = ['residents', 'provinces', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["phase", "housecolor", "citizenship", "relation", "vehicletype", "pettype"])->with("referential")->get();
-        $provinces = Provinces::get();
+        $provinces = Provinces::orderBy("name", "ASC")->get();
         $residents = Residents::with(["occupants", "vehicles", "pets"])->paginate(10);
         if($request->searchkey != null){
             $residents = Residents::with(["occupants", "vehicles", "pets"])->where("name", "like", "%" . $request->searchkey . "%")->paginate(10);

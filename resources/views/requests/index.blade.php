@@ -121,6 +121,19 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6 form-data">
+                            <label for="reqrequestedby" class="form-label">Requested By</label>
+                            <input type="hidden" name="reqrequestedbyid" id="reqrequestedbyid" value="{{ auth()->user()->role_id != '1' ? auth()->user()->id : '' }}">
+                            <input type="text" class="form-control py-2 px-3 rounded-3" id="reqrequestedby" name="reqrequestedby" placeholder="Select Requested By" value="{{ auth()->user()->role_id != '1' ? auth()->user()->name : '' }}" onfocus="searchresident();" {{ auth()->user()->role_id != '1' ? 'readonly' : '' }} required>
+                        </div>
+                        <div class="col-md-6 form-data">
+                            <label for="reqstatus" class="form-label">Request Status</label>
+                            <select class="form-select py-2 px-3 rounded-3" name="reqstatus" id="reqstatus" required>
+                                <option value="">Select Request Status</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-data mb-3">
                         <label for="reqaddress" class="form-label">Address</label>
                         <input type="text" class="form-control py-2 px-3 rounded-3" name="reqaddress" id="reqaddress" required>
@@ -143,26 +156,13 @@
                             <input type="text" class="form-control py-2 px-3 datepicker rounded-3" id="reqvalidto" name="reqvalidto" placeholder="__/__/____" required>
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6 form-data">
-                            <label for="reqrequestedby" class="form-label">Requested By</label>
-                            <input type="hidden" name="reqrequestedbyid" id="reqrequestedbyid" value="{{ auth()->user()->role_id != '1' ? auth()->user()->id : '' }}">
-                            <input type="text" class="form-control py-2 px-3 rounded-3" id="reqrequestedby" name="reqrequestedby" placeholder="Select Requested By" value="{{ auth()->user()->role_id != '1' ? auth()->user()->name : '' }}" onfocus="searchresident();" {{ auth()->user()->role_id != '1' ? 'readonly' : '' }} required>
-                        </div>
-                        <div class="col-md-6 form-data">
-                            <label for="reqstatus" class="form-label">Request Status</label>
-                            <select class="form-select py-2 px-3 rounded-3" name="reqstatus" id="reqstatus" required>
-                                <option value="">Select Request Status</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="row" id="reqnew">
-                        <div class="col-md-6 form-data">
+                        <div class="col-md-6 form-data chk_by">
                             <label for="reqcheckedby" class="form-label">Checked By</label>
                             <input type="hidden" name="reqcheckedbyid" id="reqcheckedbyid">
                             <input type="text" class="form-control py-2 px-3 rounded-3" id="reqcheckedby" name="reqcheckedby" placeholder="Select Checked By" disabled>
                         </div>
-                        <div class="col-md-6 form-data">
+                        <div class="col-md-6 form-data app_by">
                             <label for="reqapprovedby" class="form-label">Approved By</label>
                             <input type="hidden" name="reqapprovedbyid" id="reqapprovedbyid">
                             <input type="text" class="form-control py-2 px-3 rounded-3" id="reqapprovedby" name="reqapprovedby" placeholder="Select Approved By" disabled>
@@ -170,8 +170,8 @@
                     </div>
                 </div>
                 <div class="modal-footer p-4 py-3">
-                    <button type="submit" name="btnapprove" class="btn btn-success px-3 py-2 rounded-3 btnapprove"><i class="fa-solid fa-thumbs-up"></i>&nbsp;&nbsp;Approve</button>
-                    <button type="submit" name="btnsubmit" class="btn btn-add mx-2 px-3 py-2 rounded-3"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save</button>
+                    <button type="submit" id="btnapprove" name="btnapprove" value="approve" class="btn btn-success px-3 py-2 rounded-3 btnapprove"><i class="fa-solid fa-thumbs-up"></i>&nbsp;&nbsp;Approve</button>
+                    <button type="submit" name="btnsubmit" value="submit" class="btn btn-add mx-2 px-3 py-2 rounded-3"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save</button>
                     <button type="button" class="btn btn-light border py-2 px-3 rounded-3" data-bs-dismiss="modal">Close</button>
                 </div>
             </form>
@@ -399,12 +399,14 @@
                         "<td>" + item.last_name + ", " + item.first_name + " " + item.middle_name.charAt(0) + ".</td>" +
                         "<td>" + item.home_address + "</td>" +
                         "<td>" + (item.home_status == 1 ? "Active" : "Inactive") + "</td>" +
+                        "<input type='hidden' class='fulladdress' value='" + item.fulladdress + "'>" +
                     "</tr>");
                 });
                 $("#tblfilterres tr").each(function(){
                     $(this).click(function(){
                         $("#reqrequestedbyid").val($(this).attr("id"));
                         $("#reqrequestedby").val($(this).find("td").eq(0).text());
+                        $("#reqaddress").val($(this).find(".fulladdress").val());
                         $("#searchresident").modal("hide");
                         $("#addreq").modal("show");
                     });
@@ -420,6 +422,7 @@
         $("#reqnew").hide();
         $("#frmreq").attr("action", "{{ route('requests.add_request') }}");
         $("#addreq").modal("show");
+        $("#btnapprove").hide();
     }
 
     function editreq(){
@@ -436,18 +439,41 @@
         $("#reqvalidfrom").val(formatDate(arr.valid_from));
         $("#reqvalidto").val(formatDate(arr.valid_to));
         $("#reqrequestedbyid").val(arr.req_by.id);
+        $("#reqstatus").val(arr.request_status);
         $("#reqrequestedby").val(arr.req_by.last_name + ", " + arr.req_by.first_name + " " + arr.req_by.middle_name.charAt(0) + ".");
         if(arr.chk_by || arr.app_by){
             $("#reqnew").show();
         }
         if(arr.app_by)
-        { $("#reqnew .col-md-6:first-child").show(); }
+        {
+            $("#reqapprovedbyid").val(arr.app_by.id);
+            $("#reqapprovedby").val(arr.app_by.name);
+            $("#reqnew .app_by").show();
+        }
         else
-        { $("#reqnew .col-md-6:first-child").hide(); }
+        {
+            $("#reqapprovedbyid").val("");
+            $("#reqapprovedby").val("");
+            $("#reqnew .app_by").hide();
+        }
         if(arr.chk_by)
-        { $("#reqnew .col-md-6:last-child").show(); }
+        {
+            $("#reqcheckedbyid").val(arr.chk_by.id);
+            $("#reqcheckedby").val(arr.chk_by.name);
+            $("#reqnew .chk_by").show();
+        }
         else
-        { $("#reqnew .col-md-6:last-child").hide(); }
+        {
+            $("#reqcheckedbyid").val("");
+            $("#reqcheckedby").val("");
+            $("#reqnew .chk_by").hide();
+        }
+        if(arr.request_status != "Approved"){     
+            $("#btnapprove").show();
+        }
+        else{
+            $("#btnapprove").hide();
+        }
         $("#addreqLabel").text("Edit Request");
         $("#frmreq").attr("action", "{{ route('requests.update_request') }}");
         $("#addreq").modal("show");

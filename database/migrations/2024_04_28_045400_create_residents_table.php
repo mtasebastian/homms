@@ -23,7 +23,7 @@ class CreateResidentsTable extends Migration
             $table->integer("barangay_id");
             $table->integer("city_id");
             $table->integer("province_id");
-            $table->string("unit_area", 20);
+            $table->string("unit_area", 20)->nullable();
             $table->date("move_in_date");
             $table->string("house_color", 50);
             $table->integer("renovated")->default(0);
