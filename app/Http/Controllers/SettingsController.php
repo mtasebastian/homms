@@ -341,7 +341,7 @@ class SettingsController extends Controller
 
     public function filterresidents(Request $request)
     {
-        $residents = Residents::where('last_name', 'like', '%' . $request->key . '%')->orWhere('first_name', 'like', '%' . $request->key . '%')->orWhere('middle_name', 'like', '%' . $request->key . '%')->get();
+        $residents = Residents::where('last_name', 'like', '%' . $request->key . '%')->orWhere('first_name', 'like', '%' . $request->key . '%')->orWhere('middle_name', 'like', '%' . $request->key . '%')->limit(10)->get();
         return $residents;
     }
 

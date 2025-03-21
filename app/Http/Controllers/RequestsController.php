@@ -15,6 +15,7 @@ class RequestsController extends Controller
         $params = ['reqs', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["reqtype", "reqstatus"])->with("referential")->get();
         $reqs = Requests::with(["reqBy", "appBy", "chkBy"])->paginate(10);
+        $reqs->appends($request->except('page')); 
         return view("requests.index", compact($params));
     }
 

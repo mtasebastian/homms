@@ -118,18 +118,18 @@
                     <div class="row mb-3">
                         <div class="col-md-6 form-data">
                             <label for="compresname" class="form-label">Complainant</label>
-                            <input type="hidden" name="compresid" id="compresid">
-                            <input type="text" class="form-control py-2 px-3 rounded-3" id="compresname" placeholder="Select Complainant" onfocus="searchresident('res')">
+                            <input type="hidden" name="compresid" id="compresid" required>
+                            <input type="text" class="form-control py-2 px-3 rounded-3" id="compresname" placeholder="Select Complainant" onkeyup="searchresident('res')" required>
                         </div>
                         <div class="col-md-6 form-data">
                             <label for="compdefname" class="form-label">Defendant</label>
-                            <input type="hidden" name="compdefid" id="compdefid">
-                            <input type="text" class="form-control py-2 px-3 rounded-3" id="compdefname" placeholder="Select Defendant" onfocus="searchresident('def')">
+                            <input type="hidden" name="compdefid" id="compdefid" required>
+                            <input type="text" class="form-control py-2 px-3 rounded-3" id="compdefname" placeholder="Select Defendant" onkeyup="searchresident('def')" required>
                         </div>
                     </div>
                     <div class="form-data mb-3">
                         <label for="comppurpose" class="form-label">Purpose</label>
-                        <textarea class="form-control py-2 px-3 rounded-3" name="comppurpose" id="comppurpose" placeholder="Enter Purpose"></textarea>
+                        <textarea class="form-control py-2 px-3 rounded-3" name="comppurpose" id="comppurpose" placeholder="Enter Purpose" required></textarea>
                     </div>
                     <div class="form-data mb-3">
                         <label for="compremarks" class="form-label">Remarks / Comments</label>

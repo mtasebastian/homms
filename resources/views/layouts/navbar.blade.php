@@ -1,5 +1,5 @@
 <div class="d-flex flex-column flex-shrink-0 sidebar shadow">
-    <div class="m-4 mx-auto img-cont shadow border-light rounded-3">
+    <div class="m-4 mx-auto img-cont shadow rounded-3">
       <a href="/" class="d-flex align-items-center text-decoration-none">
         <img src="{{ asset('images/logo.jpg') }}" class="img-fluid rounded-3">
       </a>

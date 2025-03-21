@@ -58,6 +58,7 @@ class FinancialsController extends Controller
                 array_push($params, ['datefrom', 'dateto']);
             }
         }
+        $financials->appends($request->except('page')); 
         return view("financials.index", compact($params));
     }
 
