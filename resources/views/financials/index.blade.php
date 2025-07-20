@@ -355,6 +355,11 @@
                     alert("Please select residents to bill.");
                 }
                 else{
+                    const hiddenInput = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", clickedSubmitBtn.attr("name"))
+                        .val(clickedSubmitBtn.val());
+                    $(this).append(hiddenInput);
                     $(this).off("submit").submit();
                 }
             }
