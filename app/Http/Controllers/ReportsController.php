@@ -8,6 +8,7 @@ use App\Models\Requests;
 use App\Models\Residents;
 use App\Models\Complaints;
 use App\Models\Visitors;
+use Carbon\Carbon;
 
 class ReportsController extends Controller
 {
