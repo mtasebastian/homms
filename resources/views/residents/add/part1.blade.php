@@ -17,27 +17,27 @@
     </div>
     <div class="row mb-3">
         <div class="col-md-3 form-data">
-            <label for="resphase" class="form-label">Phase</label>
+            <label for="resphase" class="form-label req">Phase</label>
             <select class="form-select py-2 px-3 rounded-3" name="resphase" id="resphase" required>
                 <option value="">Select Phase</option>
             </select>
         </div>
         <div class="col-md-3 form-data">
-            <label for="reshouseno" class="form-label">House Number</label>
+            <label for="reshouseno" class="form-label req">House Number</label>
             <input type="text" class="form-control py-2 px-3 rounded-3" name="reshouseno" id="reshouseno" placeholder="Enter House Number" required>
         </div>
         <div class="col-md-3 form-data">
-            <label for="resblock" class="form-label">Block</label>
+            <label for="resblock" class="form-label req">Block</label>
             <input type="text" class="form-control py-2 px-3 rounded-3" name="resblock" id="resblock" placeholder="Enter Block" required>
         </div>
         <div class="col-md-3 form-data">
-            <label for="reslot" class="form-label">Lot</label>
+            <label for="reslot" class="form-label req">Lot</label>
             <input type="text" class="form-control py-2 px-3 rounded-3" name="reslot" id="reslot" placeholder="Enter Lot" required>
         </div>
     </div>
     <div class="row mb-3">
         <div class="col-md-6 form-data">
-            <label for="resprovince" class="form-label">Province</label>
+            <label for="resprovince" class="form-label req">Province</label>
             <select class="form-select py-2 px-3 rounded-3" name="resprovince" id="resprovince" onchange="loadcities(this.value)" required>
                 <option value="">Select Province</option>
                 @foreach($provinces as $province)
@@ -46,7 +46,7 @@
             </select>
         </div>
         <div class="col-md-6 form-data">
-            <label for="rescity" class="form-label">City</label>
+            <label for="rescity" class="form-label req">City</label>
             <select class="form-select py-2 px-3 rounded-3" name="rescity" id="rescity" onchange="loadbarangays(this.value)" required>
                 <option value="">Select City</option>
             </select>
@@ -54,13 +54,13 @@
     </div>
     <div class="row mb-3">
         <div class="col-md-6 form-data">
-            <label for="resbarangay" class="form-label">Barangay</label>
+            <label for="resbarangay" class="form-label req">Barangay</label>
             <select class="form-select py-2 px-3 rounded-3" name="resbarangay" id="resbarangay" required>
                 <option value="">Select Barangay</option>
             </select>
         </div>
         <div class="col-md-6 form-data">
-            <label for="resstreet" class="form-label">Street</label>
+            <label for="resstreet" class="form-label req">Street</label>
             <input type="text" class="form-control py-2 px-3 rounded-3" name="resstreet" id="resstreet" placeholder="Enter Street" required>
         </div>
     </div>

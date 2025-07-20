@@ -38,7 +38,7 @@ class ReportsController extends Controller
         if($request->reporttype){
             switch ($request->reporttype){
                 case "Financials":
-                    $results = Financials::with("resident")->where("created_at", Financials::max("created_at"))->get();
+                    $results = Financials::with("resident")->get();
                 break;
                 case "Requests":
                     $results = Requests::with(["reqBy", "appBy", "chkBy"])->get();

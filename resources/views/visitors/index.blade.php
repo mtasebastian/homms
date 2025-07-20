@@ -161,7 +161,7 @@
     <div class="modal-dialog xs-modal">
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
-                <h5 class="modal-title" id="optvisitLabel">Options</h5>
+                <h5 class="modal-title" id="optvisitLabel">Actions</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 py-3 m-3 text-center">

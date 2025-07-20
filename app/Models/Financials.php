@@ -12,11 +12,16 @@ class Financials extends Model
     use HasFactory;
     use SoftDeletes;
     public $timestamps = true;
-    protected $appends = ["formattedcat", "formatteduat"];
+    protected $appends = ["formattedcat", "formatteduat", "monthname"];
 
     public function resident()
     {
         return $this->belongsTo("App\Models\Residents", "resident_id", "id");
+    }
+
+    public function payments()
+    {
+        return $this->hasMany("App\Models\FinancialPayments", "financial_id", "id");
     }
 
     public function bills()
@@ -29,8 +34,14 @@ class Financials extends Model
         return Carbon::parse($this->created_at)->format("Y-m-d");
     }
 
-    public function getFormatteduatAttribute($date)
+    public function getFormatteduatAttribute()
     {
         return Carbon::parse($this->updated_at)->format("Y-m-d");
+    }
+
+    public function getMonthnameAttribute()
+    {
+        $months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        return $months[$this->bill_month];
     }
 }

@@ -103,13 +103,13 @@
                     <input type="hidden" id="compid" name="compid">
                     <div class="row mb-3">
                         <div class="col-md-6 form-data">
-                            <label for="comptype" class="form-label">Complaint Type</label>
+                            <label for="comptype" class="form-label req">Complaint Type</label>
                             <select class="form-select py-2 px-3 rounded-3" name="comptype" id="comptype" required>
                                 <option value="">Select Complaint Type</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-data">
-                            <label for="compstatus" class="form-label">Complaint Status</label>
+                            <label for="compstatus" class="form-label req">Complaint Status</label>
                             <select class="form-select py-2 px-3 rounded-3" name="compstatus" id="compstatus" required>
                                 <option value="">Select Complaint Status</option>
                             </select>
@@ -117,18 +117,18 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6 form-data">
-                            <label for="compresname" class="form-label">Complainant</label>
+                            <label for="compresname" class="form-label req">Complainant</label>
                             <input type="hidden" name="compresid" id="compresid" required>
-                            <input type="text" class="form-control py-2 px-3 rounded-3" id="compresname" placeholder="Select Complainant" onkeyup="searchresident('res')" required>
+                            <input type="text" class="form-control py-2 px-3 rounded-3" id="compresname" placeholder="Select Complainant" onclick="searchresident('res')" required>
                         </div>
                         <div class="col-md-6 form-data">
-                            <label for="compdefname" class="form-label">Defendant</label>
-                            <input type="hidden" name="compdefid" id="compdefid" required>
-                            <input type="text" class="form-control py-2 px-3 rounded-3" id="compdefname" placeholder="Select Defendant" onkeyup="searchresident('def')" required>
+                            <label for="compdefname" class="form-label">Neighbor</label>
+                            <input type="hidden" name="compdefid" id="compdefid">
+                            <input type="text" class="form-control py-2 px-3 rounded-3" id="compdefname" placeholder="Select Defendant" onclick="searchresident('def')" required>
                         </div>
                     </div>
                     <div class="form-data mb-3">
-                        <label for="comppurpose" class="form-label">Purpose</label>
+                        <label for="comppurpose" class="form-label req">Purpose</label>
                         <textarea class="form-control py-2 px-3 rounded-3" name="comppurpose" id="comppurpose" placeholder="Enter Purpose" required></textarea>
                     </div>
                     <div class="form-data mb-3">
@@ -153,7 +153,7 @@
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
                 <h5 class="modal-title" id="searchresidentLabel">Search Complainant</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" onclick="closesearch()"></button>
             </div>
             <div class="modal-body p-4">
                 <div class="row mb-4">
@@ -210,7 +210,7 @@
     <div class="modal-dialog xs-modal">
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
-                <h5 class="modal-title" id="optcompLabel">Options</h5>
+                <h5 class="modal-title" id="optcompLabel">Actions</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 py-3 m-3 text-center">
@@ -264,12 +264,17 @@
         $("#addcomplaint").modal("hide");
     }
 
+    function closesearch(){
+        $("#addcomplaint").modal("show");
+        $("#searchresident").modal("hide");
+    }
+
     function filterresident(){
         let key = $("#txtressearch").val();
         $.get("{{ route('filter_residents') }}?key=" + key, function(data, status){       
             if(status == "success"){
                 if(data.length == 0){
-                    $("#tblfilterres").html("<tr><td colspan='3' class='text-center'>Search Resident</td></tr>");
+                    $("#tblfilterres").html("<tr><td colspan='3' class='text-center'>No Resident/s Found</td></tr>");
                 }
                 else{
                     $("#tblfilterres").html("");

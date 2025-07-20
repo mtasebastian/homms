@@ -13,7 +13,37 @@ class VisitorsController extends Controller
     {
         $params = ['visitors', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["visitortype", "presentedid"])->with("referential")->get();
-        $visitors = Visitors::paginate(10);
+        $query = Visitors::query();
+        $search = $request->txtvisitorsearch;
+        $dateFrom = $request->txtvisitordatefrom;
+        $dateTo = $request->txtvisitordateto;
+        if($search){
+            $query->where(function ($q) use ($search) {
+                $q->where('visitor_type', 'like', "%$search%")
+                ->orWhere('name', 'like', "%$search%")
+                ->orWhere('purpose', 'like', "%$search%");
+            });
+            $searchkey = $search;
+            array_push($params, ['searchkey']);
+        }
+
+        if($dateFrom && !$dateTo){
+            $query->whereDate('created_at', Carbon::parse($dateFrom)->format('Y-m-d'));
+            array_push($params, ['datefrom']);
+        }
+        elseif(!$dateFrom && $dateTo){
+            $query->whereDate('created_at', Carbon::parse($dateTo)->format('Y-m-d'));
+            array_push($params, ['dateto']);
+        }
+        elseif($dateFrom && $dateTo){
+            $query->whereBetween(DB::raw("DATE(created_at)"), [
+                Carbon::parse($dateFrom)->format('Y-m-d'),
+                Carbon::parse($dateTo)->format('Y-m-d')
+            ]);
+            array_push($params, ['datefrom', 'dateto']);
+        }
+        $visitors = $query->paginate(10);
+        $visitors->appends($request->except('page')); 
         return view("visitors.index", compact($params));
     }
 

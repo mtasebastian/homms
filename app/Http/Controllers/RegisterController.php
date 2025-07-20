@@ -25,6 +25,7 @@ class RegisterController extends Controller
             $user->role_id = 5;
             $user->name = $request->txtfirstname . " " . $request->txtlastname;
             $user->email = $request->txtemail;
+            $user->mobileno = $request->txtcontactno;
             $user->password = bcrypt($request->txtpassword);
             $user->save();
             return redirect()->back()->with("success", "Registration successful. You will be redirected to the login page.");

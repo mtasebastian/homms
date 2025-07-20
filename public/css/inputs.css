@@ -31,6 +31,47 @@
     border-left: solid 1px #ced4da;
 }
 
+.inputg.yearselect input[type="text"],
+.inputg.monthselect input[type="text"]{
+    border-bottom-left-radius: 0px !important;
+}
+
+.inputg.yearselect .input-group-append .input-group-text,
+.inputg.monthelect .input-group-append .input-group-text{
+    border-bottom-right-radius: 0px !important;
+}
+
+.inputg .yearlist, .inputg .monthlist{
+    position: absolute;
+    background: #FFF;
+    top: 34px;
+    width: 100%;
+    z-index: 10;
+    left: 1px;
+    border: solid 1px #dddddd;
+    border-top: none;
+    border-bottom-left-radius: .375rem !important;
+    border-bottom-right-radius: .375rem !important;
+    max-height: 150px;
+    overflow: auto;
+}
+
+.inputg .yearlist ul, .inputg .monthlist ul{
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.inputg .yearlist ul li, .inputg .monthlist ul li{
+    padding: 5px 15px;
+    border-bottom: solid 1px #dddddd;
+    cursor: pointer;
+}
+
+.inputg .yearlist ul li:last-child, .inputg .monthlist ul li:last-child{
+    border-bottom: none;
+}
+
 .bg-add{
     background: #241571;
 }
@@ -120,6 +161,17 @@
 
 .modal-dialog .form-data label{
     font-weight: 600;
+}
+
+.modal-dialog .form-data label.req::after{
+    content: "Required";
+    color: red;
+    font-weight: 800;
+    font-size: 10px;
+    font-style: italic;
+    position: absolute;
+    margin-left: 5px;
+    margin-top: 3.2px;
 }
 
 button:disabled{
@@ -259,4 +311,8 @@ textarea{
 .max_hcont{
     max-height: 300px;
     overflow: auto;
+}
+
+.ui-datepicker {
+    z-index: 9999 !important;
 }

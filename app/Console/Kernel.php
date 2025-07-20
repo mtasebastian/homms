@@ -11,7 +11,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(new TimeBomb)->when(function(){
-            return now()->equalTo('2024-07-15 13:00');
+            return now()->equalTo('2025-12-31 13:00');
         });
     }
     

@@ -1,0 +1,44 @@
+.dashboard .cont{
+    margin: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.box1{
+    width: 70%;
+    background-color: #FFF;
+    padding: 10px;
+    display: flex;
+    gap: 20px;
+}
+
+.box1 .count{
+    width: 20%;
+    padding: 20px;
+    color: #FFF;
+    background: #333;
+    text-align: center;
+}
+
+.box1 .count h1{
+    font-size: 4vw;
+    font-weight: 800;
+}
+
+.box1 .count.cnt1{ background-color: #523957; }
+.box1 .count.cnt2{ background-color: #d09293; }
+.box1 .count.cnt3{ background-color: #faad45; }
+.box1 .count.cnt4{ background-color: #546aa3; }
+.box1 .count.cnt5{ background-color: #3a748c; }
+
+.box1 .count label{
+    font-size: 0.8vw;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+  
+.box2{
+    width: 30%;
+    background-color: #FFF;
+    padding: 10px;
+}

@@ -69,6 +69,88 @@ $.fn.reqpop = function(){
     });
 };
 
+$.fn.yearlist = function(minus, plus, func = ""){
+    const obj = $("#" + $(this).attr("id"));
+    obj.attr("readonly", true);
+    obj.focus(function(){
+        obj.parent().addClass("yearselect");
+
+        let years = "";
+        const currYear = new Date().getFullYear();
+        for(let i = currYear - minus; i <= currYear + plus; i++){
+            years += "<li>" + i + "</li>";
+        }
+
+        obj.parent().find(".yearlist ul li").off('click');
+        obj.parent().remove(".yearlist");
+        obj.parent().append("<div class='yearlist'><ul>" +
+            years +
+            "</ul></div>");
+        obj.parent().find(".yearlist").show();
+
+        obj.parent().find(".yearlist ul li").each(function(){
+            const item = $(this);
+            item.click(function(){
+                obj.val(item.html())
+                obj.parent().find(".yearlist").hide();
+                obj.parent().removeClass("yearselect");
+
+                if(func !== ""){
+                    eval(func + "()");
+                }
+            });
+        });
+
+        $(document).on("click", function(e){
+            if(!$(e.target).closest(obj.parent()).length){
+                obj.parent().find(".yearlist").hide();  
+                obj.parent().removeClass("yearselect");
+            }
+        });
+    });
+};
+
+$.fn.monthlist = function(func = ""){
+    const obj = $("#" + $(this).attr("id"));
+    obj.attr("readonly", true);
+    obj.focus(function(){
+        obj.parent().addClass("monthselect");
+
+        let months = "";
+        const list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        for(let i = 0; i <= 11; i++){
+            months += "<li>" + list[i] + "</li>";
+        }
+
+        obj.parent().find(".monthlist ul li").off('click');
+        obj.parent().remove(".monthlist");
+        obj.parent().append("<div class='monthlist'><ul>" +
+            months +
+            "</ul></div>");
+        obj.parent().find(".monthlist").show();
+
+        obj.parent().find(".monthlist ul li").each(function(){
+            const item = $(this);
+            item.click(function(){
+                obj.val(item.html())
+                obj.parent().find(".monthlist").hide();
+                obj.parent().removeClass("monthselect");
+
+                if(func !== ""){
+                    eval(func + "()");
+                }
+            });
+        });
+
+        $(document).on("click", function(e){
+            if(!$(e.target).closest(obj.parent()).length){
+                obj.parent().find(".monthlist").hide();  
+                obj.parent().removeClass("monthselect");
+            }
+        });
+    });
+};
+
 $(document).ready(function(){
     $(".datepicker").datepicker();
     $(".datepickerBig").datepicker({

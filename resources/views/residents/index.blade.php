@@ -183,7 +183,7 @@
     <div class="modal-dialog xs-modal">
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
-                <h5 class="modal-title" id="optresLabel">Options</h5>
+                <h5 class="modal-title" id="optresLabel">Actions</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 py-3 m-3 text-center">
@@ -252,25 +252,40 @@
         switch(cnt){
             case 1:
                 $("#btnrprev").hide();
-                if($("#txtdrfname").val() == "" || $("#txtdrlname").val() == "" || $("#txtdremailadd").val() == "" || $("#txtdrpass").val() == ""){
-                    $("#btnrnext").attr("disabled", true);
+                chkrespart1();
+                if($("#resid").val() != ""){
+                    $("#btnrsubmit").hide();
                 }
-                $("#btnrsubmit").hide();
             break;
             case 2:
+                const fulladdress = $("#resphase option:selected").text() + " " +
+                    $("#reshouseno").val() +
+                    " Block " + $("#resblock").val() +
+                    " Lot " + $("#reslot").val() +
+                    " " + $("#resbarangay option:selected").text() +
+                    " " + $("#resstreet").val() + " st." +
+                    ", " + $("#rescity option:selected").text() +
+                    " " + $("#resprovince option:selected").text();
+                $("#reshomeaddress").val(fulladdress);
                 $("#btnrprev").show();
                 $("#btnrnext").show();
                 chkrespart2();
-                $("#btnrsubmit").hide();
+                if($("#resid").val() != ""){
+                    $("#btnrsubmit").hide();
+                }
             break;
             case 3 || 4:
                 $("#btnrprev").show();
                 $("#btnrnext").show();
-                $("#btnrsubmit").hide();
+                if($("#resid").val() != ""){
+                    $("#btnrsubmit").hide();
+                }
             break;
             case 5:
                 $("#btnrnext").hide();
-                $("#btnrsubmit").show();
+                if($("#resid").val() != ""){
+                    $("#btnrsubmit").hide();
+                }
             break;
         }
         $(".xsteps li").removeClass("active");
@@ -293,6 +308,7 @@
         initresident();
         params = JSON.parse(obj.find(".resident").val());
         $("#resid").val(id);
+        $("#btnrsubmit").show();
         $("#resstatus").prop("checked", params.home_status == 1 ? true : false);
         $("#resrenovated").prop("checked", params.renovated == 1 ? true : false);
         $("#resphase").val(params.phase);

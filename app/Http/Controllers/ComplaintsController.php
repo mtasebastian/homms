@@ -13,7 +13,38 @@ class ComplaintsController extends Controller
     {
         $params = ['complaints', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["comptype", "compstatus"])->with("referential")->get();
-        $complaints = Complaints::paginate(10);
+        $query = Complaints::query();
+        $search = $request->txtcomplaintsearch;
+        $dateFrom = $request->txtcomplaintdatefrom;
+        $dateTo = $request->txtcomplaintdateto;
+
+        if($search){
+            $query->where(function ($q) use ($search) {
+                $q->where('complaint_type', 'like', "%$search%")
+                ->orWhere('purpose', 'like', "%$search%")
+                ->orWhere('details', 'like', "%$search%");
+            });
+            $searchkey = $search;
+            array_push($params, ['searchkey']);
+        }
+
+        if($dateFrom && !$dateTo){
+            $query->whereDate('created_at', Carbon::parse($dateFrom)->format('Y-m-d'));
+            array_push($params, ['datefrom']);
+        }
+        elseif(!$dateFrom && $dateTo){
+            $query->whereDate('created_at', Carbon::parse($dateTo)->format('Y-m-d'));
+            array_push($params, ['dateto']);
+        }
+        elseif($dateFrom && $dateTo){
+            $query->whereBetween(DB::raw("DATE(created_at)"), [
+                Carbon::parse($dateFrom)->format('Y-m-d'),
+                Carbon::parse($dateTo)->format('Y-m-d')
+            ]);
+            array_push($params, ['datefrom', 'dateto']);
+        }
+
+        $complaints = $query->paginate(10);
         $complaints->appends($request->except('page')); 
         return view("complaints.index", compact($params));
     }
@@ -26,7 +57,7 @@ class ComplaintsController extends Controller
         $complaint->resident_id = $request->compresid;
         $complaint->complaint_to = $request->compdefid;
         $complaint->purpose = $request->comppurpose;
-        $complaint->details = $request->compremarks;
+        $complaint->details = $request->compremarks ?? 'N/A';
         $complaint->report_to = Auth::user()->id;
         $complaint->save();
 

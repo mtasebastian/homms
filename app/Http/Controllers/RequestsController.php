@@ -14,7 +14,36 @@ class RequestsController extends Controller
     {
         $params = ['reqs', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["reqtype", "reqstatus"])->with("referential")->get();
-        $reqs = Requests::with(["reqBy", "appBy", "chkBy"])->paginate(10);
+        $search = $request->txtreqsearch;
+        $dateFrom = $request->txtreqdatefrom;
+        $dateTo = $request->txtreqdateto;
+        $query = Requests::with(["reqBy", "appBy", "chkBy"]);
+        if($search){
+            $query->where(function ($q) use ($search) {
+                $q->where('request_type', 'like', "%$search%")
+                ->orWhere('details', 'like', "%$search%")
+                ->orWhere('address', 'like', "%$search%");
+            });
+            $searchkey = $search;
+            array_push($params, ['searchkey']);
+        }
+
+        if($dateFrom && !$dateTo){
+            $query->whereDate('created_at', Carbon::parse($dateFrom)->format('Y-m-d'));
+            array_push($params, ['datefrom']);
+        }
+        elseif(!$dateFrom && $dateTo){
+            $query->whereDate('created_at', Carbon::parse($dateTo)->format('Y-m-d'));
+            array_push($params, ['dateto']);
+        }
+        elseif($dateFrom && $dateTo){
+            $query->whereBetween(DB::raw("DATE(created_at)"), [
+                Carbon::parse($dateFrom)->format('Y-m-d'),
+                Carbon::parse($dateTo)->format('Y-m-d')
+            ]);
+            array_push($params, ['datefrom', 'dateto']);
+        }
+        $reqs = $query->paginate(10);
         $reqs->appends($request->except('page')); 
         return view("requests.index", compact($params));
     }

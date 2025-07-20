@@ -38,6 +38,10 @@ Route::group(['middleware' => ['auth']], function (){
     // Dashboard
     Route::get('/', 'App\Http\Controllers\IndexController@index')->name('dashboard');
 
+    Route::prefix('/dashboard')->group(function(){
+        Route::get('/counts', 'App\Http\Controllers\DashboardController@counts')->name('dashboard.count');
+    });
+
     Route::prefix('/financials')->group(function(){
         Route::get('/', 'App\Http\Controllers\FinancialsController@index')->name('financials.index');
         Route::get('/searchresident', 'App\Http\Controllers\FinancialsController@searchresident')->name('financials.search_resident');

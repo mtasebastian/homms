@@ -1,22 +1,22 @@
 <div id="respart2">
     <div class="row mb-3">
         <div class="col-md-4 form-data">
-            <label for="reslastname" class="form-label">Last Name</label>
+            <label for="reslastname" class="form-label req">Last Name</label>
             <input type="text" class="form-control py-2 px-3 rounded-3" name="reslastname" id="reslastname" placeholder="Enter Last Name" required>
         </div>
         <div class="col-md-4 form-data">
-            <label for="resfirstname" class="form-label">First Name</label>
+            <label for="resfirstname" class="form-label req">First Name</label>
             <input type="text" class="form-control py-2 px-3 rounded-3" name="resfirstname" id="resfirstname" placeholder="Enter First Name" required>
         </div>
         <div class="col-md-4 form-data">
             <label for="resmiddlename" class="form-label">Middle Name</label>
-            <input type="text" class="form-control py-2 px-3 rounded-3" name="resmiddlename" id="resmiddlename" placeholder="Enter Middle Name" required>
+            <input type="text" class="form-control py-2 px-3 rounded-3" name="resmiddlename" id="resmiddlename" placeholder="Enter Middle Name">
         </div>
     </div>
     <div class="row mb-3">
         <div class="col-md-6 form-data">
             <label for="reshomeaddress" class="form-label">Home Address</label>
-            <input type="text" class="form-control py-2 px-3 rounded-3" name="reshomeaddress" id="reshomeaddress" placeholder="Enter Home Address" required>
+            <input type="text" class="form-control py-2 px-3 rounded-3" name="reshomeaddress" id="reshomeaddress" placeholder="Enter Home Address" readonly>
         </div>
         <div class="col-md-6 form-data">
             <label for="resotheraddress" class="form-label">Other Address</label>
@@ -25,15 +25,15 @@
     </div>
     <div class="row mb-3">
         <div class="col-md-4 form-data">
-            <label for="resmobilenumber" class="form-label">Mobile Number</label>
+            <label for="resmobilenumber" class="form-label req">Mobile Number</label>
             <input type="text" class="form-control py-2 px-3 rounded-3" name="resmobilenumber" id="resmobilenumber" placeholder="Enter Mobile Number" required>
         </div>
         <div class="col-md-4 form-data">
-            <label for="resemailaddress" class="form-label">Email Address</label>
+            <label for="resemailaddress" class="form-label req">Email Address</label>
             <input type="text" class="form-control py-2 px-3 rounded-3" name="resemailaddress" id="resemailaddress" placeholder="Enter Email Address" required>
         </div>
         <div class="col-md-4 form-data">
-            <label for="rescitizenship" class="form-label">Citizenship</label>
+            <label for="rescitizenship" class="form-label req">Citizenship</label>
             <select class="form-select py-2 px-3 rounded-3" name="rescitizenship" id="rescitizenship" required>
                 <option value="">Select Citizenship</option>
             </select>
@@ -41,21 +41,21 @@
     </div>
     <div class="row mb-3">
         <div class="col-md-3 form-data">
-            <label for="resdateofbirth" class="form-label">Date of Birth</label>
+            <label for="resdateofbirth" class="form-label req">Date of Birth</label>
             <input type="text" class="form-control py-2 px-3 datepickerBig rounded-3" name="resdateofbirth" id="resdateofbirth" placeholder="__/__/____" onchange="computeAge()" required>
         </div>
         <div class="col-md-3 form-data">
-            <label for="resage" class="form-label">Age</label>
+            <label for="resage" class="form-label req">Age</label>
             <input type="text" class="form-control py-2 px-3 rounded-3" name="resage" id="resage" placeholder="Enter Age" readonly required>
         </div>
         <div class="col-md-6 form-data">
             <label for="resplaceofbirth" class="form-label">Place of Birth</label>
-            <input type="text" class="form-control py-2 px-3 rounded-3" name="resplaceofbirth" id="resplaceofbirth" placeholder="Enter Place of Birth" required>
+            <input type="text" class="form-control py-2 px-3 rounded-3" name="resplaceofbirth" id="resplaceofbirth" placeholder="Enter Place of Birth">
         </div>
     </div>
     <div class="row mb-3">
         <div class="col-md-3 form-data">
-            <label for="rescivilstatus" class="form-label">Civil Status</label>
+            <label for="rescivilstatus" class="form-label req">Civil Status</label>
             <select class="form-select py-2 px-3 rounded-3" name="rescivilstatus" id="rescivilstatus" required>
                 <option value="">Select Civil Status</option>
                 <option value="Single">Single</option>
@@ -66,7 +66,7 @@
             </select>
         </div>
         <div class="col-md-3 form-data">
-            <label for="resgender" class="form-label">Gender</label>
+            <label for="resgender" class="form-label req">Gender</label>
             <select class="form-select py-2 px-3 rounded-3" name="resgender" id="resgender" required>
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
@@ -75,7 +75,7 @@
         </div>
         <div class="col-md-6 form-data">
             <label for="resoccupation" class="form-label">Occupation</label>
-            <input type="text" class="form-control py-2 px-3 rounded-3" name="resoccupation" id="resoccupation" placeholder="Enter Occupation" required>
+            <input type="text" class="form-control py-2 px-3 rounded-3" name="resoccupation" id="resoccupation" placeholder="Enter Occupation">
         </div>
     </div>
     <div class="row mb-3">
