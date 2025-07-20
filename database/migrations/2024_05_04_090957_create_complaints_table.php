@@ -18,7 +18,7 @@ class CreateComplaintsTable extends Migration
             $table->integer("resident_id");
             $table->string("complaint_type", 100);
             $table->integer("report_to");
-            $table->integer("complaint_to");
+            $table->integer("complaint_to")->nullable();
             $table->string("purpose");
             $table->string("details");
             $table->string("status", 50);

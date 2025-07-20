@@ -28,6 +28,11 @@ class Financials extends Model
     {
         return $this->hasMany("App\Models\FinancialBills", "financial_id", "id");
     }
+
+    public function balances()
+    {
+        return $this->hasMany(self::class, "resident_id", "resident_id")->where("id", "<=", $this->id);
+    }
     
     public function getFormattedcatAttribute()
     {

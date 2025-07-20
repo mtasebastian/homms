@@ -73,7 +73,7 @@
                                 <td class="tbl-d-none">{{ $complaint->id }}</td>
                                 <td>{{ $complaint->complaint_type }}</td>
                                 <td>{{ $complaint->resident->fullname }}</td>
-                                <td class="tbl-d-none">{{ $complaint->defendant->fullname }}</td>
+                                <td class="tbl-d-none">{{ $complaint->complaint_to ? $complaint->defendant->fullname : '' }}</td>
                                 <td class="tbl-d-none">{{ $complaint->details }}</td>
                                 <td class="tbl-d-none">{{ $complaint->reported_to->name }}</td>
                                 <td class="text-center"><label class="badge {{ $complaint->complaintStatus() }} p-2 px-3">{{ $complaint->status }}</span></td>
@@ -124,7 +124,7 @@
                         <div class="col-md-6 form-data">
                             <label for="compdefname" class="form-label">Neighbor</label>
                             <input type="hidden" name="compdefid" id="compdefid">
-                            <input type="text" class="form-control py-2 px-3 rounded-3" id="compdefname" placeholder="Select Defendant" onclick="searchresident('def')" required>
+                            <input type="text" class="form-control py-2 px-3 rounded-3" id="compdefname" placeholder="Select Defendant" onclick="searchresident('def')">
                         </div>
                     </div>
                     <div class="form-data mb-3">

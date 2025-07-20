@@ -77,7 +77,7 @@
                                 <td>{{ $financial->monthname }}</td>
                                 <td>{{ number_format($financial->bill_amount, 2, '.', ',') }}</td>
                                 <td>{{ number_format($financial->payments()->sum('payment'), 2, '.', ',') }}</td>
-                                <td>{{ number_format($financial->balance, 2, '.', ',') }}</td>
+                                <td>{{ number_format($financial->balances()->sum('balance'), 2, '.', ',') }}</td>
                                 <td class="tbl-d-none">{{ date("m/d/y", strtotime($financial->created_at)) }}</td>
                                 <input type="hidden" class="financial" value="{{ json_encode($financial) }}">
                             </tr>

@@ -19,7 +19,7 @@ class FinancialsController extends Controller
         $refsetup = RefSetup::whereIn("for", ["mod", "disctype"])->with("referential")->get();
         $finsetup = FinancialSetup::get();
 
-        $query = Financials::with("resident");
+        $query = Financials::with(["resident"]);
         $searchkey = $request->searchkey;
         $year = $request->billyear;
         $month = $request->billmonth;
