@@ -15,8 +15,8 @@ class RequestsController extends Controller
         $params = ['reqs', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["reqtype", "reqstatus"])->with("referential")->get();
         $search = $request->txtreqsearch;
-        $dateFrom = $request->txtreqdatefrom;
-        $dateTo = $request->txtreqdateto;
+        $datefrom = $request->txtreqdatefrom;
+        $dateto = $request->txtreqdateto;
         $query = Requests::with(["reqBy", "appBy", "chkBy"]);
         if($search){
             $query->where(function ($q) use ($search) {
@@ -28,18 +28,18 @@ class RequestsController extends Controller
             array_push($params, ['searchkey']);
         }
 
-        if($dateFrom && !$dateTo){
-            $query->whereDate('created_at', Carbon::parse($dateFrom)->format('Y-m-d'));
+        if($datefrom && !$dateto){
+            $query->whereDate('created_at', Carbon::parse($datefrom)->format('Y-m-d'));
             array_push($params, ['datefrom']);
         }
-        elseif(!$dateFrom && $dateTo){
-            $query->whereDate('created_at', Carbon::parse($dateTo)->format('Y-m-d'));
+        elseif(!$datefrom && $dateto){
+            $query->whereDate('created_at', Carbon::parse($dateto)->format('Y-m-d'));
             array_push($params, ['dateto']);
         }
-        elseif($dateFrom && $dateTo){
+        elseif($datefrom && $dateto){
             $query->whereBetween(DB::raw("DATE(created_at)"), [
-                Carbon::parse($dateFrom)->format('Y-m-d'),
-                Carbon::parse($dateTo)->format('Y-m-d')
+                Carbon::parse($datefrom)->format('Y-m-d'),
+                Carbon::parse($dateto)->format('Y-m-d')
             ]);
             array_push($params, ['datefrom', 'dateto']);
         }

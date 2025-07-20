@@ -20,8 +20,8 @@ class ResidentsController extends Controller
         $provinces = Provinces::orderBy("name", "ASC")->get();
         $query = Residents::with(['occupants', 'vehicles', 'pets']);
         $search = $request->txtresidentsearch;
-        $dateFrom = $request->txtresidentdatefrom;
-        $dateTo = $request->txtresidentdateto;
+        $datefrom = $request->txtresidentdatefrom;
+        $dateto = $request->txtresidentdateto;
 
         if($search){
             $query->where(function ($q) use ($search) {
@@ -32,18 +32,18 @@ class ResidentsController extends Controller
             array_push($params, ['searchkey']);
         }
 
-        if($dateFrom && !$dateTo){
-            $query->whereDate('created_at', Carbon::parse($dateFrom)->format('Y-m-d'));
+        if($datefrom && !$dateto){
+            $query->whereDate('created_at', Carbon::parse($datefrom)->format('Y-m-d'));
             array_push($params, ['datefrom']);
         }
-        elseif(!$dateFrom && $dateTo){
-            $query->whereDate('created_at', Carbon::parse($dateTo)->format('Y-m-d'));
+        elseif(!$datefrom && $dateto){
+            $query->whereDate('created_at', Carbon::parse($dateto)->format('Y-m-d'));
             array_push($params, ['dateto']);
         }
-        elseif($dateFrom && $dateTo){
+        elseif($datefrom && $dateto){
             $query->whereBetween(DB::raw("DATE(created_at)"), [
-                Carbon::parse($dateFrom)->format('Y-m-d'),
-                Carbon::parse($dateTo)->format('Y-m-d')
+                Carbon::parse($datefrom)->format('Y-m-d'),
+                Carbon::parse($dateto)->format('Y-m-d')
             ]);
             array_push($params, ['datefrom', 'dateto']);
         }
