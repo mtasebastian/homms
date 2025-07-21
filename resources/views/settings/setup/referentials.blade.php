@@ -53,7 +53,18 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-6 form-data mb-3 mb-md-0>
+                <div class="col-md-6 form-data mb-3 mb-md-0">
+                    <label for="reqtranstype" class="form-label">Transaction Type</label>
+                    <select class="form-select py-2 px-3 rounded-3" name="refreqtranstype" id="refreqtranstype" required>
+                        <option value="">Select Referential</option>
+                        @foreach($referentials as $referential)
+                        <option value="{{ $referential->id }}">{{ $referential->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 form-data mb-3 mb-md-0">
                     <label for="refreqstatus" class="form-label">Request Status</label>
                     <select class="form-select py-2 px-3 rounded-3" name="refreqstatus" id="refreqstatus" required>
                         <option value="">Select Referential</option>
@@ -178,7 +189,7 @@
         </div>
     </div>
     <div class="text-end mt-4">
-        <button class="btn btn-add px-3 py-2 rounded-3" onclick="saverefsetup();">Save Changes</button>
+        <button class="btn btn-add px-3 py-2 rounded-3" id="btnsaverefs" onclick="saverefsetup();">Save Changes</button>
     </div>
 </div>
 <script>
@@ -222,15 +233,21 @@
     }
 
     function saverefsetup(){
+        $("#btnsaverefs").prop("disabled", true);
+        $("#btnsaverefs").text("Saving...");
+        $("#btnsaverefs").css("opacity", "80%");
         let params = {};
         params._token = "{{ csrf_token() }}";
-        const arr = ['disctype', 'mod', 'reqtype', 'reqstatus', 'phase', 'housecolor', 'citizenship', 'relation', 'vehicletype', 'pettype', 'comptype', 'compstatus', 'visitortype', 'presentedid'];
+        const arr = ['disctype', 'mod', 'reqtype', 'reqstatus', 'reqtranstype', 'phase', 'housecolor', 'citizenship', 'relation', 'vehicletype', 'pettype', 'comptype', 'compstatus', 'visitortype', 'presentedid'];
         $.each(arr, function(i, val){
             params[val] = $("#ref" + val).val();
         });
         $.post("{{ route('settings.save_refential_setup') }}", params).done(function(res){
-            if(res == "success"){
+            if(res.includes("success")){
                 showtoast("Success", "Referential Setup has been Updated.");
+                $("#btnsaverefs").prop("disabled", false);
+                $("#btnsaverefs").text("Save Changes");
+                $("#btnsaverefs").css("opacity", "100%");
             }
         });
     }

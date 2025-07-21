@@ -116,8 +116,6 @@
                             <label for="reqtranstype" class="form-label">Transaction Type</label>
                             <select class="form-select py-2 px-3 rounded-3" id="reqtranstype" name="reqtranstype" required>
                                 <option value="">Select Transaction Type</option>
-                                <option value="Delivery">Delivery</option>
-                                <option value="Pullout">Pullout</option>
                             </select>
                         </div>
                     </div>

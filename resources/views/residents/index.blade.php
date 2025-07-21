@@ -253,9 +253,6 @@
             case 1:
                 $("#btnrprev").hide();
                 chkrespart1();
-                if($("#resid").val() != ""){
-                    $("#btnrsubmit").hide();
-                }
             break;
             case 2:
                 const fulladdress = $("#resphase option:selected").text() + " " +
@@ -270,27 +267,21 @@
                 $("#btnrprev").show();
                 $("#btnrnext").show();
                 chkrespart2();
-                if($("#resid").val() != ""){
-                    $("#btnrsubmit").hide();
-                }
             break;
             case 3 || 4:
                 $("#btnrprev").show();
                 $("#btnrnext").show();
-                if($("#resid").val() != ""){
-                    $("#btnrsubmit").hide();
-                }
             break;
             case 5:
                 $("#btnrnext").hide();
-                if($("#resid").val() != ""){
-                    $("#btnrsubmit").hide();
-                }
             break;
         }
         $(".xsteps li").removeClass("active");
         $("#dstep" + cnt).addClass("active");
         $(".xbody").hide();
+        if($("#resid").val() != ""){
+            $("#btnrsubmit").show();
+        }
         $("#xbody" + cnt).show();
     }
     

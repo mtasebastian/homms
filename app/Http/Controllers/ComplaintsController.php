@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Complaints;
+use Illuminate\Support\Facades\DB;
 use App\Models\RefSetup;
 use Carbon\Carbon;
 
@@ -14,7 +15,8 @@ class ComplaintsController extends Controller
     {
         $params = ['complaints', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["comptype", "compstatus"])->with("referential")->get();
-        $query = Complaints::query();
+        $query = Complaints::select("complaints.*", "residents.*")
+                ->join('residents', 'complaints.resident_id', '=', 'residents.id');
         $search = $request->txtcomplaintsearch;
         $datefrom = $request->txtcomplaintdatefrom;
         $dateto = $request->txtcomplaintdateto;
@@ -23,7 +25,8 @@ class ComplaintsController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('complaint_type', 'like', "%$search%")
                 ->orWhere('purpose', 'like', "%$search%")
-                ->orWhere('details', 'like', "%$search%");
+                ->orWhere('details', 'like', "%$search%")
+                ->orWhere(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), 'like', "%$search%");
             });
             $searchkey = $search;
             array_push($params, ['searchkey']);

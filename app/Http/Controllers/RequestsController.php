@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Requests;
+use Illuminate\Support\Facades\DB;
 use App\Models\RefSetup;
 use Carbon\Carbon;
 
@@ -13,16 +14,19 @@ class RequestsController extends Controller
     public function index(Request $request)
     {
         $params = ['reqs', 'refsetup'];
-        $refsetup = RefSetup::whereIn("for", ["reqtype", "reqstatus"])->with("referential")->get();
+        $refsetup = RefSetup::whereIn("for", ["reqtype", "reqstatus", "reqtranstype"])->with("referential")->get();
         $search = $request->txtreqsearch;
         $datefrom = $request->txtreqdatefrom;
         $dateto = $request->txtreqdateto;
-        $query = Requests::with(["reqBy", "appBy", "chkBy"]);
+        $query = Requests::select("requests.*", "residents.*")
+                ->join('residents', 'requests.requested_by', '=', 'residents.id')
+                ->with(["reqBy", "appBy", "chkBy"]);
         if($search){
             $query->where(function ($q) use ($search) {
                 $q->where('request_type', 'like', "%$search%")
                 ->orWhere('details', 'like', "%$search%")
-                ->orWhere('address', 'like', "%$search%");
+                ->orWhere('address', 'like', "%$search%")
+                ->orWhere(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), 'like', "%$search%");
             });
             $searchkey = $search;
             array_push($params, ['searchkey']);
