@@ -9,6 +9,8 @@ use App\Models\FinancialPayments;
 use App\Models\RefSetup;
 use App\Models\FinancialSetup;
 use App\Models\Residents;
+use App\Models\SystemSetup;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class FinancialsController extends Controller
@@ -19,13 +21,25 @@ class FinancialsController extends Controller
         $refsetup = RefSetup::whereIn("for", ["mod", "disctype"])->with("referential")->get();
         $finsetup = FinancialSetup::get();
 
-        $query = Financials::with(["resident"]);
+        $columns = \Schema::getColumnListing('residents');
+        $selectColumns = ['financials.*'];
+        foreach ($columns as $col) {
+            if ($col === 'id') {
+                $selectColumns[] = "residents.id as resident_id";
+            } else {
+                $selectColumns[] = "residents.$col";
+            }
+        }
+
+        $query = Financials::select($selectColumns)
+                ->join('residents', 'financials.resident_id', '=', 'residents.id')
+                ->with(["resident"]);
         $searchkey = $request->searchkey;
         $year = $request->billyear;
         $month = $request->billmonth;
 
         if($searchkey){
-            $query->where("name", "like", "%$searchkey%");
+            $query->where(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), "like", "%$searchkey%");
             $params[] = 'searchkey';
         }
         
@@ -46,7 +60,7 @@ class FinancialsController extends Controller
 
         $financials = $query->orderBy('bill_year', 'desc')
             ->orderBy('bill_month', 'desc')
-            ->paginate(10)
+            ->paginate(15)
             ->appends($request->except('page'));
         return view("financials.index", compact($params));
     }
@@ -113,6 +127,53 @@ class FinancialsController extends Controller
     {
         $payments = FinancialPayments::where("financial_id", $request->id)->get();
         return $payments;
+    }
+
+    public function billingstatement(Request $request)
+    {
+        $ret = [];
+        $sys_setup = SystemSetup::get();
+        foreach($sys_setup as $setup){
+            if($setup->setting_name == "systemlogo"){
+                $ret['systemlogo'] = [
+                    "mime" => $setup->mime,
+                    "content" => base64_encode($setup->content)
+                ];
+            }
+            else{
+                $ret[$setup->setting_name] = $setup->text;
+            }
+        }
+
+        $financial = Financials::with(["resident", "bills"])->find($request->id);
+        $ret['financials'] = $financial;
+
+        return $ret;
+    }
+
+    public function receipt(Request $request)
+    {
+        $ret = [];
+        $sys_setup = SystemSetup::get();
+        foreach($sys_setup as $setup){
+            if($setup->setting_name == "systemlogo"){
+                $ret['systemlogo'] = [
+                    "mime" => $setup->mime,
+                    "content" => base64_encode($setup->content)
+                ];
+            }
+            else{
+                $ret[$setup->setting_name] = $setup->text;
+            }
+        }
+
+        
+        $financial_payment = FinancialPayments::find($request->id);
+        $financial = Financials::with(["resident"])->find($financial_payment->financial_id);
+        $ret['financial_payments'] = $financial_payment;
+        $ret['financials'] = $financial;
+
+        return $ret;
     }
 
     protected function getMonthNum($str)

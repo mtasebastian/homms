@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Requests;
 use Illuminate\Support\Facades\DB;
 use App\Models\RefSetup;
+use App\Models\SystemSetup;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Carbon\Carbon;
 
 class RequestsController extends Controller
@@ -18,7 +20,18 @@ class RequestsController extends Controller
         $search = $request->txtreqsearch;
         $datefrom = $request->txtreqdatefrom;
         $dateto = $request->txtreqdateto;
-        $query = Requests::select("requests.*", "residents.*")
+
+        $columns = \Schema::getColumnListing('residents');
+        $selectColumns = ['requests.*'];
+        foreach ($columns as $col) {
+            if ($col === 'id') {
+                $selectColumns[] = "residents.id as resident_id";
+            } else {
+                $selectColumns[] = "residents.$col";
+            }
+        }
+
+        $query = Requests::select($selectColumns)
                 ->join('residents', 'requests.requested_by', '=', 'residents.id')
                 ->with(["reqBy", "appBy", "chkBy"]);
         if($search){
@@ -47,7 +60,7 @@ class RequestsController extends Controller
             ]);
             array_push($params, ['datefrom', 'dateto']);
         }
-        $reqs = $query->paginate(10);
+        $reqs = $query->paginate(15);
         $reqs->appends($request->except('page')); 
         return view("requests.index", compact($params));
     }
@@ -135,5 +148,29 @@ class RequestsController extends Controller
         $req->checked_by = Auth::user()->id;
         $req->save();
         return "success";
+    }
+
+    public function printRequest(Request $request)
+    {
+        $ret = [];
+        $sys_setup = SystemSetup::get();
+        foreach($sys_setup as $setup){
+            if($setup->setting_name == "systemlogo"){
+                $ret['systemlogo'] = [
+                    "mime" => $setup->mime,
+                    "content" => base64_encode($setup->content)
+                ];
+            }
+            else{
+                $ret[$setup->setting_name] = $setup->text;
+            }
+        }
+
+        $req = Requests::with("reqBy")->find($request->id);
+        $qrcode = QrCode::format('svg')->size(120)->generate($req->qr_code);
+        $ret["request"] = $req;
+        $ret["qrcode"] = (string) $qrcode;
+        
+        return response()->json($ret);
     }
 }

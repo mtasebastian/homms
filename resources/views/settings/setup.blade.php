@@ -9,20 +9,20 @@
             <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
                 <ul class="nav nav-tabs sys_setup">
                     <li class="nav-item" id="sys_1">
-                        <a class="nav-link active text-" href="#">General Settings</a>
+                        <a class="nav-link active">General Settings</a>
                     </li>
                     <li class="nav-item" id="sys_2">
-                        <a class="nav-link" href="#">Financials Setup</a>
+                        <a class="nav-link">Financials Setup</a>
                     </li>
                     <li class="nav-item" id="sys_3">
-                        <a class="nav-link" href="#">Assign Referencials</a>
+                        <a class="nav-link">Assign Referencials</a>
                     </li>
                     <li class="nav-item" id="sys_4">
-                        <a class="nav-link" href="#">Account Settings</a>
+                        <a class="nav-link">Account Settings</a>
                     </li>
                 </ul>
                 <div class="syscont" id="syscont1">
-
+                    @include("settings.setup.index")
                 </div>
                 <div class="syscont" id="syscont2">
                     @include("settings.setup.financials")
@@ -31,7 +31,7 @@
                     @include("settings.setup.referentials")
                 </div>
                 <div class="syscont" id="syscont4">
-
+                    @include("settings.setup.account")
                 </div>
             </div>
         </div>

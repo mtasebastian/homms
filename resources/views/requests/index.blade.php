@@ -324,18 +324,22 @@
     </div>
 </div>
 <div class="modal fade" id="optreq" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog xs-modal">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
                 <h5 class="modal-title" id="optreqLabel">Actions</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 py-3 m-3 text-center">
-                <div class="row mb-3">
+                <div class="row">
                     <div class="col-6 p-2"><button class="btn btn-info text-white p-2 w-100 fs-6" onclick="editreq()"><i class="fa-solid fa-pen-to-square me-2 fs-5"></i>Edit</button></div>
                     <div class="col-6 p-2"><button class="btn btn-danger p-2 w-100 fs-6" onclick="deletereq()"><i class="fa-solid fa-trash-alt me-2 fs-5"></i>Delete</button></div>
                 </div>
-                <button class="btn btn-warning text-white p-2 w-100 fs-6" onclick="viewqrcode()"><i class="fa-solid fa-pen-to-square me-2 fs-5"></i>View QR</button>
+                <div class="row">
+                    <div class="col-6 p-2"><button class="btn btn-warning text-white p-2 w-100 fs-6" onclick="viewqrcode()"><i class="fa-solid fa-pen-to-square me-2 fs-5"></i>View QR</button></div>
+                    <div class="col-6 p-2"><button class="btn btn-secondary text-white p-2 w-100 fs-6" onclick="printRequest()"><i class="fa-solid fa-print me-2 fs-5"></i>Print</button></div>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -385,7 +389,7 @@
     function filterresident(){
         let key = $("#txtressearch").val();
         $.get("{{ route('filter_residents') }}?key=" + key, function(data, status){       
-            if(status == "success"){
+            if(status.includes("success")){
                 if(data.length == 0){
                     $("#tblfilterres").html("<tr><td colspan='3' class='text-center'>Search Resident</td></tr>");
                 }
@@ -498,7 +502,7 @@
 
     function openRequest(qrcode){
         $.get("{{ route('find_request') }}?qrcode=" + qrcode, function(data, status){
-            if(status == "success"){
+            if(status.includes("success")){
                 $("#lblid").val(data.id);
                 $("#lblreqtype").text(data.request_type);
                 $("#lbltranstype").text(data.type);
@@ -525,6 +529,98 @@
             setTimeout(function(){
                 location.reload();
             }, 2000);
+        });
+    }
+
+    function printRequest(id){
+        $.get("{{ route('requests.print_request') }}?id=" + req_id, function(data, status){       
+            if(status.includes("success")){
+                console.log(data);
+                let w = window.open();
+                let html = '<html>' +
+                    '<head>' +
+                        '<title>Billing Statement</title>' +
+                        '<style>@media print { @page { size: portrait; margin: 10px; }  body { -webkit-print-color-adjust: exact; color-adjust: exact; width: 100%; } header, footer, .print-hide { display: none; } } *{ font-family: Arial; font-size: 13px; } table td{ padding: 5px; }</style>' +
+                    '</head>' +
+                    '<body>' +
+                        '<div style="margin: 100px 5%;">' +
+                        '<table width="100%" cellspacing="0">' +
+                            '<tr>' +
+                                '<td colspan="2" style="vertical-align: middle; padding: 0px;">' +
+                                    '<div style="display: flex; gap: 10px; justify-content: flex-start; align-items: center;">' +
+                                        '<img src="' + 'data:' + data.systemlogo.mime + ';base64,' + data.systemlogo.content + '" style="width: 120px; height: auto;">' +
+                                        '<div>' +
+                                            '<p style="margin: 0px; font-size: 20px;">' + data.systemname + '</p>' +
+                                            '<p style="margin: 0px;">Registration Number: ' + data.systemtin + '</p>' +
+                                            '<p style="margin: 0px;">' + data.systemcontact + '</p>' +
+                                            '<p style="margin: 0px;">' + data.systemaddress + '</p>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</td>' +
+                                '<td style="padding: 0px;"><div style="width: 120px; height: 120px; background: #28a745; display: flex; justify-content: center; align-items: center; float: right; margin-right: 5px;"><p style="margin: 0px; color: #FFF; font-weight: 800; text-transform: uppercase; text-align: center;">' + data.request.request_type + '</p></div></td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="3">&nbsp;</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td>RESIDENT NAME</td>' +
+                                '<td style="border-bottom: solid 1px #CCC;">' + data.request.req_by.fullname + '</td>' +
+                                '<td rowspan="6" style="text-align: right;">' + data.qrcode + '</td>' +
+                            '<tr>' +
+                            '<tr>' +
+                                '<td>COMPLETE ADDRESS</td>' +
+                                '<td style="border-bottom: solid 1px #CCC;">' + data.request.req_by.fulladdress + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td>REQUEST DATE</td>' +
+                                '<td style="border-bottom: solid 1px #CCC;">' + data.request.formattedrequestdate + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td>REQUEST TYPE</td>' +
+                                '<td style="border-bottom: solid 1px #CCC;">' + data.request.type + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td>VALID FROM</td>' +
+                                '<td style="border-bottom: solid 1px #CCC;">' + data.request.formattedvalidfrom + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td>VALID TO</td>' +
+                                '<td style="border-bottom: solid 1px #CCC;">' + data.request.formattedvalidto + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="3">&nbsp;<td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="3" style="border: solid 1px gray; background: #28a745; color: #FFF; font-weight: 800;">DETAILS</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="3" style="border: solid 1px gray; border-top: none; height: 150px; vertical-align: top;">' + data.request.details + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="3">&nbsp;<td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="3">' +
+                                    '<p style="font-size: 16px; margin-bottom: 5px; font-weight: 600;">NOTE:</p>' +
+                                    '<ul style="list-style: decimal; padding: 0 15px;">' +
+                                        '<li>This permit is valid only on the dates indicated above.</li>' +
+                                        '<li>Only Homeowners with no arrear on dues and good payment standing with Pag-ibig shall be eligible for Approval.</li>' +
+                                        '<li>Any deviation from design submitted or violation of design standards shall be corrected and charged a penalty.</li>' +
+                                        '<li>Alterations that may cause damage to adjacent properties and your own of the original plumbing and electrical works will render the warranty void.</li>' +
+                                        '<li>The Developer will not be liable for the repairs. Damage cost will be barne by the undersigned Homeowner/Resident/Tenant.</li>' +
+                                    '<ul>' +
+                                '</td>' +
+                            '</tr>' +
+                        '</table>' +
+                        '</div>' +
+                    '</body>' +
+                '</html>';
+                w.document.write(html);
+                setTimeout(() => {
+                    w.print();
+                    w.close();
+                }, 100);
+            }
         });
     }
 </script>

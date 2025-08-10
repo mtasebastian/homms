@@ -15,6 +15,7 @@ use App\Models\Cities;
 use App\Models\Barangays;
 use App\Models\Residents;
 use App\Models\FinancialSetup;
+use App\Models\SystemSetup;
 use App\Helpers\RouteChecker;
 use Carbon\Carbon;
 use DB;
@@ -368,6 +369,79 @@ class SettingsController extends Controller
     {
         try{
             FinancialSetup::find($request->id)->delete();
+            return "success";
+        }
+        catch(Exception $e){
+            return "failed";
+        }
+    }
+
+    public function getsettings()
+    {
+        $arr = [];
+        $settings = SystemSetup::get();
+        foreach($settings as $setting){
+            if($setting->setting_type == "file" && !empty($setting->content)){
+                $setting->content = base64_encode($setting->content);
+            }
+            $arr[$setting->setting_name] = $setting;
+        }
+        return $arr;
+    }
+
+    public function systemsettings(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|max:150',
+        ]);
+
+        try{
+            SystemSetup::truncate();
+            foreach($request->all() as $key => $value){
+                if($key !== "_token"){
+                    if($request->hasFile($key) && $request->file($key)->isValid()){
+                        $uploadedFile = $request->file($key);
+                        $sys = new SystemSetup();
+                        $sys->setting_name = $key;
+                        $sys->setting_type = 'file';
+                        $sys->text = $uploadedFile->getClientOriginalName();
+                        $sys->mime = $uploadedFile->getMimeType();
+                        $sys->content = file_get_contents($uploadedFile->getRealPath());
+                        $sys->save();
+
+                    }
+                    else{
+                        $sys = new SystemSetup();
+                        $sys->setting_name = $key;
+                        $sys->setting_type = 'text';
+                        $sys->text = $value;
+                        $sys->save();
+                    }
+                }
+            }
+            return "success";
+        }
+        catch(Exception $e){
+            return "failed";
+        }
+    }
+
+    public function getaccount()
+    {
+        return auth()->user();
+    }
+
+    public function updateaccount(Request $request)
+    {
+        try{
+            $user = auth()->user();
+            $user->name = $request->name;
+            $user->mobileno = $request->mobileno;
+            $user->email = $request->email;
+            if(!empty($request->password)){
+                $user->password = bcrypt($request->password);
+            }
+            $user->save();
             return "success";
         }
         catch(Exception $e){

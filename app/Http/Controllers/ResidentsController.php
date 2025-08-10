@@ -48,7 +48,7 @@ class ResidentsController extends Controller
             array_push($params, ['datefrom', 'dateto']);
         }
 
-        $residents = $query->paginate(10);
+        $residents = $query->paginate(15);
         $residents->appends($request->except('page')); 
         return view("residents.index", compact($params));
     }

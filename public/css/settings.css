@@ -1,6 +1,7 @@
 .sys_setup li .nav-link{
     color: #666;
     padding: 10px 20px;
+    cursor: pointer;
 }
 
 .sys_setup li .nav-link.active{

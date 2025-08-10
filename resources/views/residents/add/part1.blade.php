@@ -124,7 +124,7 @@
     function loadcities(id){
         $("#rescity").html("<option value=''>Select City</option>");
         $.get("{{ route('load_cities') }}?province=" + id, function(data, status){
-            if(status == "success"){
+            if(status.includes("success")){
                 $.each(data, function(i, item){
                     $("#rescity").append("<option value='" + item.id + "'>" + formatString(item.name) + (item.name.toLowerCase().includes('city') ? "" : " City") + "</option>");
                 });
@@ -138,7 +138,7 @@
     function loadbarangays(id){
         $("#resbarangay").html("<option value=''>Select Barangay</option>");
         $.get("{{ route('load_brgys') }}?city=" + id, function(data, status){       
-            if(status == "success"){
+            if(status.includes("success")){
                 $.each(data, function(i, item){
                     $("#resbarangay").append("<option value='" + item.id + "'>Brgy. " + formatString(item.name) + "</option>");
                 });

@@ -40,7 +40,7 @@
     function loadfinancials(){
         $("#tblfinancials").html("");
         $.get("{{ route('settings.financials') }}", function(data, status){
-            if(status == "success"){
+            if(status.includes("success")){
                 if(data.length == 0){
                     $("#tblfinancials").html("<tr><td colspan='3' class='text-center'>No bills has been added</td></tr>");
                 }
@@ -84,7 +84,7 @@
             amt: amt
         };
         $.post("{{ route('settings.save_financial') }}", params).done(function(res){
-            if(res == "success"){
+            if(res.includes("success")){
                 if(id != ""){
                     showtoast("Success", "Bill has been Updated.");
                 }
@@ -103,7 +103,7 @@
             id: $("#finbillid").val()
         };
         $.post("{{ route('settings.delete_financial') }}", params).done(function(res){
-            if(res == "success"){
+            if(res.includes("success")){
                 showtoast("Success", "Bill has been Deleted.");
                 loadfinancials();
                 resetBill();

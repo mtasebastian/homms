@@ -1,24 +1,29 @@
 <table class="table">
     <thead>
         <tr>
-            <th scope="col" class="align-top tbl-d-none">ID</th>
-            <th scope="col" class="align-top">Resident</th>
-            <th scope="col" class="align-top">Bill Period</th>
-            <th scope="col" class="align-top">Bill Amount</th>
-            <th scope="col" class="align-top">Balance</th>
-            <th scope="col" class="align-top tbl-d-none">Created At</th>
+            <th scope="col">ID</th>
+            <th scope="col">Resident</th>
+            <th scope="col">Year</th>
+            <th scope="col">Month</th>
+            <th scope="col" class="text-end">Amount</th>
+            <th scope="col" class="text-end">Payment</th>
+            <th scope="col" class="text-end">Balance</th>
+            <th scope="col">Created At</th>
         </tr>
     </thead>
     <tbody>
     @foreach($results as $financial)
-        <tr id="fin_{{ $financial->id }}" onclick="optfin({{ $financial->id }})">
-            <td class="tbl-d-none">{{ $financial->id }}</td>
+        <tr>
+            <td>{{ $financial->id }}</td>
             <td>{{ $financial->resident->fullname }}</td>
-            <td>{{ $financial->monthname . ', ' . $financial->bill_year }}</td>
-            <td>{{ number_format($financial->bill_amount, 2, '.', ',') }}</td>
-            <td>{{ number_format($financial->balance, 2, '.', ',') }}</td>
-            <td class="tbl-d-none">{{ date("m/d/y", strtotime($financial->created_at)) }}</td>
+            <td>{{ $financial->bill_year }}</td>
+            <td>{{ $financial->monthname }}</td>
+            <td class="text-end">{{ number_format($financial->bill_amount, 2, '.', ',') }}</td>
+            <td class="text-end">{{ number_format($financial->payments()->sum('payment'), 2, '.', ',') }}</td>
+            <td class="text-end">{{ number_format($financial->balances()->sum('balance'), 2, '.', ',') }}</td>
+            <td>{{ date("m/d/y", strtotime($financial->created_at)) }}</td>
         </tr>
     @endforeach
     </tbody>
 </table>
+<div class="d-flex"><div class="mx-auto">{{ $results->links() }}</div></div>

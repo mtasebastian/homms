@@ -15,7 +15,18 @@ class ComplaintsController extends Controller
     {
         $params = ['complaints', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["comptype", "compstatus"])->with("referential")->get();
-        $query = Complaints::select("complaints.*", "residents.*")
+        
+        $columns = \Schema::getColumnListing('residents');
+        $selectColumns = ['complaints.*'];
+        foreach ($columns as $col) {
+            if ($col === 'id') {
+                $selectColumns[] = "residents.id as resident_id";
+            } else {
+                $selectColumns[] = "residents.$col";
+            }
+        }
+        
+        $query = Complaints::select($selectColumns)
                 ->join('residents', 'complaints.resident_id', '=', 'residents.id');
         $search = $request->txtcomplaintsearch;
         $datefrom = $request->txtcomplaintdatefrom;
@@ -48,7 +59,7 @@ class ComplaintsController extends Controller
             array_push($params, ['datefrom', 'dateto']);
         }
 
-        $complaints = $query->paginate(10);
+        $complaints = $query->paginate(15);
         $complaints->appends($request->except('page')); 
         return view("complaints.index", compact($params));
     }

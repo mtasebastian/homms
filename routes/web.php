@@ -48,6 +48,8 @@ Route::group(['middleware' => ['auth']], function (){
         Route::post('/generatebills', 'App\Http\Controllers\FinancialsController@generatebills')->name('financials.generate_bills');
         Route::post('/addpayment', 'App\Http\Controllers\FinancialsController@addpayment')->name('financials.add_payment');
         Route::get('/paymentlist', 'App\Http\Controllers\FinancialsController@paymentlist')->name('financials.payment_list');
+        Route::get('/billingstatement', 'App\Http\Controllers\FinancialsController@billingstatement')->name('financials.billing_statement');
+        Route::get('/receipt', 'App\Http\Controllers\FinancialsController@receipt')->name('financials.receipt');
     });
 
     Route::prefix('/requests')->group(function(){
@@ -56,6 +58,7 @@ Route::group(['middleware' => ['auth']], function (){
         Route::post('/update', 'App\Http\Controllers\RequestsController@updaterequest')->name('requests.update_request');
         Route::post('/check', 'App\Http\Controllers\RequestsController@checkrequest')->name('requests.check_request');
         Route::post('/delete', 'App\Http\Controllers\RequestsController@deleterequest')->name('requests.delete_request');
+        Route::get('/print', 'App\Http\Controllers\RequestsController@printrequest')->name('requests.print_request');
     });
 
     Route::prefix('/residents')->group(function(){
@@ -81,6 +84,8 @@ Route::group(['middleware' => ['auth']], function (){
     Route::prefix('/reports')->group(function(){
         Route::get('/', 'App\Http\Controllers\ReportsController@index')->name('reports.index');
         Route::get('/filter', 'App\Http\Controllers\ReportsController@filter')->name('reports.filter');
+        Route::get('/print', 'App\Http\Controllers\ReportsController@print')->name('reports.print');
+        Route::get('/export', 'App\Http\Controllers\ReportsController@export')->name('reports.export');
     });
 
     // Settings
@@ -105,5 +110,11 @@ Route::group(['middleware' => ['auth']], function (){
         Route::post('/setup/financials/save', 'App\Http\Controllers\SettingsController@savefinancial')->name('settings.save_financial');
         Route::post('/setup/financials/delete', 'App\Http\Controllers\SettingsController@deletefinancial')->name('settings.delete_financial');
         Route::post('/setup/saveref', 'App\Http\Controllers\SettingsController@saverefsetup')->name('settings.save_refential_setup');
+
+        Route::get('/setup/get', 'App\Http\Controllers\SettingsController@getsettings')->name('settings.get_settings');
+        Route::post('/setup/save', 'App\Http\Controllers\SettingsController@systemsettings')->name('settings.save_settings');
+
+        Route::get('/setup/account', 'App\Http\Controllers\SettingsController@getaccount')->name('settings.get_account');
+        Route::post('/setup/account/update', 'App\Http\Controllers\SettingsController@updateaccount')->name('settings.update_account');
     });
 });

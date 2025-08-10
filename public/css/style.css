@@ -590,11 +590,24 @@ body{
         margin-top: 80px;
         width: 100% !important;
         padding-bottom: 75px;
+        margin-left: 0px;
     }
 
     .bgimg{
         background: url("../images/bg.jpg") center no-repeat;
         background-size: auto 100% !important;
         position: fixed;
+    }
+
+    .mlist li a{
+        margin: 0 !important;
+    }
+
+    .mlist li a{
+        margin: 0 !important;
+    }
+
+    .mlist li.active a .fa-solid{
+        margin-left: -5px !important;
     }
 }

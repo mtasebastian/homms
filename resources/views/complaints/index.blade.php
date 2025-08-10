@@ -272,7 +272,7 @@
     function filterresident(){
         let key = $("#txtressearch").val();
         $.get("{{ route('filter_residents') }}?key=" + key, function(data, status){       
-            if(status == "success"){
+            if(status.includes("success")){
                 if(data.length == 0){
                     $("#tblfilterres").html("<tr><td colspan='3' class='text-center'>No Resident/s Found</td></tr>");
                 }

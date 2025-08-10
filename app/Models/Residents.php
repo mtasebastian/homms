@@ -11,7 +11,12 @@ class Residents extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $appends = ["fullname", "hoaaddress", "fulladdress"];
+    protected $appends = ["formattedid", "fullname", "hoaaddress", "fulladdress"];
+
+    public function getFormattedidAttribute()
+    {
+        return str_pad($this->id, 7, '0', STR_PAD_LEFT);
+    }
 
     public function getFullNameAttribute()
     {

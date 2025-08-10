@@ -292,6 +292,7 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th scope="col"></th>
                                 <th scope="col">Reference Number</th>
                                 <th scope="col" class="text-end">Payment Amount</th>
                                 <th scope="col">Discount Type</th>
@@ -319,11 +320,13 @@
             </div>
             <div class="modal-body p-4 py-3 m-3 text-center">
                 <button class="btn btn-info text-white p-2 w-100 fs-6 mb-3" onclick="paymentlist()"><i class="fa-solid fa-list me-2 fs-5"></i>Payment List</button>
-                <button class="btn btn-success p-2 w-100 fs-6" id="btnaddpayment" onclick="addpayment()"><i class="fa-solid fa-cash-register me-2 fs-5"></i>Add Payment</button>
+                <button class="btn btn-success p-2 w-100 fs-6 mb-3" id="btnaddpayment" onclick="addpayment()"><i class="fa-solid fa-cash-register me-2 fs-5"></i>Add Payment</button>
+                <button class="btn btn-secondary p-2 w-100 fs-6" id="btnaddpayment" onclick="generateBillingStatement()"><i class="fa-solid fa-file-invoice me-2 fs-5"></i>Billing Statement</button>
             </div>
         </div>
     </div>
 </div>
+<div id="print">
 <script>
     let fin_id = "";
     let clickedSubmitBtn = null;
@@ -413,7 +416,7 @@
     function searchresidents(){
         let key = $("#txtresidentsearch").val();
         $.get("{{ route('financials.search_resident') }}?key=" + key, function(data, status){       
-            if(status == "success"){
+            if(status.includes("success")){
                 if(data.length == 0){
                     $("#tblsearchresidents").html("<tr style='width: 100%; display: grid; grid-template-columns: repeat(10, 1fr); gap: 0.25rem;'><td class='text-center p-3' style='grid-column: span 10'>Resident not found</td></tr>");
                 }
@@ -484,7 +487,7 @@
         $("#optfin").modal("hide");
         id = fin_id;
         $.get("{{ route('financials.payment_list') }}?id=" + id, function(data, status){       
-            if(status == "success"){
+            if(status.includes("success")){
                 if(data.length == 0){
                     $("#tblpaylist").html("<td colspan='5' class='text-center p-3'>No payments has been posted for this bill.</td>");
                 }
@@ -493,16 +496,201 @@
                 }
                 $.each(data, function(i, item){
                     $("#tblpaylist").append("<tr>" +
+                        "<td><button class='btn btn-info text-white' onclick='printReceipt(\"" + item.id + "\")'><i class='fa-solid fa-print'></i></button></td>" +
                         "<td>" + item.reference_number + "</td>" +
                         "<td class='text-end'>" + parseFloat(item.payment).toFixed(2) + "</td>" +
                         "<td>" + (item.discount_type ? item.discount_type : 'none') + "</td>" +
                         "<td class='text-end'>" + (item.discount_amount ? parseFloat(item.discount_amount).toFixed(2) : 'none') + "</td>" +
-                        "<td>" + item.formatted_date + "</td>" +
+                        "<td>" + item.formatteddate + "</td>" +
                     "</tr>");
                 });
             }
         });
         $("#paymentlist").modal("show");
+    }
+
+    function generateBillingStatement(){
+        $.get("{{ route('financials.billing_statement') }}?id=" + fin_id, function(data, status){       
+            if(status.includes("success")){
+                let w = window.open();
+                let bills = '';
+                Object.entries(data.financials.bills).forEach(([i, item]) => {
+                    bills += '<tr>' +
+                        '<td style="padding: 10px;' + (i == Object.entries(data.financials.bills).length-1 ? '' : ' border-bottom: solid 1px #dddddd;') + '">' + (i + 1) + '</td>' +
+                        '<td colspan="2" style="padding: 10px;' + (i == Object.entries(data.financials.bills).length-1 ? '' : ' border-bottom: solid 1px #dddddd;') + '">' + item.billname + '</td>' +
+                        '<td style="padding: 10px;' + (i == Object.entries(data.financials.bills).length-1 ? '' : ' border-bottom: solid 1px #dddddd;') + ' text-align: right;">' + item.formattedamt + '</td>' +
+                    '</tr>';
+                });       
+                let html = '<html>' +
+                    '<head>' +
+                        '<title>Billing Statement</title>' +
+                        '<style>@media print { @page { size: portrait; margin: 10px; }  body { -webkit-print-color-adjust: exact; color-adjust: exact; width: 100%; } header, footer, .print-hide { display: none; } } *{ font-family: Arial; font-size: 13px; }</style>' +
+                    '</head>' +
+                    '<body>' +
+                        '<div style="margin: 100px 5%;">' +
+                        '<table width="100%" cellspacing="0">' +
+                            '<tr>' +
+                                '<td colspan="3" style="font-size: 20px;">' + data.systemname + '</td>' +
+                                '<td rowspan="5" style="text-align: right;"><img src="' + 'data:' + data.systemlogo.mime + ';base64,' + data.systemlogo.content + '" style="width: 120px; height: auto;"><td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="2">NON-VAT Reg.</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="2">TIN: ' + data.systemtin + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="2">CONTACT #: ' + data.systemcontact + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="2">' + data.systemaddress + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="4">&nbsp;</td>' +
+                            '</tr>' +
+                            '<tr style="background: blue; color: #ffffff;">' +
+                                '<td colspan="2" style="padding: 10px;">Billing Statement: ' + data.financials.formattedid + '</td>' +
+                                '<td></td>' +
+                                '<td style="padding: 10px; text-align: right;">Billing Period: ' + (data.financials.bill_month < 10 ? '0' : '') + data.financials.bill_month + '/' + data.financials.bill_year + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="4">&nbsp;</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td style="padding: 10px; border-bottom: solid 1px blue;">BILL TO</td>' +
+                                '<td style="padding: 10px; border-bottom: solid 1px blue;">ACCOUNT #</td>' +
+                                '<td colspan="2" style="padding: 10px; border-bottom: solid 1px blue;">ADDRESS</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td style="padding: 10px;">' + data.financials.resident.fullname + '</td>' +
+                                '<td style="padding: 10px;">' + data.financials.resident.formattedid + '</td>' +
+                                '<td colspan="2" style="padding: 10px;">' + data.financials.resident.fulladdress + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="4">&nbsp;</td>' +
+                            '</tr>' +
+                            '<tr style="background: blue; color: #ffffff;">' +
+                                '<td style="padding: 10px;">NO.</td>' +
+                                '<td colspan="2" style="padding: 10px;">DESCRIPTION</td>' +
+                                '<td style="padding: 10px; text-align: right;">TOTAL</td>' +
+                            '</tr>' +
+                            bills +
+                            '<tr>' +
+                                '<td colspan="4" style="border-bottom: solid 1px blue;">&nbsp;</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="4">&nbsp;</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="2" style="padding: 10px;"></td>' +
+                                '<td style="padding: 10px; color: blue;">SUBTOTAL</td>' +
+                                '<td style="padding: 10px; color: blue; text-align: right;">' + data.financials.formattedamt + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="2" style="padding: 10px;"></td>' +
+                                '<td style="padding: 10px; color: blue;">TAX</td>' +
+                                '<td style="padding: 10px; color: blue; text-align: right;">0.00</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="2" style="padding: 10px;"></td>' +
+                                '<td style="padding: 10px; color: blue; font-weight: 800;">TOTAL(DUE DATE BY 08/30/2025)</td>' +
+                                '<td style="padding: 10px; color: blue; font-weight: 800; text-align: right;">' + data.financials.formattedamt + '</td>' +
+                            '</tr>' +
+                        '</table>' +
+                        '</div>' +
+                    '</body>' +
+                '</html>';
+                w.document.write(html);
+                setTimeout(() => {
+                    w.print();
+                    w.close();
+                }, 100);
+            }
+        });
+    }
+
+    function printReceipt(id){
+        $.get("{{ route('financials.receipt') }}?id=" + id, function(data, status){       
+            if(status.includes("success")){
+                console.log(data);
+                let w = window.open();
+                let html = '<html>' +
+                    '<head>' +
+                        '<title>Billing Statement</title>' +
+                        '<style>@media print { @page { size: portrait; margin: 10px; }  body { -webkit-print-color-adjust: exact; color-adjust: exact; width: 100%; } header, footer, .print-hide { display: none; } } *{ font-family: Arial; font-size: 13px; } table td{ vertical-align: top; }</style>' +
+                    '</head>' +
+                    '<body>' +
+                        '<div style="margin: 100px 5%;">' +
+                        '<table width="100%" cellspacing="0" cellpadding="5">' +
+                            '<tr>' +
+                                '<td colspan="4" style="font-size: 20px;">' + data.systemname + '</td>' +
+                                '<td colspan="2" rowspan="5" style="text-align: right;"><img src="' + 'data:' + data.systemlogo.mime + ';base64,' + data.systemlogo.content + '" style="width: 120px; height: auto;"><td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="4">NON-VAT Reg.</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="4">TIN: ' + data.systemtin + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="4">CONTACT #: ' + data.systemcontact + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="4">' + data.systemaddress + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="6">&nbsp;</td>' +
+                            '</tr>' +
+                            '<tr style="background: gray; color: #ffffff;">' +
+                                '<td colspan="3" style="padding: 10px;">ACKNOWLEDGEMENT RECEIPT: ' + data.financial_payments.formattedid + '</td>' +
+                                '<td colspan="3" style="padding: 10px; text-align: right;">DATE: ' + data.financial_payments.formatteddate + '</td>' +
+                            '</tr>' +
+                            '<tbody id="details">' +
+                            '<tr>' +
+                                '<td style="width: 20%; border: solid 1px gray; border-top: none;">Reference Number</td>' +
+                                '<td colspan="2" style="width: 40%; border: solid 1px gray; border-left: none; border-top: none;">' + data.financial_payments.reference_number + '</td>' +
+                                '<td colspan="2" style="width: 20%;  border: solid 1px gray; border-left: none; border-top: none;">Payment Amount</td>' +
+                                '<td style="width: 20%; text-align: right; border: solid 1px gray; border-left: none; border-top: none;">' + data.financial_payments.formattedamount + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td style="border: solid 1px gray; border-top: none;">Account #</td>' +
+                                '<td colspan="2" style="border: solid 1px gray; border-left: none; border-top: none;">' + data.financials.resident.formattedid + '</td>' +
+                                '<td colspan="2" style="border: solid 1px gray; border-left: none; border-top: none;">Mode of Payment</td>' +
+                                '<td style="text-align: right; border: solid 1px gray; border-left: none; border-top: none;">' + data.financial_payments.mode_of_payment + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td style="border: solid 1px gray; border-top: none;">Resident Name</td>' +
+                                '<td colspan="2" style="border: solid 1px gray; border-left: none; border-top: none;">' + data.financials.resident.fullname + '</td>' +
+                                '<td colspan="2" style="border: solid 1px gray; border-left: none; border-top: none;">Discount</td>' +
+                                '<td style="text-align: right; border: solid 1px gray; border-left: none; border-top: none;">' + data.financial_payments.formatteddiscount + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td style="border: solid 1px gray; border-top: none;">Address</td>' +
+                                '<td colspan="2" style="border: solid 1px gray; border-left: none; border-top: none;">' + data.financials.resident.fulladdress + '</td>' +
+                                '<td colspan="2" style="border: solid 1px gray; border-left: none; border-top: none;">Total Amount</td>' +
+                                '<td style="text-align: right; border: solid 1px gray; border-left: none; border-top: none;">' + data.financial_payments.formattedtotal + '</td>' +
+                            '</tr>' +
+                            '</tbody>' +
+                            '<tr>' +
+                                '<td colspan="6">&nbsp;</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="6" style="border-bottom: dashed 1px #999;">Remarks</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="6">' + data.financial_payments.remarks + '</td>'
+                            '</tr>' +
+                        '</table>' +
+                        '</div>' +
+                    '</body>' +
+                '</html>';
+                w.document.write(html);
+                setTimeout(() => {
+                    w.print();
+                    w.close();
+                }, 100);
+            }
+        });
     }
 </script>
 @endsection

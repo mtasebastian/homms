@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Requests extends Model
 {
     use HasFactory;
+    protected $appends = ["formattedrequestdate", "formattedvalidfrom", "formattedvalidto"];
 
     public function reqBy()
     {
@@ -32,5 +34,20 @@ class Requests extends Model
             case "Checked": return "bg-warning text-white"; break;
             case "Approved": return "bg-success text-white"; break;
         }
+    }
+
+    public function getFormattedRequestdateAttribute()
+    {
+        return Carbon::parse($this->created_at)->format("m/d/Y");
+    }
+
+    public function getFormattedValidfromAttribute()
+    {
+        return Carbon::parse($this->valid_from)->format("m/d/Y");
+    }
+
+    public function getFormattedValidtoAttribute()
+    {
+        return Carbon::parse($this->valid_to)->format("m/d/Y");
     }
 }

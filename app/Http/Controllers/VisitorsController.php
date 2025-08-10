@@ -42,7 +42,7 @@ class VisitorsController extends Controller
             ]);
             array_push($params, ['datefrom', 'dateto']);
         }
-        $visitors = $query->paginate(10);
+        $visitors = $query->paginate(15);
         $visitors->appends($request->except('page')); 
         return view("visitors.index", compact($params));
     }
