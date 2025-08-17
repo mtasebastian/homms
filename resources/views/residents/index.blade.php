@@ -279,7 +279,7 @@
         $(".xsteps li").removeClass("active");
         $("#dstep" + cnt).addClass("active");
         $(".xbody").hide();
-        if($("#resid").val() != ""){
+        if($("#resid").val() != "" || cnt === 5){
             $("#btnrsubmit").show();
         }
         $("#xbody" + cnt).show();

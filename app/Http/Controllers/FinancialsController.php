@@ -24,9 +24,13 @@ class FinancialsController extends Controller
         $columns = \Schema::getColumnListing('residents');
         $selectColumns = ['financials.*'];
         foreach ($columns as $col) {
-            if ($col === 'id') {
+            if($col === 'id'){
                 $selectColumns[] = "residents.id as resident_id";
-            } else {
+            }
+            elseif($col === 'created_at') {
+                $selectColumns[] = "residents.created_at as resident_created_at";
+            }
+            else{
                 $selectColumns[] = "residents.$col";
             }
         }

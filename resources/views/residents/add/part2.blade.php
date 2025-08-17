@@ -81,11 +81,11 @@
     <div class="row mb-3">
         <div class="col-md-6 form-data">
             <label for="rescompanyname" class="form-label">Company Name</label>
-            <input type="text" class="form-control py-2 px-3 rounded-3" name="rescompanyname" id="rescompanyname" placeholder="Enter Company Name" required>
+            <input type="text" class="form-control py-2 px-3 rounded-3" name="rescompanyname" id="rescompanyname" placeholder="Enter Company Name">
         </div>
         <div class="col-md-6 form-data">
             <label for="rescompanyaddress" class="form-label">Company Address</label>
-            <input type="text" class="form-control py-2 px-3 rounded-3" name="rescompanyaddress" id="rescompanyaddress" placeholder="Enter Company Address" required>
+            <input type="text" class="form-control py-2 px-3 rounded-3" name="rescompanyaddress" id="rescompanyaddress" placeholder="Enter Company Address">
         </div>
     </div>
     <div class="row mb-3">

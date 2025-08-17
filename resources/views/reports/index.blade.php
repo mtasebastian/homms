@@ -145,8 +145,10 @@
                 let w = window.open();
                 let html = "<html><head><title>Print Report</title><style>@media print { @page { size: landscape; margin: 10px; }  body { -webkit-print-color-adjust: exact; color-adjust: exact; width: 100%; } header, footer, .print-hide { display: none; } } *{ font-family: Arial; font-size: 13px; } table thead tr th{ background: #333; color: #ffffff; padding: 5px; border: solid 1px #333333; border-left: none; } table thead tr th:first-child{ border-left: solid 1px #333333; } table tbody tr td{ padding: 5px; border: solid 1px #dddddd; border-top: none; border-left: none; } table tbody tr td:first-child{ border-left: solid 1px #dddddd; }</style></head><body><div><h4 style='font-size: 20px; text-align: center;'>{{ isset($reporttype) ? $reporttype : '' }} Report</h4></div><div>" + $("#printArea").html() + "</div></body></html>";
                 w.document.write(html);
-                w.print();
-                w.close();
+                setTimeout(() => {
+                    w.print();
+                    w.close();
+                }, 500);
             }
         });
     }

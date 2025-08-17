@@ -107,13 +107,13 @@
                     <input type="hidden" id="reqid" name="reqid">
                     <div class="row mb-3">
                         <div class="col-md-6 form-data">
-                            <label for="reqtype" class="form-label">Request Type</label>
+                            <label for="reqtype" class="form-label req">Request Type</label>
                             <select class="form-select py-2 px-3 rounded-3" name="reqtype" id="reqtype" required>
                                 <option value="">Select Request Type</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-data">
-                            <label for="reqtranstype" class="form-label">Transaction Type</label>
+                            <label for="reqtranstype" class="form-label req">Transaction Type</label>
                             <select class="form-select py-2 px-3 rounded-3" id="reqtranstype" name="reqtranstype" required>
                                 <option value="">Select Transaction Type</option>
                             </select>
@@ -121,36 +121,39 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6 form-data">
-                            <label for="reqrequestedby" class="form-label">Requested By</label>
+                            <label for="reqrequestedby" class="form-label req">Requested By</label>
                             <input type="hidden" name="reqrequestedbyid" id="reqrequestedbyid" value="{{ auth()->user()->role_id != '1' ? auth()->user()->id : '' }}">
                             <input type="text" class="form-control py-2 px-3 rounded-3" id="reqrequestedby" name="reqrequestedby" placeholder="Select Requested By" value="{{ auth()->user()->role_id != '1' ? auth()->user()->name : '' }}" onfocus="searchresident();" {{ auth()->user()->role_id != '1' ? 'readonly' : '' }} required>
                         </div>
                         <div class="col-md-6 form-data">
-                            <label for="reqstatus" class="form-label">Request Status</label>
+                            <label for="reqstatus" class="form-label req">Request Status</label>
                             <select class="form-select py-2 px-3 rounded-3" name="reqstatus" id="reqstatus" required>
                                 <option value="">Select Request Status</option>
+                                <option value="Submitted">Submitted</option>
+                                <option value="Checked">Checked</option>
+                                <option value="Approved">Approved</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-data mb-3">
-                        <label for="reqaddress" class="form-label">Address</label>
+                        <label for="reqaddress" class="form-label req">Address</label>
                         <input type="text" class="form-control py-2 px-3 rounded-3" name="reqaddress" id="reqaddress" required>
                     </div>
                     <div class="form-data mb-3">
-                        <label for="reqdetails" class="form-label">Details</label>
+                        <label for="reqdetails" class="form-label req">Details</label>
                         <textarea class="form-control py-2 px-3 rounded-3" name="reqdetails" id="reqdetails" style="height: 100px;" required></textarea>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 form-data">
-                            <label for="reqtransdate" class="form-label">Delivery/Pullout Date</label>
+                            <label for="reqtransdate" class="form-label req">Delivery</label>
                             <input type="text" class="form-control py-2 px-3 datepicker rounded-3" id="reqtransdate" name="reqtransdate" placeholder="__/__/____" required>
                         </div>
                         <div class="col-md-4 form-data">
-                            <label for="reqvalidfrom" class="form-label">Valid From</label>
+                            <label for="reqvalidfrom" class="form-label req">Valid From</label>
                             <input type="text" class="form-control py-2 px-3 datepicker rounded-3" id="reqvalidfrom" name="reqvalidfrom" placeholder="__/__/____" required>
                         </div>
                         <div class="col-md-4 form-data">
-                            <label for="reqvalidto" class="form-label">Valid To</label>
+                            <label for="reqvalidto" class="form-label req">Valid To</label>
                             <input type="text" class="form-control py-2 px-3 datepicker rounded-3" id="reqvalidto" name="reqvalidto" placeholder="__/__/____" required>
                         </div>
                     </div>
@@ -535,7 +538,6 @@
     function printRequest(id){
         $.get("{{ route('requests.print_request') }}?id=" + req_id, function(data, status){       
             if(status.includes("success")){
-                console.log(data);
                 let w = window.open();
                 let html = '<html>' +
                     '<head>' +
@@ -619,7 +621,7 @@
                 setTimeout(() => {
                     w.print();
                     w.close();
-                }, 100);
+                }, 500);
             }
         });
     }

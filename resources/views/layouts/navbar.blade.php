@@ -1,7 +1,7 @@
 <div class="d-flex flex-column flex-shrink-0 sidebar shadow">
     <div class="m-4 mx-auto img-cont shadow rounded-3">
       <a href="/" class="d-flex align-items-center text-decoration-none">
-        <img src="{{ asset('images/logo.jpg') }}" class="img-fluid rounded-3">
+        <img src="#" id="syslogo" class="img-fluid rounded-3">
       </a>
     </div>
     <div class="m-4 mx-auto px-3 profile_name">
@@ -234,3 +234,21 @@
     </ul>
   </div>
 </div>
+<script>
+  $(function(){
+    loadSysSetup();
+  });
+
+  function loadSysSetup(){
+    $.get("{{ route('settings.get_settings') }}", function(data, status){
+        if(status.includes("success")){
+          if(data.systemlogo){
+            $("#syslogo").attr("src", "data:" + data.systemlogo.mime + ";base64," + data.systemlogo.content);
+          }
+          else{
+            $("#syslogo").attr("src", "{{ asset('images/logo.jpg') }}");
+          }
+        }
+    });
+  }
+</script>

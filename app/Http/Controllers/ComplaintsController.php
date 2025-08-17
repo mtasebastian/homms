@@ -18,10 +18,14 @@ class ComplaintsController extends Controller
         
         $columns = \Schema::getColumnListing('residents');
         $selectColumns = ['complaints.*'];
-        foreach ($columns as $col) {
-            if ($col === 'id') {
+        foreach($columns as $col){
+            if($col === 'id'){
                 $selectColumns[] = "residents.id as resident_id";
-            } else {
+            }
+            elseif($col === 'created_at') {
+                $selectColumns[] = "residents.created_at as resident_created_at";
+            }
+            else{
                 $selectColumns[] = "residents.$col";
             }
         }
@@ -44,15 +48,15 @@ class ComplaintsController extends Controller
         }
 
         if($datefrom && !$dateto){
-            $query->whereDate('created_at', Carbon::parse($datefrom)->format('Y-m-d'));
+            $query->whereDate('complaints.created_at', Carbon::parse($datefrom)->format('Y-m-d'));
             array_push($params, ['datefrom']);
         }
         elseif(!$datefrom && $dateto){
-            $query->whereDate('created_at', Carbon::parse($dateto)->format('Y-m-d'));
+            $query->whereDate('complaints.created_at', Carbon::parse($dateto)->format('Y-m-d'));
             array_push($params, ['dateto']);
         }
         elseif($datefrom && $dateto){
-            $query->whereBetween(DB::raw("DATE(created_at)"), [
+            $query->whereBetween(DB::raw("DATE(complaints.created_at)"), [
                 Carbon::parse($datefrom)->format('Y-m-d'),
                 Carbon::parse($dateto)->format('Y-m-d')
             ]);

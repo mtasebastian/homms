@@ -391,17 +391,15 @@ class SettingsController extends Controller
 
     public function systemsettings(Request $request)
     {
-        $request->validate([
-            'file' => 'required|file|max:150',
-        ]);
-
         try{
-            SystemSetup::truncate();
             foreach($request->all() as $key => $value){
                 if($key !== "_token"){
+                    $sys = SystemSetup::where("setting_name", $key)->first();
+                    if(!$sys){
+                        $sys = new SystemSetup();
+                    }
                     if($request->hasFile($key) && $request->file($key)->isValid()){
                         $uploadedFile = $request->file($key);
-                        $sys = new SystemSetup();
                         $sys->setting_name = $key;
                         $sys->setting_type = 'file';
                         $sys->text = $uploadedFile->getClientOriginalName();
@@ -411,7 +409,6 @@ class SettingsController extends Controller
 
                     }
                     else{
-                        $sys = new SystemSetup();
                         $sys->setting_name = $key;
                         $sys->setting_type = 'text';
                         $sys->text = $value;

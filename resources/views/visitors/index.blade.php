@@ -107,25 +107,25 @@
                     <input type="hidden" id="visid" name="visid">
                     <div class="row mb-3">
                         <div class="col-md-6 form-data">
-                            <label for="visvisitortype" class="form-label">Visitor Type</label>
+                            <label for="visvisitortype" class="form-label req">Visitor Type</label>
                             <select class="form-select py-2 px-3 rounded-3" name="visvisitortype" id="visvisitortype" required>
                                 <option value="">Select Visitor Type</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-data">
-                            <label for="vispresentedid" class="form-label">Presented ID</label>
+                            <label for="vispresentedid" class="form-label req">Presented ID</label>
                             <select class="form-select py-2 px-3 rounded-3" name="vispresentedid" id="vispresentedid" required>
                                 <option value="">Select Presented ID</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-data mb-3">
-                        <label for="visname" class="form-label">Visitor Name</label>
-                        <input type="text" class="form-control py-2 px-3 rounded-3" name="visname" id="visname" placeholder="Enter Visitor Name">
+                        <label for="visname" class="form-label req">Visitor Name</label>
+                        <input type="text" class="form-control py-2 px-3 rounded-3" name="visname" id="visname" placeholder="Enter Visitor Name" required>
                     </div>
                     <div class="form-data mb-3">
-                        <label for="vispurpose" class="form-label">Purpose</label>
-                        <textarea class="form-control py-2 px-3 rounded-3" name="vispurpose" id="vispurpose" placeholder="Enter Purpose"></textarea>
+                        <label for="vispurpose" class="form-label req">Purpose</label>
+                        <textarea class="form-control py-2 px-3 rounded-3" name="vispurpose" id="vispurpose" placeholder="Enter Purpose" required></textarea>
                     </div>
                     <div class="form-data">
                         <label for="visremarks" class="form-label">Remarks / Comments</label>

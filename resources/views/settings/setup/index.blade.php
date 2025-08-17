@@ -90,7 +90,9 @@
         const formData = new FormData();
         const file = $('#systemlogo')[0].files[0];
 
-        formData.append('systemlogo', file);
+        if(file){
+            formData.append('systemlogo', file);
+        }
         formData.append('systemname', $("#systemname").val());
         formData.append('systemaddress', $("#systemaddress").val());
         formData.append('systemcontact', $("#systemcontact").val());
@@ -106,8 +108,10 @@
             success: function(res){
                 if(res.includes("success")){
                     showtoast("Success", "System settings has been saved.");
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
                 }
-                disableFields(false)
             },
             error: function(xhr, status, error){
                 console.error('Upload error:', error);

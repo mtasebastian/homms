@@ -151,7 +151,7 @@
                             <div class="card p-3 shadow border-light rounded-4">
                                 <h4 class="msubtitle my-3">Apply Bills</h4>
                                 <div class="form-data mb-3">
-                                    <label class="form-label">Bill Period</label>
+                                    <label class="form-label req">Bill Period</label>
                                     <div class="d-flex" style="gap: 0.75rem;">
                                         <div>
                                             <span>Year</span>
@@ -178,7 +178,7 @@
                                     </div>
                                 </div>
                                 <div class="form-data mb-3">
-                                    <label class="form-label">Due Date</label>
+                                    <label class="form-label req">Due Date</label>
                                     <div class="input-group inputg">
                                         <input type="text" class="form-control datepicker py-2 px-3" name="finduedate" placeholder="Select Due Date" required>
                                         <div class="input-group-append">
@@ -227,23 +227,33 @@
                 @csrf
                 <div class="modal-body p-4">
                     <input type="hidden" name="payfinid" id="payfinid">
-                    <div class="row mb-3">
-                        <div class="col-6 form-data">
-                            <label class="form-label">Bill Period</label>
-                            <label class="fw-bold d-block fs-5" id="payfinbillperiod"></label>
+                    <div class="row mb-3 text-white">
+                        <div class="col-4 form-data text-center">
+                            <div class="bg-secondary p-2 rounded">
+                                <label class="form-label mb-0">Bill Period</label>
+                                <label class="fw-bold d-block fs-5" id="payfinbillperiod"></label>
+                            </div>
                         </div>
-                        <div class="col-6 form-data text-end">
-                            <label class="form-label">Bill Amount</label>
-                            <label class="fw-bold d-block fs-5" id="payfinbillamt"></label>
+                        <div class="col-4 form-data text-center">
+                            <div class="bg-success p-2 rounded">
+                                <label class="form-label mb-0">Bill Amount</label>
+                                <label class="fw-bold d-block fs-5" id="payfinbillamt"></label>
+                            </div>
+                        </div>
+                        <div class="col-4 form-data text-center">
+                            <div class="bg-primary p-2 rounded">
+                                <label class="form-label mb-0">Remaining Balance</label>
+                                <label class="fw-bold d-block fs-5" id="payfinbillbal"></label>
+                            </div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6 form-data">
-                            <label class="form-label">Reference Number</label>
+                            <label class="form-label req">Reference Number</label>
                             <input type="text" class="form-control py-2 px-3 rounded-3" name="payrefno" id="payrefno" placeholder="Input reference number" required>
                         </div>
                         <div class="col-md-6 form-data">
-                            <label class="form-label">Mode of Payment</label>
+                            <label class="form-label req">Mode of Payment</label>
                             <select class="form-select py-2 px-3 rounded-3" name="paymod" id="paymod" required>
                                 <option value="">Select Mode of Payment</option>
                             </select>
@@ -251,8 +261,8 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6 form-data">
-                            <label class="form-label">Payment Amount</label>
-                            <input type="text" class="form-control py-2 px-3 rounded-3" name="payamt" id="payamt" placeholder="Input payment amount" required>
+                            <label class="form-label req">Payment Amount</label>
+                            <input type="number" class="form-control py-2 px-3 rounded-3" name="payamt" id="payamt" step="0.01" placeholder="Input payment amount" required>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -330,6 +340,7 @@
 <script>
     let fin_id = "";
     let clickedSubmitBtn = null;
+    let maxPay = 0;
 
     $(function(){
         loadRefs();
@@ -343,6 +354,13 @@
         $("#addbillyear").yearlist(5, 10, "enableSubmitFin");
         $("#billmonth").monthlist();
         $("#addbillmonth").monthlist("enableSubmitFin");
+        $("#payamt").allowDecimalOnly();
+        $("#payamt").change(function(){
+            if(parseFloat($(this).val()) > maxPay){
+                $(this).val("")
+                alert("Inputted amount must be smaller or equals the remaining balance for this Billing.");
+            }
+        });
 
         $('#frmfinancial button[type=submit]').on('click', function(){
             clickedSubmitBtn = $(this);
@@ -390,7 +408,8 @@
     function optfin(id){
         fin_id = id;
         const obj = $("#fin_" + id);
-        if(parseFloat(obj.find("td").eq(6).text()) <= 0){
+        const fin = JSON.parse(obj.find(".financial").val());
+        if(parseFloat(fin.balance) <= 0){
             $("#btnaddpayment").hide();
         }
         else{
@@ -474,8 +493,11 @@
         $("#payfinid").val(id);
         $("#payfinbillperiod").text(obj.find("td").eq(3).text() + ", " + obj.find("td").eq(2).text());
         $("#payfinbillamt").text(obj.find("td").eq(4).text());
+        const fin = JSON.parse(obj.find(".financial").val());
+        $("#payfinbillbal").text(fin.formattedbal);
         $("#payrefno").val("");
         $("#paymod").val("");
+        maxPay = parseFloat(fin.balance)
         $("#payamt").val("");
         $("#paydisctype").val("");
         $("#paydiscamt").val("");
@@ -604,7 +626,7 @@
                 setTimeout(() => {
                     w.print();
                     w.close();
-                }, 100);
+                }, 500);
             }
         });
     }
@@ -612,7 +634,6 @@
     function printReceipt(id){
         $.get("{{ route('financials.receipt') }}?id=" + id, function(data, status){       
             if(status.includes("success")){
-                console.log(data);
                 let w = window.open();
                 let html = '<html>' +
                     '<head>' +
@@ -688,7 +709,7 @@
                 setTimeout(() => {
                     w.print();
                     w.close();
-                }, 100);
+                }, 500);
             }
         });
     }

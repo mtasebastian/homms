@@ -31,7 +31,7 @@ class Complaints extends Model
     {
         switch($this->status){
             case "Pending": return "bg-info text-white"; break;
-            case "On-going": return "bg-light text-dark"; break;
+            case "On Going": return "bg-warning text-dark"; break;
             case "Completed": return "bg-success text-white"; break;
         }
     }

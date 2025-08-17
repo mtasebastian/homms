@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Visitors;
 use App\Models\RefSetup;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class VisitorsController extends Controller
 {

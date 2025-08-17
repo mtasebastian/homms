@@ -7,7 +7,7 @@
     <h5 class="my-t rtitle">HOA Account Registration</h5>
     <p class="rdesc mx-auto">Fill up the following information. The values given are subject for verification before approval.</p>
     <br>
-    <form method="post" action="{{ route('register.save') }}" class="px-5">
+    <form method="post" id="frmregister" action="{{ route('register.save') }}" class="px-5">
         @csrf
         <div class="row">
             <div class="col-md-6 form-data mb-3">
@@ -84,7 +84,7 @@
         <hr>
         <div class="row">
             <div class="col col-md-6 col-sm-6"><button class="btn w-100 btn-add py-2 shadow-sm"><b>Register</b></button></div>
-            <div class="col col-md-6 col-sm-6"><button class="btn w-100 btn-light border py-2 shadow-sm"><b>Reset</b></button></div>
+            <div class="col col-md-6 col-sm-6"><button type="button" class="btn w-100 btn-light border py-2 shadow-sm" onclick="reset()"><b>Clear</b></button></div>
         </div>
     </form>
     @if(session('success'))
@@ -105,6 +105,13 @@
     </div>  
     @endif
 </div>
+<script>
+    function reset(){
+        $("#frmregister input[type='text'], #frmregister input[type='password']").each(function(){
+            $(this).val("")
+        });
+    }
+</script>
 <style>
     @media only screen and (max-width: 768px) {
         html{

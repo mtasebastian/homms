@@ -151,6 +151,21 @@ $.fn.monthlist = function(func = ""){
     });
 };
 
+$.fn.allowDecimalOnly = function () {
+    this.on('input', function () {
+        let value = $(this).val();
+        
+        let cleanValue = value
+            .replace(/[^0-9.]/g, '')
+            .replace(/^\.*/, '')
+            .replace(/(\..*)\./g, '$1');
+            
+        $(this).val(cleanValue);
+    });
+
+    return this;
+};
+
 $(document).ready(function(){
     $(".datepicker").datepicker();
     $(".datepickerBig").datepicker({

@@ -330,7 +330,9 @@
         $("#compresid").val(arr.resident_id);
         $("#compresname").val(arr.resident.fullname);
         $("#compdefid").val(arr.complaint_to);
-        $("#compdefname").val(arr.defendant.fullname);
+        if(arr.defendant){
+            $("#compdefname").val(arr.defendant.fullname);
+        }
         $("#comppurpose").val(arr.purpose);
         $("#compremarks").val(arr.details);
         $("#addcomplaintLabel").text("Edit Complaint");

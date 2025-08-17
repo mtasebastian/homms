@@ -21,7 +21,7 @@ class Controller extends BaseController
     {
         $rules = array(
             "txtemail" => "required|email",
-            "txtpassword" => "required|alphaNum|min:5"
+            "txtpassword" => "required|min:8"
         );
         $validator = Validator::make($request->all() , $rules);
 

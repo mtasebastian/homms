@@ -12,7 +12,7 @@ class Financials extends Model
     use HasFactory;
     use SoftDeletes;
     public $timestamps = true;
-    protected $appends = ["formattedid", "formattedcat", "formatteduat", "monthname", "formattedamt"];
+    protected $appends = ["formattedid", "formattedcat", "formatteduat", "monthname", "formattedamt", "formattedbal"];
 
     public function resident()
     {
@@ -31,7 +31,9 @@ class Financials extends Model
 
     public function balances()
     {
-        return $this->hasMany(self::class, "resident_id", "resident_id")->where("id", "<=", $this->id);
+        if($this->latest('created_at')){
+            return $this->hasMany(self::class, "resident_id", "resident_id")->where("id", "<=", $this->id);
+        }
     }
 
     public function getFormattedidAttribute()
@@ -58,5 +60,10 @@ class Financials extends Model
     public function getFormattedamtAttribute()
     {
         return number_format($this->bill_amount, 2, '.', ',');
+    }
+
+    public function getFormattedbalAttribute()
+    {
+        return number_format($this->balance, 2, '.', ',');
     }
 }

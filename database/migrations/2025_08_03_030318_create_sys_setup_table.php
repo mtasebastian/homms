@@ -17,7 +17,7 @@ class CreateSysSetupTable extends Migration
             $table->id();
             $table->string("setting_name", 200);
             $table->string("setting_type", 20)->nullable();
-            $table->string("text", 200);
+            $table->string("text", 200)->nullable();
             $table->string('mime')->nullable();
             $table->binary('content')->nullable();
             $table->timestamps();

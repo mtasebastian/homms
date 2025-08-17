@@ -16,8 +16,15 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
+        $rules = array(
+            "txtemail" => "required|email",
+            "txtpassword" => "required|min:8"
+        );
+        $validator = Validator::make($request->all() , $rules);
+
         $resident = Residents::where("email_address", $request->txtemail)->where("mobile_number", $request->txtcontactno)->get();
-        if($resident->count() > 0){
+        $auth = User::where("email", $request->txtemail)->where("mobileno", $request->txtcontactno)->first();
+        if($resident->count() > 0 && $auth->count() == 0){
             if($request->txtpassword != $request->txtconfirmpassword){
                 return redirect()->back()->with("error", "Passwords do not match.");
             }

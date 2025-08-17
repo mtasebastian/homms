@@ -75,7 +75,7 @@
         </div>
         <div class="col-md-3 form-data">
             <label for="reshousecolor" class="form-label">House Color</label>
-            <select class="form-select py-2 px-3 rounded-3" name="reshousecolor" id="reshousecolor" required>
+            <select class="form-select py-2 px-3 rounded-3" name="reshousecolor" id="reshousecolor">
                 <option value="">Select House Color</option>
             </select>
         </div>
