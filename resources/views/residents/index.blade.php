@@ -199,6 +199,9 @@
     let cnt = 1;
     let res_id = "";
     let params = {};
+    let occupants = [];
+    let vehicles = [];
+    let pets = [];
 
     $(function(){
         loadRefs();
@@ -334,7 +337,6 @@
         $("#rescontactpersonno").val(params.contact_person_number);
 
         // Occupants
-        occupants = [];
         $.each(params.occupants, function(i, item){
             let occupant = {
                 lastname: item.last_name,
@@ -352,7 +354,6 @@
         displayoccupants();
 
         // Vehicles
-        vehicles = [];
         $.each(params.vehicles, function(i, item){
             let vehicle = {
                 vehicletype: item.type,
@@ -366,7 +367,6 @@
         displayvehicles();
 
         // Pets
-        pets = [];
         $.each(params.pets, function(i, item){
             let pet = {
                 pettype: item.type,

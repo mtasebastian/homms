@@ -1,14 +1,14 @@
 <form method="post" enctype="multipart/form-data" id="systemForm">
     <div class="row p-4">
-        <div class="col-2">
+        <div class="col-md-2">
             <div class="form-data mb-3">
                 <label for="systemlogo" class="form-label">Logo</label>
-                <img src="" style="max-width: 100%; height: auto; margin-bottom: 10px;" id="previewlogo">
+                <img src="" style="max-width: 100%; height: auto; margin: 0px auto 10px; display: block;" id="previewlogo">
                 <input type="file" class="form-control py-2 px-3 rounded-3" id="systemlogo" name="systemlogo">
                 <label class="text-danger px-1">(Maximum of 150 KB size for Logo)</label>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-md-3">
             <div class="form-data mb-3">
                 <label for="systemname" class="form-label">Name</label>
                 <input type="text" class="form-control py-2 px-3 rounded-3" id="systemname" name="systemname">

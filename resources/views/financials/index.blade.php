@@ -221,7 +221,7 @@
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
                 <h5 class="modal-title" id="addpaymentLabel">Add Payment</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" onclick="closeaddpayment()"></button>
             </div>
             <form method="post" id="frmpayment" action="{{ route('financials.add_payment') }}">
                 @csrf
@@ -284,7 +284,7 @@
                 </div>
                 <div class="modal-footer p-4 py-3">
                     <button type="submit" class="btn btn-add mx-2 px-3 py-2 rounded-3"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Add Payment</button>
-                    <button type="button" class="btn btn-light border py-2 px-3 rounded-3" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-light border py-2 px-3 rounded-3" onclick="closeaddpayment()">Close</button>
                 </div>
             </form>
         </div>
@@ -295,7 +295,7 @@
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
                 <h5 class="modal-title" id="paymentlistLabel">Payment List</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" onclick="closepaymentlist()"></button>
             </div>
             <div class="modal-body p-4">
                 <div class="table-responsive">
@@ -316,7 +316,7 @@
                 </div>
             </div>
             <div class="modal-footer p-4 py-3">
-                <button type="button" class="btn btn-light border py-2 px-3 rounded-3" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-light border py-2 px-3 rounded-3" onclick="closepaymentlist()">Close</button>
             </div>
         </div>
     </div>
@@ -505,6 +505,11 @@
         $("#addpayment").modal("show");
     }
 
+    function closeaddpayment(){
+        $("#addpayment").modal("hide");
+        $("#optfin").modal("show");
+    }
+
     function paymentlist(){
         $("#optfin").modal("hide");
         id = fin_id;
@@ -529,6 +534,12 @@
             }
         });
         $("#paymentlist").modal("show");
+    }
+
+    function closepaymentlist(){
+        $("#paymentlist").modal("hide");
+        $("#optfin").modal("show");
+        
     }
 
     function generateBillingStatement(){

@@ -1,5 +1,5 @@
 <div class="d-flex flex-column flex-shrink-0 sidebar shadow">
-    <div class="m-4 mx-auto img-cont shadow rounded-3">
+    <div class="m-4 mx-auto img-cont rounded-3">
       <a href="/" class="d-flex align-items-center text-decoration-none">
         <img src="#" id="syslogo" class="img-fluid rounded-3">
       </a>
@@ -110,8 +110,8 @@
     </ul>
 </div>
 <div class="mobile-sidebar shadow-sm">
-    <a href="/" class="text-decoration-none sm-img shadow">
-      <img src="{{ asset('images/logo.jpg') }}" class="img-fluid rounded-3">
+    <a href="/" class="text-decoration-none sm-img">
+      <img src="#" id="syslogo_mobile" class="img-fluid rounded-3">
     </a>
     <button class="btn-menu rounded-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample">
       <i class="fa-solid fa-bars"></i>
@@ -244,9 +244,11 @@
         if(status.includes("success")){
           if(data.systemlogo){
             $("#syslogo").attr("src", "data:" + data.systemlogo.mime + ";base64," + data.systemlogo.content);
+            $("#syslogo_mobile").attr("src", "data:" + data.systemlogo.mime + ";base64," + data.systemlogo.content);
           }
           else{
             $("#syslogo").attr("src", "{{ asset('images/logo.jpg') }}");
+            $("#syslogo_mobile").attr("src", "{{ asset('images/logo.jpg') }}");
           }
         }
     });

@@ -37,8 +37,6 @@
     <input type="hidden" name="resvehiclelist" id="resvehiclelist">
 </div>
 <script>
-    let vehicles = [];
-
     function initrespart4(){
         displayvehicles();
         resetFields('respart4');

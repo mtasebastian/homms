@@ -174,6 +174,10 @@ class ResidentsController extends Controller
         $resident->contact_person_number = $request->rescontactpersonno;
         $resident->save();
 
+        $resident->occupants()->delete();
+        $resident->vehicles()->delete();
+        $resident->pets()->delete();
+
         // Occupants
         $occupants = json_decode($request->resoccupantlist, true);
         if($occupants != null){

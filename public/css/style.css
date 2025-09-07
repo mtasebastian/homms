@@ -86,7 +86,6 @@ body{
 
 .img-cont{
     width: 40%;
-    border: solid 1px #DDD;
 }
 
 .navtitle{
@@ -325,6 +324,7 @@ body{
 
 .table th, .table td{
     padding: 0.8rem;
+    vertical-align: middle;
 }
 
 .table tr.active{
@@ -562,11 +562,14 @@ body{
 
     .mobile-sidebar .sm-img{
         display: block;
-        width: 90px;
-        height: 90px;
         margin: 10px;
         border-radius: 5px;
         border: solid 5px #FFF;
+    }
+
+    .mobile-sidebar .sm-img img{
+        width: auto;
+        max-height: 55px;
     }
 
     .mobile-sidebar .btn-menu{

@@ -37,8 +37,6 @@
     <input type="hidden" name="respetlist" id="respetlist">
 </div>
 <script>
-    let pets = [];
-
     function initrespart5(){
         displaypets();
         resetFields('respart5');

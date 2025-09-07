@@ -59,8 +59,6 @@
     <input type="hidden" name="resoccupantlist" id="resoccupantlist">
 </div>
 <script>
-    let occupants = [];
-
     function initrespart3(){
         displayoccupants();
         resetFields('respart3');
@@ -93,15 +91,15 @@
         if(occupants.length > 0){
             $("#resoccupants").prev(".none").hide();
             $.each(occupants, function(i, item){
-            $("#resoccupants").append("<li class='list-group-item'>" +
-                "<p class='mb-0'>Full Name: <b>" + item.lastname + ", " + item.firstname + " " + item.middlename.charAt(0) + ".</b></p>" +
-                "<p class='mb-0'>Email Address: <b>" + item.emailaddress + "</b></p>" +
-                "<p class='mb-0'>Mobile Number: <b>" + item.mobilenumber + "</b></p>" +
-                "<p class='mb-0'>Relationship to Owner: <b>" + item.relation + "</b></p>" +
-                "<button type='button' class='btn btn-white p-1 px-2 mx-1 border-success edit' onclick='editoccupant(" + i + ")'><i class='fa-solid fa-pen-to-square text-success'></i></button>" +
-                "<button type='button' class='btn btn-white p-1 px-2 mx-1 border-danger delete' onclick='deleteoccupant(" + i + ")'><i class='fa-solid fa-trash-alt text-danger'></i></button>" +
-            "</li>");
-        });
+                $("#resoccupants").append("<li class='list-group-item'>" +
+                    "<p class='mb-0'>Full Name: <b>" + item.lastname + ", " + item.firstname + " " + item.middlename.charAt(0) + ".</b></p>" +
+                    "<p class='mb-0'>Email Address: <b>" + item.emailaddress + "</b></p>" +
+                    "<p class='mb-0'>Mobile Number: <b>" + item.mobilenumber + "</b></p>" +
+                    "<p class='mb-0'>Relationship to Owner: <b>" + item.relation + "</b></p>" +
+                    "<button type='button' class='btn btn-white p-1 px-2 mx-1 border-success edit' onclick='editoccupant(" + i + ")'><i class='fa-solid fa-pen-to-square text-success'></i></button>" +
+                    "<button type='button' class='btn btn-white p-1 px-2 mx-1 border-danger delete' onclick='deleteoccupant(" + i + ")'><i class='fa-solid fa-trash-alt text-danger'></i></button>" +
+                "</li>");
+            });
         }else{
             $("#resoccupants").prev(".none").show();
         }
