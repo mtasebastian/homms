@@ -121,8 +121,7 @@ class DashboardController extends Controller
 
     protected function visitors()
     {
-        // $date = Carbon::now()->format("Y-m-d");
-        $date = "2025-05-04";
+        $date = Carbon::now()->format("Y-m-d");
         $visitors = Visitors::select(
                 DB::raw("HOUR(time_in) as hour"),
                 DB::raw("COUNT(id) as count")
