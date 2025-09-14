@@ -6,6 +6,7 @@
         @include('layouts.navtitle', ['navtitle' => 'Dashboard'])
         <div class="mcontent dashboard">
             <div class="cont">
+                {{ date_default_timezone_get(); }}
                 <div class="box shadow-sm rounded mb-3">
                     <div class="count cnt1 shadow-sm rounded">
                         <h1 id="cnt1"></h1>
