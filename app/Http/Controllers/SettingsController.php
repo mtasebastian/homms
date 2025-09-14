@@ -257,9 +257,37 @@ class SettingsController extends Controller
 
     public function referentials(Request $request)
     {
-        $referentials = Referentials::paginate(10);
+        $params = ['referentials', 'modules'];
+        $search = $request->txtreferentialsearch;
+        $datefrom = $request->txtreferentialdatefrom;
+        $dateto = $request->txtreferentialdateto;
+
+        $query = Referentials::query();
+        if($search){
+            $query->where("name", "LIKE", "%" . $search . "%");
+            $searchkey = $search;
+            array_push($params, ['searchkey']);
+        }
+
+        if($datefrom && !$dateto){
+            $query->whereDate('created_at', Carbon::parse($datefrom)->format('Y-m-d'));
+            array_push($params, ['datefrom']);
+        }
+        elseif(!$datefrom && $dateto){
+            $query->whereDate('created_at', Carbon::parse($dateto)->format('Y-m-d'));
+            array_push($params, ['dateto']);
+        }
+        elseif($datefrom && $dateto){
+            $query->whereBetween(DB::raw("DATE(created_at)"), [
+                Carbon::parse($datefrom)->format('Y-m-d'),
+                Carbon::parse($dateto)->format('Y-m-d')
+            ]);
+            array_push($params, ['datefrom', 'dateto']);
+        }
+
+        $referentials = $query->paginate(10);
         $modules = Modules::get();
-        return view("settings.referentials", compact(['referentials', 'modules']));
+        return view("settings.referentials", compact($params));
     }
 
     public function addreferential(Request $request)

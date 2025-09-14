@@ -120,6 +120,7 @@
 
     function deleteoccupant(i){
         occupants.splice(i, 1);
+        $("#resoccupantlist").val(JSON.stringify(occupants));
         displayoccupants();
     }
 </script>

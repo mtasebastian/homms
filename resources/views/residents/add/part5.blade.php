@@ -89,6 +89,7 @@
 
     function deletepet(i){
         pets.splice(i, 1);
+        $("#respetlist").val(JSON.stringify(pets));
         displaypets();
     }
 </script>

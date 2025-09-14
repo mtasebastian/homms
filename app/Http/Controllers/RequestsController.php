@@ -40,9 +40,9 @@ class RequestsController extends Controller
                 ->with(["reqBy", "appBy", "chkBy"]);
         if($search){
             $query->where(function ($q) use ($search) {
-                $q->where('request_type', 'like', "%$search%")
-                ->orWhere('details', 'like', "%$search%")
-                ->orWhere('address', 'like', "%$search%")
+                $q->where('requests.request_type', 'like', "%$search%")
+                ->orWhere('requests.details', 'like', "%$search%")
+                ->orWhere('requests.address', 'like', "%$search%")
                 ->orWhere(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), 'like', "%$search%");
             });
             $searchkey = $search;
@@ -50,15 +50,15 @@ class RequestsController extends Controller
         }
 
         if($datefrom && !$dateto){
-            $query->whereDate('residents.created_at', Carbon::parse($datefrom)->format('Y-m-d'));
+            $query->whereDate('requests.created_at', Carbon::parse($datefrom)->format('Y-m-d'));
             array_push($params, ['datefrom']);
         }
         elseif(!$datefrom && $dateto){
-            $query->whereDate('residents.created_at', Carbon::parse($dateto)->format('Y-m-d'));
+            $query->whereDate('requests.created_at', Carbon::parse($dateto)->format('Y-m-d'));
             array_push($params, ['dateto']);
         }
         elseif($datefrom && $dateto){
-            $query->whereBetween(DB::raw("DATE(residents.created_at)"), [
+            $query->whereBetween(DB::raw("DATE(requests.created_at)"), [
                 Carbon::parse($datefrom)->format('Y-m-d'),
                 Carbon::parse($dateto)->format('Y-m-d')
             ]);

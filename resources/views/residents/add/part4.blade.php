@@ -89,6 +89,7 @@
 
     function deletevehicle(i){
         vehicles.splice(i, 1);
+        $("#resvehiclelist").val(JSON.stringify(vehicles));
         displayvehicles();
     }
 </script>
