@@ -10,84 +10,101 @@
             @include('layouts.toast', ['type' => 'danger', 'message' => session('error')])
         @endif
         @include('layouts.navtitle', ['navtitle' => 'Financials'])
-        <div class="mcontent">
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <form method="get" id="frmSearch" action="{{ route('financials.index') }}">
-                <div class="row">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control py-2 px-3" name="searchkey" id="searchkey" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </span>
+        @if($checker->routePermission('financials.index'))
+            <div class="mcontent">
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <form method="get" id="frmSearch" action="{{ route('financials.index') }}">
+                    <div class="row">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control py-2 px-3" name="searchkey" id="searchkey" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-select py-2 px-3" name="billyear" id="billyear" placeholder="Select Year" value="{{ isset($year) ? $year : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar"></i>
-                                </span>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-select py-2 px-3" name="billyear" id="billyear" placeholder="Select Year" value="{{ isset($year) ? $year : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-select py-2 px-3" name="billmonth" id="billmonth" placeholder="Select Month" value="{{ isset($month) ? $month : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-week"></i>
-                                </span>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-select py-2 px-3" name="billmonth" id="billmonth" placeholder="Select Month" value="{{ isset($month) ? $month : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-week"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
+                        <div class="col-md-1 mb-3 mb-md-0"><button onclick="clearSearch()" class="btn btn-info py-2 px-4 rounded-3 me-2 btn-sm-100"><i class="fa-solid fa-rotate-right"></i></button></div>
+                        <div class="col-md-3 text-end">
+                            <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
+                            <button
+                                type="button"
+                                class="btn btn-add py-2 px-4 rounded-3 btn-sm-100
+                                @if(!$checker->routePermission('financials.generate_bills'))
+                                disabled
+                                @endif
+                                "
+                                onclick="addfinancial()"
+                            >
+                                <i class="fa-solid fa-plus"></i>
+                                &nbsp;&nbsp;Add Bill
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-md-1 mb-3 mb-md-0"><button onclick="clearSearch()" class="btn btn-info py-2 px-4 rounded-3 me-2 btn-sm-100"><i class="fa-solid fa-rotate-right"></i></button></div>
-                    <div class="col-md-3 text-end">
-                        <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
-                        <button type="button" class="btn btn-add py-2 px-4 rounded-3 btn-sm-100" onclick="addfinancial()"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add Bill</button>
+                    </form>
+                </div>
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <i class="idetail">Note: Click a row to view options</i>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="align-top tbl-d-none">ID</th>
+                                    <th scope="col" class="align-top">Resident</th>
+                                    <th scope="col" class="align-top">Year</th>
+                                    <th scope="col" class="align-top">Month</th>
+                                    <th scope="col" class="align-top">Amount</th>
+                                    <th scope="col" class="align-top">Payment</th>
+                                    <th scope="col" class="align-top">Balance</th>
+                                    <th scope="col" class="align-top tbl-d-none">Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($financials as $financial)
+                                <tr id="fin_{{ $financial->id }}" onclick="optfin({{ $financial->id }})">
+                                    <td class="tbl-d-none">{{ $financial->id }}</td>
+                                    <td>{{ $financial->resident->fullname }}</td>
+                                    <td>{{ $financial->bill_year }}</td>
+                                    <td>{{ $financial->monthname }}</td>
+                                    <td>{{ number_format($financial->bill_amount, 2, '.', ',') }}</td>
+                                    <td>{{ number_format($financial->payments()->sum('payment'), 2, '.', ',') }}</td>
+                                    <td>{{ number_format($financial->balances()->sum('balance'), 2, '.', ',') }}</td>
+                                    <td class="tbl-d-none">{{ date("m/d/y", strtotime($financial->created_at)) }}</td>
+                                    <input type="hidden" class="financial" value="{{ json_encode($financial) }}">
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                        <div class="d-flex"><div class="mx-auto">{{ $financials->links() }}</div></div>
                     </div>
                 </div>
-                </form>
             </div>
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <i class="idetail">Note: Click a row to view options</i>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="align-top tbl-d-none">ID</th>
-                                <th scope="col" class="align-top">Resident</th>
-                                <th scope="col" class="align-top">Year</th>
-                                <th scope="col" class="align-top">Month</th>
-                                <th scope="col" class="align-top">Amount</th>
-                                <th scope="col" class="align-top">Payment</th>
-                                <th scope="col" class="align-top">Balance</th>
-                                <th scope="col" class="align-top tbl-d-none">Created At</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($financials as $financial)
-                            <tr id="fin_{{ $financial->id }}" onclick="optfin({{ $financial->id }})">
-                                <td class="tbl-d-none">{{ $financial->id }}</td>
-                                <td>{{ $financial->resident->fullname }}</td>
-                                <td>{{ $financial->bill_year }}</td>
-                                <td>{{ $financial->monthname }}</td>
-                                <td>{{ number_format($financial->bill_amount, 2, '.', ',') }}</td>
-                                <td>{{ number_format($financial->payments()->sum('payment'), 2, '.', ',') }}</td>
-                                <td>{{ number_format($financial->balances()->sum('balance'), 2, '.', ',') }}</td>
-                                <td class="tbl-d-none">{{ date("m/d/y", strtotime($financial->created_at)) }}</td>
-                                <input type="hidden" class="financial" value="{{ json_encode($financial) }}">
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    <div class="d-flex"><div class="mx-auto">{{ $financials->links() }}</div></div>
-                </div>
+        @else
+            <div class="mcontent">
+                <div class="no-access">You don't have access to this feature!</div>
             </div>
-        </div>
+        @endif
     </div>
     <input type="hidden" id="refsetup" value="{{ json_encode($refsetup) }}">
 </div>
@@ -329,9 +346,41 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 py-3 m-3 text-center">
-                <button class="btn btn-info text-white p-2 w-100 fs-6 mb-3" onclick="paymentlist()"><i class="fa-solid fa-list me-2 fs-5"></i>Payment List</button>
-                <button class="btn btn-success p-2 w-100 fs-6 mb-3" id="btnaddpayment" onclick="addpayment()"><i class="fa-solid fa-cash-register me-2 fs-5"></i>Add Payment</button>
-                <button class="btn btn-secondary p-2 w-100 fs-6" id="btnaddpayment" onclick="generateBillingStatement()"><i class="fa-solid fa-file-invoice me-2 fs-5"></i>Billing Statement</button>
+                <button
+                    class="btn btn-info text-white p-2 w-100 fs-6 mb-3
+                    @if(!$checker->routePermission('financials.payment_list'))
+                    disabled
+                    @endif
+                    "
+                    onclick="paymentlist()"
+                >
+                    <i class="fa-solid fa-list me-2 fs-5"></i>
+                    Payment List
+                </button>
+                <button
+                    class="btn btn-success p-2 w-100 fs-6 mb-3
+                    @if(!$checker->routePermission('financials.add_payment'))
+                    disabled
+                    @endif
+                    "
+                    id="btnaddpayment"
+                    onclick="addpayment()"
+                >
+                    <i class="fa-solid fa-cash-register me-2 fs-5"></i>
+                    Add Payment
+                </button>
+                <button
+                    class="btn btn-secondary p-2 w-100 fs-6
+                    @if(!$checker->routePermission('financials.billing_statement'))
+                    disabled
+                    @endif
+                    "
+                    id="btnaddpayment"
+                    onclick="generateBillingStatement()"
+                >
+                    <i class="fa-solid fa-file-invoice me-2 fs-5"></i>
+                    Billing Statement
+                </button>
             </div>
         </div>
     </div>
@@ -516,14 +565,25 @@
         $.get("{{ route('financials.payment_list') }}?id=" + id, function(data, status){       
             if(status.includes("success")){
                 if(data.length == 0){
-                    $("#tblpaylist").html("<td colspan='5' class='text-center p-3'>No payments has been posted for this bill.</td>");
+                    $("#tblpaylist").html("<td colspan='6' class='text-center p-3'>No payments has been posted for this bill.</td>");
                 }
                 else{
                     $("#tblpaylist").html("");
                 }
                 $.each(data, function(i, item){
                     $("#tblpaylist").append("<tr>" +
-                        "<td><button class='btn btn-info text-white' onclick='printReceipt(\"" + item.id + "\")'><i class='fa-solid fa-print'></i></button></td>" +
+                        "<td>" +
+                            "<button " +
+                               "class='btn btn-info text-white " +
+                                @if(!$checker->routePermission('financials.receipt'))
+                                "disabled" +
+                                @endif
+                               "'" +
+                               "onclick='printReceipt(\"" + item.id + "\")'" +
+                            ">" +
+                                "<i class='fa-solid fa-print'></i>" +
+                            "</button>" +
+                        "</td>" +
                         "<td>" + item.reference_number + "</td>" +
                         "<td class='text-end'>" + parseFloat(item.payment).toFixed(2) + "</td>" +
                         "<td>" + (item.discount_type ? item.discount_type : 'none') + "</td>" +

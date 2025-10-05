@@ -4,40 +4,46 @@
     @include('layouts.navbar')
     <div class="mbody">
         @include('layouts.navtitle', ['navtitle' => 'Dashboard'])
-        <div class="mcontent dashboard">
-            <div class="cont">
-                <div class="box shadow-sm rounded mb-3">
-                    <div class="count cnt1 shadow-sm rounded">
-                        <h1 id="cnt1"></h1>
-                        <label>Active Resident</label>
+        @if($checker->routePermission('dashboard.index'))
+            <div class="mcontent dashboard">
+                <div class="cont">
+                    <div class="box shadow-sm rounded mb-3">
+                        <div class="count cnt1 shadow-sm rounded">
+                            <h1 id="cnt1"></h1>
+                            <label>Active Resident</label>
+                        </div>
+                        <div class="count cnt2 rounded">
+                            <h1 id="cnt2"></h1>
+                            <label>Overdue Payments</label>
+                        </div>
+                        <div class="count cnt3 rounded">
+                            <h1 id="cnt3"></h1>
+                            <label>Open Complaints</label>
+                        </div>
+                        <div class="count cnt4 rounded">
+                            <h1 id="cnt4"></h1>
+                            <label>Open Requests</label>
+                        </div>
+                        <div class="count cnt5 rounded">
+                            <h1 id="cnt5"></h1>
+                            <label>Visitors Today</label>
+                        </div>
                     </div>
-                    <div class="count cnt2 rounded">
-                        <h1 id="cnt2"></h1>
-                        <label>Overdue Payments</label>
+                    <div class="box shadow-sm rounded mb-3" id="billing">
                     </div>
-                    <div class="count cnt3 rounded">
-                        <h1 id="cnt3"></h1>
-                        <label>Open Complaints</label>
-                    </div>
-                    <div class="count cnt4 rounded">
-                        <h1 id="cnt4"></h1>
-                        <label>Open Requests</label>
-                    </div>
-                    <div class="count cnt5 rounded">
-                        <h1 id="cnt5"></h1>
-                        <label>Visitors Today</label>
-                    </div>
-                </div>
-                <div class="box shadow-sm rounded mb-3" id="billing">
-                </div>
-                <div class="d-md-flex gap-3">
-                    <div class="box shadow-sm rounded mb-3" id="complaints">
-                    </div>
-                    <div class="box shadow-sm rounded mb-3" id="visitors">
+                    <div class="d-md-flex gap-3">
+                        <div class="box shadow-sm rounded mb-3" id="complaints">
+                        </div>
+                        <div class="box shadow-sm rounded mb-3" id="visitors">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="mcontent">
+                <div class="no-access">You don't have access to this feature!</div>
+            </div>
+        @endif
     </div>
 </div>
 <script>

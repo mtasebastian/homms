@@ -10,75 +10,92 @@
             @include('layouts.toast', ['type' => 'danger', 'message' => session('error')])
         @endif
         @include('layouts.navtitle', ['navtitle' => 'Referentials'])
-        <div class="mcontent">
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <form method="get" action="{{ route('settings.referentials') }}">
-                <div class="row">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control py-2 px-3" name="txtreferentialsearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </span>
+        @if($checker->routePermission('settings.referentials'))
+            <div class="mcontent">
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <form method="get" action="{{ route('settings.referentials') }}">
+                    <div class="row">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control py-2 px-3" name="txtreferentialsearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control datepicker py-2 px-3" name="txtreferentialdatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </span>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control datepicker py-2 px-3" name="txtreferentialdatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control datepicker py-2 px-3" name="txtreferentialdateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </span>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control datepicker py-2 px-3" name="txtreferentialdateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
+                            <button
+                                type="button"
+                                class="btn btn-add py-2 px-4 rounded-3 btn-sm-100
+                                @if(!$checker->routePermission('settings.add_referential'))
+                                disabled
+                                @endif
+                                "
+                                onclick="addreferential()"
+                            >
+                                <i class="fa-solid fa-plus"></i>&nbsp;&nbsp;
+                                Add Referential
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-md-4 text-end">
-                        <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
-                        <button type="button" class="btn btn-add py-2 px-4 rounded-3 btn-sm-100" onclick="addreferential()"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add Referential</button>
+                    </form>
+                </div>
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <i class="idetail">Note: Click a row to view options</i>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th scope="col" class="align-top tbl-d-none">ID</th>
+                                    <th scope="col" class="align-top">Name</th>
+                                    <th scope="col" class="align-top">Description</th>
+                                    <th scope="col" class="align-top">Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($referentials as $referential)
+                                <tr id="{{ $referential->id }}" onclick="optref({{ $referential->id }})">
+                                    <td class="tbl-d-none">{{ $referential->id }}</td>
+                                    <td>{{ $referential->name }}</td>
+                                    <td>{{ $referential->description }}</td>
+                                    <td>{{ date("m/d/Y", strtotime($referential->created_at)) }}</td>
+                                    <input type="hidden" class="referential" value="{{ json_encode($referential) }}">
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                        <div class="d-flex"><div class="mx-auto">{{ $referentials->links() }}</div></div>
                     </div>
                 </div>
-                </form>
             </div>
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <i class="idetail">Note: Click a row to view options</i>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="table-secondary">
-                            <tr>
-                                <th scope="col" class="align-top tbl-d-none">ID</th>
-                                <th scope="col" class="align-top">Name</th>
-                                <th scope="col" class="align-top">Description</th>
-                                <th scope="col" class="align-top">Created At</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($referentials as $referential)
-                            <tr id="{{ $referential->id }}" onclick="optref({{ $referential->id }})">
-                                <td class="tbl-d-none">{{ $referential->id }}</td>
-                                <td>{{ $referential->name }}</td>
-                                <td>{{ $referential->description }}</td>
-                                <td>{{ date("m/d/Y", strtotime($referential->created_at)) }}</td>
-                                <input type="hidden" class="referential" value="{{ json_encode($referential) }}">
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    <div class="d-flex"><div class="mx-auto">{{ $referentials->links() }}</div></div>
-                </div>
+        @else
+            <div class="mcontent">
+                <div class="no-access">You don't have access to this feature!</div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 <div class="modal fade" id="addreferential" tabindex="-1" aria-labelledby="addreferentialLabel" aria-hidden="true" data-bs-backdrop="static">
@@ -127,11 +144,21 @@
     <div class="modal-dialog xs-modal">
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
-                <h5 class="modal-title" id="optrefLabel">Options</h5>
+                <h5 class="modal-title" id="optrefLabel">Actions</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 py-3 m-3 text-center">
-                <button class="btn btn-info text-white p-2 w-100 fs-6" onclick="editreferential()"><i class="fa-solid fa-pen-to-square me-2 fs-5"></i>Edit</button>
+                <button
+                    class="btn btn-info text-white p-2 w-100 fs-6
+                    @if(!$checker->routePermission('settings.update_referential'))
+                    disabled
+                    @endif
+                    "
+                    onclick="editreferential()"
+                >
+                    <i class="fa-solid fa-pen-to-square me-2 fs-5"></i>
+                    Edit
+                </button>
             </div>
         </div>
     </div>

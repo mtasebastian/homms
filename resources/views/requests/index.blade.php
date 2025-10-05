@@ -11,86 +11,103 @@
             @include('layouts.toast', ['type' => '', 'message' => ''])
         @endif
         @include('layouts.navtitle', ['navtitle' => 'Requests'])
-        <div class="mcontent">
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <form method="get" action="{{ route('requests.index') }}">
-                <div class="row">
-                    <div class="col-md-3 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control py-2 px-3" name="txtreqsearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </span>
+        @if($checker->routePermission('requests.index'))
+            <div class="mcontent">
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <form method="get" action="{{ route('requests.index') }}">
+                    <div class="row">
+                        <div class="col-md-3 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control py-2 px-3" name="txtreqsearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control datepicker py-2 px-3" name="txtreqdatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </span>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control datepicker py-2 px-3" name="txtreqdatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control datepicker py-2 px-3" name="txtreqdateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </span>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control datepicker py-2 px-3" name="txtreqdateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
+                        <div class="col-md-5 text-end">
+                            <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
+                            <button
+                                type="button"
+                                class="btn btn-add py-2 px-4 rounded-3 me-2 btn-sm-50 btn-me
+                                @if(!$checker->routePermission('requests.add_request'))
+                                disabled
+                                @endif
+                                "
+                                onclick="addreq()"
+                            >
+                                <i class="fa-solid fa-plus"></i>&nbsp;&nbsp;
+                                Add Request
+                            </button>
+                            <button type="button" class="btn btn-warning py-2 px-4 rounded-3 btn-sm-50" onclick="scanQr()"><i class="fa-solid fa-expand"></i>&nbsp;&nbsp;Scan QR</button>
+                        </div>
                     </div>
-                    <div class="col-md-5 text-end">
-                        <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
-                        <button type="button" class="btn btn-add py-2 px-4 rounded-3 me-2 btn-sm-50 btn-me" onclick="addreq()"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add Request</button>
-                        <button type="button" class="btn btn-warning py-2 px-4 rounded-3 btn-sm-50" onclick="scanQr()"><i class="fa-solid fa-expand"></i>&nbsp;&nbsp;Scan QR</button>
+                    </form>
+                </div>
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <i class="idetail">Note: Click a row to view options</i>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="align-top tbl-d-none">ID</th>
+                                    <th scope="col" class="align-top">Request Type</th>
+                                    <th scope="col" class="align-top">Requested By</th>
+                                    <th scope="col" class="align-top tbl-d-none">Type</th>
+                                    <th scope="col" class="align-top tbl-d-none">Validity</th>
+                                    <th scope="col" class="align-top tbl-d-none">Approved By</th>
+                                    <th scope="col" class="align-top tbl-d-none">Checked By</th>
+                                    <th scope="col" class="align-top text-center">Status</th>
+                                    <th scope="col" class="align-top">Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($reqs as $req)
+                                <tr id="req_{{ $req->id }}" onclick="optreq({{ $req->id }}, '{{ $req->qr_code }}');">
+                                    <td class="tbl-d-none">{{ $req->id }}</td>
+                                    <td>{{ $req->request_type }}</td>
+                                    <td>{{ $req->reqBy->fullname }}</td>
+                                    <td class="tbl-d-none">{{ $req->type }}</td>
+                                    <td class="tbl-d-none">{{ $req->valid_from != '' ? date("m/d/Y", strtotime($req->valid_from)) . ' to ' . date("m/d/Y", strtotime($req->valid_to)) : '' }}</td>
+                                    <td class="tbl-d-none">{{ $req->appBy ? $req->appBy->name : '' }}</td>
+                                    <td class="tbl-d-none">{{ $req->chkBy ? $req->chkBy->name : '' }}</td>
+                                    <td class="text-center"><label class="badge {{ $req->requestStatus() }} p-2 px-3">{{ $req->request_status }}</span></td>
+                                    <td>{{ date("m/d/y", strtotime($req->created_at)) }}</td>
+                                    <input type="hidden" class="req" value="{{ json_encode($req) }}">
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                        <div class="d-flex"><div class="mx-auto">{{ $reqs->links() }}</div></div>
                     </div>
                 </div>
-                </form>
             </div>
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <i class="idetail">Note: Click a row to view options</i>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="align-top tbl-d-none">ID</th>
-                                <th scope="col" class="align-top">Request Type</th>
-                                <th scope="col" class="align-top">Requested By</th>
-                                <th scope="col" class="align-top tbl-d-none">Type</th>
-                                <th scope="col" class="align-top tbl-d-none">Validity</th>
-                                <th scope="col" class="align-top tbl-d-none">Approved By</th>
-                                <th scope="col" class="align-top tbl-d-none">Checked By</th>
-                                <th scope="col" class="align-top text-center">Status</th>
-                                <th scope="col" class="align-top">Created At</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($reqs as $req)
-                            <tr id="req_{{ $req->id }}" onclick="optreq({{ $req->id }}, '{{ $req->qr_code }}');">
-                                <td class="tbl-d-none">{{ $req->id }}</td>
-                                <td>{{ $req->request_type }}</td>
-                                <td>{{ $req->reqBy->fullname }}</td>
-                                <td class="tbl-d-none">{{ $req->type }}</td>
-                                <td class="tbl-d-none">{{ $req->valid_from != '' ? date("m/d/Y", strtotime($req->valid_from)) . ' to ' . date("m/d/Y", strtotime($req->valid_to)) : '' }}</td>
-                                <td class="tbl-d-none">{{ $req->appBy ? $req->appBy->name : '' }}</td>
-                                <td class="tbl-d-none">{{ $req->chkBy ? $req->chkBy->name : '' }}</td>
-                                <td class="text-center"><label class="badge {{ $req->requestStatus() }} p-2 px-3">{{ $req->request_status }}</span></td>
-                                <td>{{ date("m/d/y", strtotime($req->created_at)) }}</td>
-                                <input type="hidden" class="req" value="{{ json_encode($req) }}">
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    <div class="d-flex"><div class="mx-auto">{{ $reqs->links() }}</div></div>
-                </div>
+        @else
+            <div class="mcontent">
+                <div class="no-access">You don't have access to this feature!</div>
             </div>
-        </div>
+        @endif
     </div>
     <input type="hidden" id="refsetup" value="{{ json_encode($refsetup) }}">
 </div>
@@ -171,7 +188,20 @@
                     </div>
                 </div>
                 <div class="modal-footer p-4 py-3">
-                    <button type="submit" id="btnapprove" name="btnapprove" value="approve" class="btn btn-success px-3 py-2 rounded-3 btnapprove"><i class="fa-solid fa-thumbs-up"></i>&nbsp;&nbsp;Approve</button>
+                    <button
+                        type="submit"
+                        id="btnapprove"
+                        name="btnapprove"
+                        value="approve"
+                        class="btn btn-success px-3 py-2 rounded-3 btnapprove
+                        @if(!$checker->routePermission('requests.check_request'))
+                        disabled
+                        @endif
+                        "
+                    >
+                        <i class="fa-solid fa-thumbs-up"></i>&nbsp;&nbsp;
+                        Approve
+                    </button>
                     <button type="submit" name="btnsubmit" value="submit" class="btn btn-add mx-2 px-3 py-2 rounded-3"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save</button>
                     <button type="button" class="btn btn-light border py-2 px-3 rounded-3" data-bs-dismiss="modal">Close</button>
                 </div>
@@ -335,12 +365,48 @@
             </div>
             <div class="modal-body p-4 py-3 m-3 text-center">
                 <div class="row">
-                    <div class="col-6 p-2"><button class="btn btn-info text-white p-2 w-100 fs-6" onclick="editreq()"><i class="fa-solid fa-pen-to-square me-2 fs-5"></i>Edit</button></div>
-                    <div class="col-6 p-2"><button class="btn btn-danger p-2 w-100 fs-6" onclick="deletereq()"><i class="fa-solid fa-trash-alt me-2 fs-5"></i>Delete</button></div>
+                    <div class="col-6 p-2">
+                        <button
+                            class="btn btn-info text-white p-2 w-100 fs-6
+                            @if(!$checker->routePermission('requests.update_request'))
+                            disabled
+                            @endif
+                            "
+                            onclick="editreq()"
+                        >
+                            <i class="fa-solid fa-pen-to-square me-2 fs-5"></i>
+                            Edit
+                        </button>
+                    </div>
+                    <div class="col-6 p-2">
+                        <button
+                            class="btn btn-danger p-2 w-100 fs-6
+                            @if(!$checker->routePermission('requests.delete_request'))
+                            disabled
+                            @endif
+                            "
+                            onclick="deletereq()"
+                        >
+                            <i class="fa-solid fa-trash-alt me-2 fs-5"></i>
+                            Delete
+                        </button>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-6 p-2"><button class="btn btn-warning text-white p-2 w-100 fs-6" onclick="viewqrcode()"><i class="fa-solid fa-pen-to-square me-2 fs-5"></i>View QR</button></div>
-                    <div class="col-6 p-2"><button class="btn btn-secondary text-white p-2 w-100 fs-6" onclick="printRequest()"><i class="fa-solid fa-print me-2 fs-5"></i>Print</button></div>
+                    <div class="col-6 p-2">
+                        <button
+                            class="btn btn-secondary text-white p-2 w-100 fs-6
+                            @if(!$checker->routePermission('requests.print_request'))
+                            disabled
+                            @endif
+                            "
+                            onclick="printRequest()"
+                        >
+                            <i class="fa-solid fa-print me-2 fs-5"></i>
+                            Print
+                        </button>
+                    </div>
                 </div>
                 
             </div>
@@ -494,7 +560,11 @@
 
     function viewqrcode(){
         $("#optreq").modal("hide");
+        $("#reqqrcode").hide();
         $("#reqqrcode").attr("src", "{{ route('getqrcode') }}?qrcode=" + req_qrcode);
+        setTimeout(() => {
+            $("#reqqrcode").show();
+        }, 1000)
         $("#viewreqqr").modal("show");
     }
 

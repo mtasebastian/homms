@@ -2,26 +2,75 @@
     <div class="col-md-3 p-4">
         <div class="form-data mb-3">
             <label for="accountname" class="form-label">Name</label>
-            <input type="text" class="form-control py-2 px-3 rounded-3" id="accountname" name="accountname">
+            <input
+                type="text"
+                class="form-control py-2 px-3 rounded-3"
+                id="accountname"
+                name="accountname"
+                @if(!$checker->routePermission('settings.update_account'))
+                disabled="disabled"
+                @endif
+            >
         </div>
         <div class="form-data mb-3">
             <label for="accountcontact" class="form-label">Mobile Number</label>
-            <input type="text" class="form-control py-2 px-3 rounded-3" id="accountcontact" name="accountcontact">
+            <input
+                type="text"
+                class="form-control py-2 px-3 rounded-3"
+                id="accountcontact"
+                name="accountcontact"
+                @if(!$checker->routePermission('settings.update_account'))
+                disabled="disabled"
+                @endif
+            >
         </div>
         <div class="form-data mb-3">
             <label for="accountemail" class="form-label">Email</label>
-            <input type="text" class="form-control py-2 px-3 rounded-3" id="accountemail" name="accountemail">
+            <input
+                type="text"
+                class="form-control py-2 px-3 rounded-3"
+                id="accountemail"
+                name="accountemail"
+                @if(!$checker->routePermission('settings.update_account'))
+                disabled="disabled"
+                @endif
+            >
         </div>
         <div class="form-data mb-3">
             <label for="accountpass" class="form-label">New Password</label>
-            <input type="password" class="form-control py-2 px-3 rounded-3" id="accountpass" name="accountpass">
+            <input
+                type="password"
+                class="form-control py-2 px-3 rounded-3"
+                id="accountpass"
+                name="accountpass"
+                @if(!$checker->routePermission('settings.update_account'))
+                disabled="disabled"
+                @endif
+            >
         </div>
         <div class="form-data mb-3">
             <label for="accountcpass" class="form-label">Confirm New Password</label>
-            <input type="password" class="form-control py-2 px-3 rounded-3" id="accountcpass" name="accountcpass">
+            <input
+                type="password"
+                class="form-control py-2 px-3 rounded-3"
+                id="accountcpass"
+                name="accountcpass"
+                @if(!$checker->routePermission('settings.update_account'))
+                disabled="disabled"
+                @endif
+            >
         </div>
         <div class="form-data text-center">
-            <button onclick="updateAccount()" class="btn btn-add w-100 px-3 py-2 rounded-3 me-3">Update Account</button>
+            <button
+                onclick="updateAccount()"
+                class="btn btn-add w-100 px-3 py-2 rounded-3 me-3
+                @if(!$checker->routePermission('settings.update_account'))
+                disabled
+                @endif
+                "
+            >
+                Update Account
+            </button>
         </div>
     </div>
 </div>

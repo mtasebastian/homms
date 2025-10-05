@@ -65,7 +65,7 @@
         </a>
       </li>
       @endif
-      @if($checker->routePermission('settings.users') || $checker->routePermission('settings.roles'))
+      @if($checker->routePermission('settings.users') || $checker->routePermission('settings.roles') || $checker->routePermission('settings.referentials') || $checker->routePermission('settings.system_setup'))
       <li>
         <a href="#" class="nav-link collapsible {{ Route::is('settings.users') || Route::is('settings.roles') || Route::is('settings.referentials') || Route::is('settings.system_setup') ? '' : 'collapsed' }}" data-bs-toggle="collapse" data-bs-target="#settings-collapse" aria-expanded="true">
           <i class="fa-solid fa-gear"></i>
@@ -73,30 +73,38 @@
         </a>
         <div class="collapse {{ Route::is('settings.users') || Route::is('settings.roles') || Route::is('settings.referentials') || Route::is('settings.system_setup') ? 'show' : '' }}" id="settings-collapse">
           <ul class="msublist">
+            @if($checker->routePermission('settings.users'))
             <li class="{{ Route::is('settings.users') ? 'active' : '' }}">
                 <a href="{{ route('settings.users') }}" class="nav-link">
                     <i class="fa-solid fa-users"></i>
                     Users
                 </a>
             </li>
+            @endif
+            @if($checker->routePermission('settings.roles'))
             <li class="{{ Route::is('settings.roles') ? 'active' : '' }}">
                 <a href="{{ route('settings.roles') }}" class="nav-link">
                     <i class="fa-solid fa-user-lock"></i>
                     User Roles
                 </a>
             </li>
+            @endif
+            @if($checker->routePermission('settings.referentials'))
             <li class="{{ Route::is('settings.referentials') ? 'active' : '' }}">
                 <a href="{{ route('settings.referentials') }}" class="nav-link">
                     <i class="fa-solid fa-circle-info"></i>
                     Referentials
                 </a>
             </li>
+            @endif
+            @if($checker->routePermission('settings.system_setup'))
             <li class="{{ Route::is('settings.system_setup') ? 'active' : '' }}">
                 <a href="{{ route('settings.system_setup') }}" class="nav-link">
                     <i class="fa-solid fa-gears"></i>
                     System Setup
                 </a>
             </li>
+            @endif
           </ul>
         </div>
       </li>

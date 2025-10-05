@@ -132,6 +132,21 @@ body{
     padding-bottom: 20px;
 }
 
+.mcontent .no-access{
+    width: 100%;
+    height: calc(100vh - 95px);
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #F00;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 50%;
+    font-weight: 800;
+}
+
 .rtitle{
     font-weight: 600;
     color: #333333;

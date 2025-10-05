@@ -12,8 +12,30 @@
                 <input type="number" class="form-control py-2 px-3 rounded-3" id="finbillamt">
             </div>
             <div class="form-data text-center">
-                <button type="button" class="btn btn-add px-3 py-2 rounded-3 me-3" onclick="saveBill()" id="btnaddbill">Submit Bill</button>
-                <button type="button" class="btn btn-secondary px-3 py-2 rounded-3 me-3" onclick="deleteBill()" id="btnremovebill">Delete Bill</button>
+                <button
+                    type="button"
+                    class="btn btn-add px-3 py-2 rounded-3 me-3
+                    @if(!$checker->routePermission('settings.save_financial'))
+                    disabled
+                    @endif
+                    "
+                    onclick="saveBill()"
+                    id="btnaddbill"
+                >
+                    Submit Bill
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-danger px-3 py-2 rounded-3 me-3
+                    @if(!$checker->routePermission('settings.delete_financial'))
+                    disabled
+                    @endif
+                    "
+                    onclick="deleteBill()"
+                    id="btnremovebill"
+                >
+                    Delete Bill
+                </button>
                 <button type="button" class="btn btn-default px-3 py-2 rounded-3 border" onclick="resetBill()" id="btnresetbill">Reset</button>
             </div>
         </div>
@@ -59,7 +81,6 @@
         $("#finbillname").val("");
         $("#finbillamt").val("");
         $("#btnremovebill").hide();
-        $("#btnresetbill").show();
     }
 
     function editBill(id){
@@ -70,7 +91,6 @@
         $("#finbillname").val(obj.find("td").eq(0).text());
         $("#finbillamt").val(obj.find("td").eq(1).text());
         $("#btnremovebill").show();
-        $("#btnresetbill").hide();
     }
 
     function saveBill(){

@@ -4,29 +4,78 @@
             <div class="form-data mb-3">
                 <label for="systemlogo" class="form-label">Logo</label>
                 <img src="" style="max-width: 100%; height: auto; margin: 0px auto 10px; display: block;" id="previewlogo">
-                <input type="file" class="form-control py-2 px-3 rounded-3" id="systemlogo" name="systemlogo">
+                <input
+                    type="file"
+                    class="form-control py-2 px-3 rounded-3"
+                    @if(!$checker->routePermission('settings.save_settings'))
+                    disabled="disabled"
+                    @endif
+                    id="systemlogo"
+                    name="systemlogo"
+                >
                 <label class="text-danger px-1">(Maximum of 150 KB size for Logo)</label>
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-data mb-3">
                 <label for="systemname" class="form-label">Name</label>
-                <input type="text" class="form-control py-2 px-3 rounded-3" id="systemname" name="systemname">
+                <input
+                    type="text"
+                    class="form-control py-2 px-3 rounded-3"
+                    id="systemname"
+                    name="systemname"
+                    @if(!$checker->routePermission('settings.save_settings'))
+                    disabled="disabled"
+                    @endif
+                >
             </div>
             <div class="form-data mb-3">
                 <label for="systemaddress" class="form-label">Address</label>
-                <textarea class="form-control py-2 px-3 rounded-3" id="systemaddress" name="systemaddress"></textarea>
+                <textarea
+                    class="form-control py-2 px-3 rounded-3"
+                    id="systemaddress"
+                    name="systemaddress"
+                    @if(!$checker->routePermission('settings.save_settings'))
+                    disabled="disabled"
+                    @endif
+                >
+                </textarea>
             </div>
             <div class="form-data mb-3">
                 <label for="systemcontact" class="form-label">Contact Number</label>
-                <input type="text" class="form-control py-2 px-3 rounded-3" id="systemcontact" name="systemcontact">
+                <input
+                    type="text"
+                    class="form-control py-2 px-3 rounded-3"
+                    id="systemcontact"
+                    name="systemcontact"
+                    @if(!$checker->routePermission('settings.save_settings'))
+                    disabled="disabled"
+                    @endif
+                >
             </div>
             <div class="form-data mb-3">
                 <label for="systemtin" class="form-label">TIN Number</label>
-                <input type="text" class="form-control py-2 px-3 rounded-3" id="systemtin" name="systemtin">
+                <input
+                    type="text"
+                    class="form-control py-2 px-3 rounded-3"
+                    id="systemtin"
+                    name="systemtin"
+                    @if(!$checker->routePermission('settings.save_settings'))
+                    disabled="disabled"
+                    @endif
+                >
             </div>
             <div class="form-data text-center">
-                <button type="submit" class="btn btn-add w-100 px-3 py-2 rounded-3 me-3">Update Settings</button>
+                <button
+                    type="submit"
+                    class="btn btn-add w-100 px-3 py-2 rounded-3 me-3
+                    @if(!$checker->routePermission('settings.save_settings'))
+                    disabled
+                    @endif
+                    "
+                >
+                    Update Settings
+                </button>
             </div>
         </div>
     </div>

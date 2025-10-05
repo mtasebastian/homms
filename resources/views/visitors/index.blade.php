@@ -10,87 +10,104 @@
             @include('layouts.toast', ['type' => 'danger', 'message' => session('error')])
         @endif
         @include('layouts.navtitle', ['navtitle' => 'Visitors'])
-        <div class="mcontent">
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <form method="get" action="{{ route('visitors.index') }}">
-                <div class="row">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control py-2 px-3" name="txtvisitorsearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </span>
+        @if($checker->routePermission('visitors.index'))
+            <div class="mcontent">
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <form method="get" action="{{ route('visitors.index') }}">
+                    <div class="row">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control py-2 px-3" name="txtvisitorsearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control datepicker py-2 px-3" name="txtvisitordatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </span>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control datepicker py-2 px-3" name="txtvisitordatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control datepicker py-2 px-3" name="txtvisitordateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </span>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control datepicker py-2 px-3" name="txtvisitordateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 text-end">
-                        <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
-                        <button type="button" class="btn btn-add py-2 px-4 rounded-3 btn-sm-100" onclick="addvisitor()"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add visitor</button>
-                    </div>
-                </div>
-                </form>
-            </div>
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <i class="idetail">Note: Click a row to view options</i>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="align-top tbl-d-none">ID</th>
-                                <th scope="col" class="align-top tbl-d-none">Visitor Type</th>
-                                <th scope="col" class="align-top">Visitor Name</th>
-                                <th scope="col" class="align-top">Purpose</th>
-                                <th scope="col" class="align-top">Time In</th>
-                                <th scope="col" class="align-top">Time Out</th>
-                                <th scope="col" class="align-top tbl-d-none">Created At</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($visitors as $visitor)
-                            <tr id="res_{{ $visitor->id }}"
-                                @php
-                                    if($visitor->time_out == ''){
-                                        echo "onclick='optvisit(" . $visitor->id . ")'";
-                                    }
-                                @endphp
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
+                            <button
+                                type="button"
+                                class="btn btn-add py-2 px-4 rounded-3 btn-sm-100
+                                @if(!$checker->routePermission('visitors.add_visitor'))
+                                disabled
+                                @endif
+                                "
+                                onclick="addvisitor()"
                             >
-                                <td class="tbl-d-none">{{ $visitor->id }}</td>
-                                <td class="tbl-d-none">{{ $visitor->visitor_type }}</td>
-                                <td>{{ $visitor->name }}</td>
-                                <td class="w-25">{{ $visitor->purpose }}</td>
-                                <td>{{ date("m/d/Y h:i A", strtotime($visitor->time_in)) }}</td>
-                                <td>{{ $visitor->time_out != '' ? date("m/d/Y h:i A", strtotime($visitor->time_out)) : '' }}</td>
-                                <td class="tbl-d-none">{{ date("m/d/y", strtotime($visitor->created_at)) }}</td>
-                                <input type="hidden" class="visitor" value="{{ json_encode($visitor) }}">
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    <div class="d-flex"><div class="mx-auto">{{ $visitors->links() }}</div></div>
+                                <i class="fa-solid fa-plus"></i>&nbsp;&nbsp;
+                                Add visitor
+                            </button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <i class="idetail">Note: Click a row to view options</i>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="align-top tbl-d-none">ID</th>
+                                    <th scope="col" class="align-top tbl-d-none">Visitor Type</th>
+                                    <th scope="col" class="align-top">Visitor Name</th>
+                                    <th scope="col" class="align-top">Purpose</th>
+                                    <th scope="col" class="align-top">Time In</th>
+                                    <th scope="col" class="align-top">Time Out</th>
+                                    <th scope="col" class="align-top tbl-d-none">Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($visitors as $visitor)
+                                <tr id="res_{{ $visitor->id }}"
+                                    @php
+                                        if($visitor->time_out == ''){
+                                            echo "onclick='optvisit(" . $visitor->id . ")'";
+                                        }
+                                    @endphp
+                                >
+                                    <td class="tbl-d-none">{{ $visitor->id }}</td>
+                                    <td class="tbl-d-none">{{ $visitor->visitor_type }}</td>
+                                    <td>{{ $visitor->name }}</td>
+                                    <td class="w-25">{{ $visitor->purpose }}</td>
+                                    <td>{{ date("m/d/Y h:i A", strtotime($visitor->time_in)) }}</td>
+                                    <td>{{ $visitor->time_out != '' ? date("m/d/Y h:i A", strtotime($visitor->time_out)) : '' }}</td>
+                                    <td class="tbl-d-none">{{ date("m/d/y", strtotime($visitor->created_at)) }}</td>
+                                    <input type="hidden" class="visitor" value="{{ json_encode($visitor) }}">
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                        <div class="d-flex"><div class="mx-auto">{{ $visitors->links() }}</div></div>
+                    </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="mcontent">
+                <div class="no-access">You don't have access to this feature!</div>
+            </div>
+        @endif
     </div>
     <input type="hidden" id="refsetup" value="{{ json_encode($refsetup) }}">
 </div>
@@ -165,7 +182,17 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 py-3 m-3 text-center">
-                <button class="btn btn-info text-white p-2 w-100 fs-6" onclick="timeoutvisitor()"><i class="fa-solid fa-right-from-bracket me-2 fs-5"></i>Time Out</button>
+                <button
+                    class="btn btn-info text-white p-2 w-100 fs-6
+                    @if(!$checker->routePermission('visitors.timeout_visitor'))
+                    disabled
+                    @endif
+                    "
+                    onclick="timeoutvisitor()"
+                >
+                    <i class="fa-solid fa-right-from-bracket me-2 fs-5"></i>
+                    Time Out
+                </button>
             </div>
         </div>
     </div>

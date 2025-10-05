@@ -4,106 +4,134 @@
     @include('layouts.navbar')
     <div class="mbody">
         @include('layouts.navtitle', ['navtitle' => 'Reports'])
-        <div class="mcontent">
-            <form method="get" id="frmreportsfilter">
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <input type="hidden" id="reportfor" name="reportfor" value="page">
-                <div class="row">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <select class="form-select py-2 px-3" id="reporttype" name="reporttype" onchange="filterReport()">
-                            <option value="">Select Report Type</option>
-                            <option value="Financials" {{ isset($reporttype) && $reporttype == 'Financials' ? 'selected' : '' }}>Financials</option>
-                            <option value="Requests" {{ isset($reporttype) && $reporttype == 'Requests' ? 'selected' : '' }}>Requests</option>
-                            <option value="Residents" {{ isset($reporttype) && $reporttype == 'Residents' ? 'selected' : '' }}>Residents</option>
-                            <option value="Complaints" {{ isset($reporttype) && $reporttype == 'Complaints' ? 'selected' : '' }}>Complaints</option>
-                            <option value="Visitors" {{ isset($reporttype) && $reporttype == 'Visitors' ? 'selected' : '' }}>Visitors</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8 mb-3 mb-md-0 text-end">
-                        <button type="button" class="btn btn-light py-2 px-4 rounded-3 text-dark border me-2 btn-sm-50 btn-me" onclick="printReport()"><i class="fa-solid fa-print"></i>&nbsp;&nbsp;Print Report</button>
-                        <button type="button" class="btn btn-info py-2 px-4 rounded-3 btn-sm-50" onclick="exportReport()"><i class="fa-solid fa-file-excel"></i>&nbsp;&nbsp;Export</button>
+        @if($checker->routePermission('reports.index'))
+            <div class="mcontent">
+                <form method="get" id="frmreportsfilter">
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <input type="hidden" id="reportfor" name="reportfor" value="page">
+                    <div class="row">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <select class="form-select py-2 px-3" id="reporttype" name="reporttype" onchange="filterReport()">
+                                <option value="">Select Report Type</option>
+                                <option value="Financials" {{ isset($reporttype) && $reporttype == 'Financials' ? 'selected' : '' }}>Financials</option>
+                                <option value="Requests" {{ isset($reporttype) && $reporttype == 'Requests' ? 'selected' : '' }}>Requests</option>
+                                <option value="Residents" {{ isset($reporttype) && $reporttype == 'Residents' ? 'selected' : '' }}>Residents</option>
+                                <option value="Complaints" {{ isset($reporttype) && $reporttype == 'Complaints' ? 'selected' : '' }}>Complaints</option>
+                                <option value="Visitors" {{ isset($reporttype) && $reporttype == 'Visitors' ? 'selected' : '' }}>Visitors</option>
+                            </select>
+                        </div>
+                        <div class="col-md-8 mb-3 mb-md-0 text-end">
+                            <button
+                                type="button"
+                                class="btn btn-light py-2 px-4 rounded-3 text-dark border me-2 btn-sm-50 btn-me
+                                @if(!$checker->routePermission('reports.print'))
+                                disabled
+                                @endif
+                                "
+                                onclick="printReport()"
+                            >
+                                <i class="fa-solid fa-print"></i>&nbsp;&nbsp;
+                                Print Report
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-info py-2 px-4 rounded-3 btn-sm-50
+                                @if(!$checker->routePermission('report.export'))
+                                disabled
+                                @endif
+                                "
+                                onclick="exportReport()"
+                            >
+                                <i class="fa-solid fa-file-excel"></i>&nbsp;&nbsp;
+                                Export
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            @if(isset($reporttype))
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <div class="row">
-                    <div class="col-md-6 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control py-2 px-3" id="searchkey" name="searchkey" placeholder="Type keyword here..." value="{{ isset($_REQUEST['searchkey']) ? $_REQUEST['searchkey'] : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </span>
+                @if(isset($reporttype))
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control py-2 px-3" id="searchkey" name="searchkey" placeholder="Type keyword here..." value="{{ isset($_REQUEST['searchkey']) ? $_REQUEST['searchkey'] : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </span>
+                                </div>
                             </div>
+                        </div>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            @if($reporttype != "Financials")
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control datepicker py-2 px-3" id="datefrom" name="datefrom" placeholder="Select Date Start" value="{{ isset($_REQUEST['datefrom']) ? $_REQUEST['datefrom'] : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            @else
+                            <div class="input-group inputg">
+                                <input type="text" class="form-select py-2 px-3" id="billyear" name="billyear" placeholder="Select Year" value="{{ isset($_REQUEST['billyear']) ? $_REQUEST['billyear'] : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            @if($reporttype != "Financials")
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control datepicker py-2 px-3" id="dateto" name="dateto" placeholder="Select Date End" value="{{ isset($_REQUEST['dateto']) ? $_REQUEST['dateto'] : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            @else
+                            <div class="input-group inputg">
+                                <input type="text" class="form-select py-2 px-3" id="billmonth" name="billmonth" placeholder="Select Month" value="{{ isset($_REQUEST['billmonth']) ? $_REQUEST['billmonth'] : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-week"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" onclick="filterReport()" class="btn btn-secondary py-2 px-4 rounded-3 btn-sm-100">Submit Search</button>
                         </div>
                     </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        @if($reporttype != "Financials")
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control datepicker py-2 px-3" id="datefrom" name="datefrom" placeholder="Select Date Start" value="{{ isset($_REQUEST['datefrom']) ? $_REQUEST['datefrom'] : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </span>
-                            </div>
-                        </div>
-                        @else
-                        <div class="input-group inputg">
-                            <input type="text" class="form-select py-2 px-3" id="billyear" name="billyear" placeholder="Select Year" value="{{ isset($_REQUEST['billyear']) ? $_REQUEST['billyear'] : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar"></i>
-                                </span>
-                            </div>
-                        </div>
+                    </form>
+                </div>
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <div class="table-responsive">
+                        @if($reporttype == "Financials")
+                            @include("reports.types.report1")
+                        @elseif($reporttype == "Requests")
+                            @include("reports.types.report2")
+                        @elseif($reporttype == "Residents")
+                            @include("reports.types.report3")
+                        @elseif($reporttype == "Complaints")
+                            @include("reports.types.report4")
+                        @elseif($reporttype == "Visitors")
+                            @include("reports.types.report5")
                         @endif
                     </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        @if($reporttype != "Financials")
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control datepicker py-2 px-3" id="dateto" name="dateto" placeholder="Select Date End" value="{{ isset($_REQUEST['dateto']) ? $_REQUEST['dateto'] : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </span>
-                            </div>
-                        </div>
-                        @else
-                        <div class="input-group inputg">
-                            <input type="text" class="form-select py-2 px-3" id="billmonth" name="billmonth" placeholder="Select Month" value="{{ isset($_REQUEST['billmonth']) ? $_REQUEST['billmonth'] : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-week"></i>
-                                </span>
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" onclick="filterReport()" class="btn btn-secondary py-2 px-4 rounded-3 btn-sm-100">Submit Search</button>
-                    </div>
+                    <div id="printArea" class="d-none"></div>
                 </div>
-                </form>
+                @endif
             </div>
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <div class="table-responsive">
-                    @if($reporttype == "Financials")
-                        @include("reports.types.report1")
-                    @elseif($reporttype == "Requests")
-                        @include("reports.types.report2")
-                    @elseif($reporttype == "Residents")
-                        @include("reports.types.report3")
-                    @elseif($reporttype == "Complaints")
-                        @include("reports.types.report4")
-                    @elseif($reporttype == "Visitors")
-                        @include("reports.types.report5")
-                    @endif
-                </div>
-                <div id="printArea" class="d-none"></div>
+        @else
+            <div class="mcontent">
+                <div class="no-access">You don't have access to this feature!</div>
             </div>
-            @endif
-        </div>
+        @endif
     </div>
 </div>
 <script>
@@ -131,26 +159,28 @@
 
     function printReport(){
         const reporttype = $("#reporttype").val();
-        let params = "?reportfor=print&reporttype=" + reporttype + '&searchkey=' + $("#searchkey").val();
-        if(reporttype == "Financials"){
-            params += "&billyear=" + $("#billyear").val() + "&billmonth=" + $("#billmonth").val();
-        }
-        else{
-            params += "&datefrom=" + $("#datefrom").val() + "&dateto=" + $("#dateto").val();
-        }
-        $.get("{{ route('reports.print') }}" + params, function(data, status){       
-            if(status.includes("success")){
-                $("#printArea").html(generatePrint(reporttype, data));
-
-                let w = window.open();
-                let html = "<html><head><title>Print Report</title><style>@media print { @page { size: landscape; margin: 10px; }  body { -webkit-print-color-adjust: exact; color-adjust: exact; width: 100%; } header, footer, .print-hide { display: none; } } *{ font-family: Arial; font-size: 13px; } table thead tr th{ background: #333; color: #ffffff; padding: 5px; border: solid 1px #333333; border-left: none; } table thead tr th:first-child{ border-left: solid 1px #333333; } table tbody tr td{ padding: 5px; border: solid 1px #dddddd; border-top: none; border-left: none; } table tbody tr td:first-child{ border-left: solid 1px #dddddd; }</style></head><body><div><h4 style='font-size: 20px; text-align: center;'>{{ isset($reporttype) ? $reporttype : '' }} Report</h4></div><div>" + $("#printArea").html() + "</div></body></html>";
-                w.document.write(html);
-                setTimeout(() => {
-                    w.print();
-                    w.close();
-                }, 500);
+        if(reporttype){
+            let params = "?reportfor=print&reporttype=" + reporttype + '&searchkey=' + $("#searchkey").val();
+            if(reporttype == "Financials"){
+                params += "&billyear=" + $("#billyear").val() + "&billmonth=" + $("#billmonth").val();
             }
-        });
+            else{
+                params += "&datefrom=" + $("#datefrom").val() + "&dateto=" + $("#dateto").val();
+            }
+            $.get("{{ route('reports.print') }}" + params, function(data, status){       
+                if(status.includes("success")){
+                    $("#printArea").html(generatePrint(reporttype, data));
+
+                    let w = window.open();
+                    let html = "<html><head><title>Print Report</title><style>@media print { @page { size: landscape; margin: 10px; }  body { -webkit-print-color-adjust: exact; color-adjust: exact; width: 100%; } header, footer, .print-hide { display: none; } } *{ font-family: Arial; font-size: 13px; } table thead tr th{ background: #333; color: #ffffff; padding: 5px; border: solid 1px #333333; border-left: none; } table thead tr th:first-child{ border-left: solid 1px #333333; } table tbody tr td{ padding: 5px; border: solid 1px #dddddd; border-top: none; border-left: none; } table tbody tr td:first-child{ border-left: solid 1px #dddddd; }</style></head><body><div><h4 style='font-size: 20px; text-align: center;'>{{ isset($reporttype) ? $reporttype : '' }} Report</h4></div><div>" + $("#printArea").html() + "</div></body></html>";
+                    w.document.write(html);
+                    setTimeout(() => {
+                        w.print();
+                        w.close();
+                    }, 500);
+                }
+            });
+        }
     }
 
     function generatePrint(reporttype, data){

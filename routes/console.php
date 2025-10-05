@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use App\Mail\ForgotPassword;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,14 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('test-email', function () {
+    $data = [
+        'title' => 'Forgot Password',
+        'body' => 'This is a test email sent using Mailgun and Laravel.'
+    ];
+
+    Mail::to('ericsonpaciente23@gmail.com')->send(new ForgotPassword($data));
+
+    echo 'Email Sent!';
+});

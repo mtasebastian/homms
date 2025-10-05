@@ -10,80 +10,97 @@
             @include('layouts.toast', ['type' => 'danger', 'message' => session('error')])
         @endif
         @include('layouts.navtitle', ['navtitle' => 'Users'])
-        <div class="mcontent">
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <form method="get" action="{{ route('settings.users') }}">
-                <div class="row">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control py-2 px-3" name="txtusersearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </span>
+        @if($checker->routePermission('settings.users'))
+            <div class="mcontent">
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <form method="get" action="{{ route('settings.users') }}">
+                    <div class="row">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control py-2 px-3" name="txtusersearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control datepicker py-2 px-3" name="txtuserdatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </span>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control datepicker py-2 px-3" name="txtuserdatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control datepicker py-2 px-3" name="txtuserdateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </span>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control datepicker py-2 px-3" name="txtuserdateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
+                            <button
+                                type="button"
+                                class="btn btn-add py-2 px-4 rounded-3 btn-sm-100
+                                @if(!$checker->routePermission('settings.add_user'))
+                                disabled
+                                @endif
+                                "
+                                onclick="adduser()"
+                            >
+                                <i class="fa-solid fa-plus"></i>&nbsp;&nbsp;
+                                Add User
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-md-4 text-end">
-                        <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
-                        <button type="button" class="btn btn-add py-2 px-4 rounded-3 btn-sm-100" onclick="adduser()"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add User</button>
+                    </form>
+                </div>
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <i class="idetail">Note: Click a row to view options</i>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="align-top tbl-d-none">ID</th>
+                                    <th scope="col" class="align-top">Name</th>
+                                    <th scope="col" class="align-top">Role</th>
+                                    <th scope="col" class="align-top tbl-d-none">Email Address</th>
+                                    <th scope="col" class="align-top tbl-d-none">Mobile #</th>
+                                    <th scope="col" class="align-top text-center">Status</th>
+                                    <th scope="col" class="align-top">Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($users as $user)
+                                <tr id="{{ $user->id }}" onclick="optuser({{ $user->id }})">
+                                    <td class="tbl-d-none">{{ $user->id }}</td>
+                                    <td>{{ $user->name }}</td>
+                                    <td id="{{ $user->role->id }}">{{ $user->role->role }}</td>
+                                    <td class="tbl-d-none">{{ $user->email }}</td>
+                                    <td class="tbl-d-none">{{ $user->mobileno }}</td>
+                                    <td class="text-center"><label class="badge {{ $user->userStatus() }} p-2 px-3">{{ $user->status() }}</span></td>
+                                    <td>{{ date("m/d/y", strtotime($user->created_at)) }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                        <div class="d-flex"><div class="mx-auto">{{ $users->links() }}</div></div>
                     </div>
                 </div>
-                </form>
             </div>
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <i class="idetail">Note: Click a row to view options</i>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="align-top tbl-d-none">ID</th>
-                                <th scope="col" class="align-top">Name</th>
-                                <th scope="col" class="align-top">Role</th>
-                                <th scope="col" class="align-top tbl-d-none">Email Address</th>
-                                <th scope="col" class="align-top tbl-d-none">Mobile #</th>
-                                <th scope="col" class="align-top text-center">Status</th>
-                                <th scope="col" class="align-top">Created At</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($users as $user)
-                            <tr id="{{ $user->id }}" onclick="optuser({{ $user->id }})">
-                                <td class="tbl-d-none">{{ $user->id }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td id="{{ $user->role->id }}">{{ $user->role->role }}</td>
-                                <td class="tbl-d-none">{{ $user->email }}</td>
-                                <td class="tbl-d-none">{{ $user->mobileno }}</td>
-                                <td class="text-center"><label class="badge {{ $user->userStatus() }} p-2 px-3">{{ $user->status() }}</span></td>
-                                <td>{{ date("m/d/y", strtotime($user->created_at)) }}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    <div class="d-flex"><div class="mx-auto">{{ $users->links() }}</div></div>
-                </div>
+        @else
+            <div class="mcontent">
+                <div class="no-access">You don't have access to this feature!</div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 <div class="modal fade" id="adduser" tabindex="-1" aria-labelledby="adduserLabel" aria-hidden="true" data-bs-backdrop="static">
@@ -152,13 +169,37 @@
     <div class="modal-dialog xs-modal">
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
-                <h5 class="modal-title" id="optuserLabel">Options</h5>
+                <h5 class="modal-title" id="optuserLabel">Actions</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 py-3 m-3 text-center">
                 <div class="row">
-                    <div class="col-6 p-2"><button class="btn btn-info text-white p-2 w-100 fs-6" onclick="edituser()"><i class="fa-solid fa-pen-to-square me-2 fs-5"></i>Edit</button></div>
-                    <div class="col-6 p-2"><button class="btn btn-danger p-2 w-100 fs-6" onclick="deleteuser()"><i class="fa-solid fa-trash-alt me-2 fs-5"></i>Delete</button></div>
+                    <div class="col-6 p-2">
+                        <button
+                            class="btn btn-info text-white p-2 w-100 fs-6
+                            @if(!$checker->routePermission('settings.update_user'))
+                            disabled
+                            @endif
+                            "
+                            onclick="edituser()"
+                        >
+                            <i class="fa-solid fa-pen-to-square me-2 fs-5"></i>
+                            Edit
+                        </button>
+                    </div>
+                    <div class="col-6 p-2">
+                        <button
+                            class="btn btn-danger p-2 w-100 fs-6
+                            @if(!$checker->routePermission('settings.delete_user'))
+                            disabled
+                            @endif
+                            "
+                            onclick="deleteuser()"
+                        >
+                            <i class="fa-solid fa-trash-alt me-2 fs-5"></i>
+                            Delete
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

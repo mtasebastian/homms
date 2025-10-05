@@ -10,83 +10,100 @@
             @include('layouts.toast', ['type' => 'danger', 'message' => session('error')])
         @endif
         @include('layouts.navtitle', ['navtitle' => 'User Roles'])
-        <div class="mcontent">
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <form method="get" action="{{ route('settings.roles') }}">
-                <div class="row">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control py-2 px-3" name="txtrolesearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </span>
+        @if($checker->routePermission('settings.roles'))
+            <div class="mcontent">
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <form method="get" action="{{ route('settings.roles') }}">
+                    <div class="row">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control py-2 px-3" name="txtrolesearch" placeholder="Type keyword here..." value="{{ isset($searchkey) ? $searchkey : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control datepicker py-2 px-3" name="txtroledatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </span>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control datepicker py-2 px-3" name="txtroledatefrom" placeholder="Select Date Start" value="{{ isset($datefrom) ? $datefrom : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 mb-3 mb-md-0">
-                        <div class="input-group inputg">
-                            <input type="text" class="form-control datepicker py-2 px-3" name="txtroledateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text rounded-0 rounded-end bg-white">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </span>
+                        <div class="col-md-2 mb-3 mb-md-0">
+                            <div class="input-group inputg">
+                                <input type="text" class="form-control datepicker py-2 px-3" name="txtroledateto" placeholder="Select Date End" value="{{ isset($dateto) ? $dateto : '' }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text rounded-0 rounded-end bg-white">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
+                            <button
+                                type="button"
+                                class="btn btn-add py-2 px-4 rounded-3 btn-sm-100
+                                @if(!$checker->routePermission('settings.add_role'))
+                                disabled
+                                @endif
+                                "
+                                onclick="addrole()"
+                            >
+                                <i class="fa-solid fa-plus"></i>&nbsp;&nbsp;
+                                Add Role
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-md-4 text-end">
-                        <button class="btn btn-secondary py-2 px-4 rounded-3 me-2 btn-sm-100">Submit Search</button>
-                        <button type="button" class="btn btn-add py-2 px-4 rounded-3 btn-sm-100" onclick="addrole()"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add Role</button>
+                    </form>
+                </div>
+                <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
+                    <i class="idetail">Note: Click a row to view options</i>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="align-top tbl-d-none">ID</th>
+                                    <th scope="col" class="align-top">Role</th>
+                                    <th scope="col" class="align-top tbl-d-none">Description</th>
+                                    <th scope="col" class="align-top text-center">Status</th>
+                                    <th scope="col" class="align-top">Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($roles as $role)
+                                <tr id="{{ $role->id }}" onclick="optrole({{ $role->id }})">
+                                    <td class="tbl-d-none">{{ $role->id }}</td>
+                                    <td>{{ $role->role }}</td>
+                                    <td class="tbl-d-none">{{ $role->description }}</td>
+                                    <td class="text-center"><label class="badge {{ $role->roleStatus() }} p-2 px-3">{{ $role->status() }}</label></td>
+                                    <td>{{ date("m/d/Y", strtotime($role->created_at)) }}</td>
+                                    @php
+                                        $rpers = "";
+                                        $rolepermissions = $role->permissions;
+                                        foreach($rolepermissions as $rolepermission){
+                                            $rpers .= "|" . $rolepermission->route;
+                                        }
+                                    @endphp
+                                    <input type="hidden" class="routelist" value="{{ substr($rpers, 1) }}">
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                </form>
             </div>
-            <div class="card m-3 mx-md-5 p-3 shadow border-light rounded-4">
-                <i class="idetail">Note: Click a row to view options</i>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="align-top tbl-d-none">ID</th>
-                                <th scope="col" class="align-top">Role</th>
-                                <th scope="col" class="align-top tbl-d-none">Description</th>
-                                <th scope="col" class="align-top text-center">Status</th>
-                                <th scope="col" class="align-top">Created At</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($roles as $role)
-                            <tr id="{{ $role->id }}" onclick="optrole({{ $role->id }})">
-                                <td class="tbl-d-none">{{ $role->id }}</td>
-                                <td>{{ $role->role }}</td>
-                                <td class="tbl-d-none">{{ $role->description }}</td>
-                                <td class="text-center"><label class="badge {{ $role->roleStatus() }} p-2 px-3">{{ $role->status() }}</label></td>
-                                <td>{{ date("m/d/Y", strtotime($role->created_at)) }}</td>
-                                @php
-                                    $rpers = "";
-                                    $rolepermissions = $role->permissions;
-                                    foreach($rolepermissions as $rolepermission){
-                                        $rpers .= "|" . $rolepermission->route;
-                                    }
-                                @endphp
-                                <input type="hidden" class="routelist" value="{{ substr($rpers, 1) }}">
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
+        @else
+            <div class="mcontent">
+                <div class="no-access">You don't have access to this feature!</div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 <div class="modal fade" id="addrole" tabindex="-1" aria-labelledby="addroleLabel" aria-hidden="true" data-bs-backdrop="static">
@@ -118,6 +135,9 @@
                 <h5 class="text-center mt-5 mb-3 msubtitle">Role Permissions</h5>
                 <div class="card rounded-4 rpermissioncont" id="rpermissioncont">
                     <div class="permcont" id="rpermissioncont">
+                        @php
+                            $not_included = ['count', 'get_settings', 'get_account', 'filter'];
+                        @endphp
                         @foreach($routes as $i => $route_group)
                         @if($i != "chat")
                         <div class="rpermission">
@@ -130,13 +150,17 @@
                                     <div class="card-body">
                                         <ul class="mb-0">
                                             @foreach($route_group as $route)
+                                            @php
+                                                $rname = str_replace($i . ".", "", $route);
+                                                if(!in_array($rname, $not_included)){
+                                            @endphp
                                             <li>
                                                 <div class="form-check">
                                                     <label class="form-check-label">
                                                         <input class="form-check-input" type="checkbox" value="{{ $route }}" id="chk_{{ str_replace('.', '_', $route) }}" name="chkrolepermission[]">
                                                         &nbsp;
                                                         @php
-                                                            $cname = ucwords(str_replace("_", " ", str_replace($i . ".", "", $route)));
+                                                            $cname = ucwords(str_replace("_", " ", $rname));
                                                             if($cname == "Index"){
                                                                 if($i == "reports"){
                                                                     echo "Reports";
@@ -152,6 +176,7 @@
                                                     </label>
                                                 </div>
                                             </li>
+                                            @php } @endphp
                                             @endforeach
                                         </ul>
                                     </div>
@@ -192,13 +217,37 @@
     <div class="modal-dialog xs-modal">
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
-                <h5 class="modal-title" id="optroleLabel">Options</h5>
+                <h5 class="modal-title" id="optroleLabel">Actions</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 py-3 m-3 text-center">
                 <div class="row">
-                    <div class="col-6 p-2"><button class="btn btn-info text-white p-2 w-100 fs-6" onclick="editrole()"><i class="fa-solid fa-pen-to-square me-2 fs-5"></i>Edit</button></div>
-                    <div class="col-6 p-2"><button class="btn btn-danger p-2 w-100 fs-6" onclick="deleterole()"><i class="fa-solid fa-trash-alt me-2 fs-5"></i>Delete</button></div>
+                    <div class="col-6 p-2">
+                        <button
+                            class="btn btn-info text-white p-2 w-100 fs-6
+                            @if(!$checker->routePermission('settings.update_role'))
+                            disabled
+                            @endif
+                            "
+                            onclick="editrole()"
+                        >
+                            <i class="fa-solid fa-pen-to-square me-2 fs-5"></i>
+                            Edit
+                        </button>
+                    </div>
+                    <div class="col-6 p-2">
+                        <button
+                            class="btn btn-danger p-2 w-100 fs-6
+                            @if(!$checker->routePermission('settings.delete_role'))
+                            disabled
+                            @endif
+                            "
+                            onclick="deleterole()"
+                        >
+                            <i class="fa-solid fa-trash-alt me-2 fs-5"></i>
+                            Delete
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
