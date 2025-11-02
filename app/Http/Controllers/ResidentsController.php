@@ -67,7 +67,7 @@ class ResidentsController extends Controller
         $resident->city_id = $request->rescity;
         $resident->barangay_id = $request->resbarangay;
         $resident->street = $request->resstreet;
-        $resident->unit_area = $request->resunitarea;
+        $resident->unit_area = $request->resunitarea ?? '';
         $resident->move_in_date = Carbon::parse($request->resmoveindate)->format("Y-m-d");
         $resident->house_color = $request->reshousecolor;
         $resident->last_name = $request->reslastname;
@@ -80,7 +80,7 @@ class ResidentsController extends Controller
         $resident->citizenship = $request->rescitizenship;
         $resident->date_of_birth = Carbon::parse($request->resdateofbirth)->format("Y-m-d");
         $resident->age = $request->resage;
-        $resident->place_of_birth = $request->resplaceofbirth;
+        $resident->place_of_birth = $request->resplaceofbirth ?? '';
         $resident->civil_status = $request->rescivilstatus;
         $resident->gender = $request->resgender;
         $resident->occupation = $request->resoccupation;

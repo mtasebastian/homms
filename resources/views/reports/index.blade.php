@@ -11,7 +11,7 @@
                     <input type="hidden" id="reportfor" name="reportfor" value="page">
                     <div class="row">
                         <div class="col-md-4 mb-3 mb-md-0">
-                            <select class="form-select py-2 px-3" id="reporttype" name="reporttype" onchange="filterReport()">
+                            <select class="form-select py-2 px-3" id="reporttype" name="reporttype" onchange="clearParams(); filterReport();">
                                 <option value="">Select Report Type</option>
                                 <option value="Financials" {{ isset($reporttype) && $reporttype == 'Financials' ? 'selected' : '' }}>Financials</option>
                                 <option value="Requests" {{ isset($reporttype) && $reporttype == 'Requests' ? 'selected' : '' }}>Requests</option>
@@ -140,13 +140,16 @@
         $("#billmonth").monthlist();
     });
 
-    function filterReport(){
-        $("#reportfor").val("page");
+    function clearParams(){
         $("#searchkey").val("");
         $("#billyear").val("");
         $("#billmonth").val("");
         $("#datefrom").val("");
         $("#dateto").val("");
+    }
+
+    function filterReport(){
+        $("#reportfor").val("page");
         $("#frmreportsfilter").attr("action", "{{ route('reports.filter') }}");
         $("#frmreportsfilter").submit()
     }

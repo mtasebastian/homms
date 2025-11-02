@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Residents;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
 {
@@ -17,29 +18,52 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        $rules = array(
-            "txtemail" => "required|email",
-            "txtpassword" => "required|min:8"
-        );
-        $validator = Validator::make($request->all() , $rules);
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'contact_number' => 'required',
+            'email_address' => 'required|email',
+            'password' => [
+                'required',
+                'string',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+            ],
+        ]);
 
-        $resident = Residents::where("email_address", $request->txtemail)->where("mobile_number", $request->txtcontactno)->get();
-        $auth = User::where("email", $request->txtemail)->where("mobileno", $request->txtcontactno)->first();
-        if($resident->count() > 0 && $auth->count() == 0){
-            if($request->txtpassword != $request->txtconfirmpassword){
-                return redirect()->back()->with("error", "Passwords do not match.");
-            }
-            $user = new User();
-            $user->role_id = 5;
-            $user->name = $request->txtfirstname . " " . $request->txtlastname;
-            $user->email = $request->txtemail;
-            $user->mobileno = $request->txtcontactno;
-            $user->password = bcrypt($request->txtpassword);
-            $user->save();
-            return redirect()->back()->with("success", "Registration successful. You will be redirected to the login page.");
+        if($validator->fails()){
+            return redirect()->back()->with("errors", $validator->errors())->withInput();
         }
         else{
-            return redirect()->back()->with("error", "Record not found.");
+            if($request->password != $request->confirm_password){
+                return redirect()->back()->with("error", "Passwords do not match.")->withInput();;
+            }
+
+            $resident = Residents::where("email_address", $request->email_address)->where("mobile_number", $request->contact_number)->first();
+            if($resident){
+                $auth = User::where("email", $request->email_address)->where("mobileno", $request->contact_number)->first();
+                if($auth){
+                    return redirect()->back()->with("error", "User already exists.")->withInput();;
+                }
+                else{
+                    $user = new User();
+                    $user->role_id = 5;
+                    $user->resident_id = $resident->id;
+                    $user->name = $request->first_name . " " . $request->last_name;
+                    $user->email = $request->email_address;
+                    $user->mobileno = $request->contact_number;
+                    $user->password = bcrypt($request->password);
+                    $user->save();
+
+                    return redirect()->back()->with("success", "Registration successful. You will be redirected to the login page.");
+                }
+            }
+            else{
+                return redirect()->back()->with("error", "Resident not found.")->withInput();;
+            }
         }
     }
 }

@@ -4,7 +4,7 @@
     @include('layouts.navbar')
     <div class="mbody">
         @include('layouts.navtitle', ['navtitle' => 'Dashboard'])
-        @if($checker->routePermission('dashboard.index'))
+        @if($checker->routePermission('dashboard'))
             <div class="mcontent dashboard">
                 <div class="cont">
                     <div class="box shadow-sm rounded mb-3">

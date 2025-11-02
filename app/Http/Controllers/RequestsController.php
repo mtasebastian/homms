@@ -15,6 +15,7 @@ class RequestsController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
         $params = ['reqs', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["reqtype", "reqstatus", "reqtranstype"])->with("referential")->get();
         $search = $request->txtreqsearch;
@@ -39,14 +40,22 @@ class RequestsController extends Controller
                 ->join('residents', 'requests.requested_by', '=', 'residents.id')
                 ->with(["reqBy", "appBy", "chkBy"]);
         if($search){
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search, $user){
                 $q->where('requests.request_type', 'like', "%$search%")
                 ->orWhere('requests.details', 'like', "%$search%")
                 ->orWhere('requests.address', 'like', "%$search%")
-                ->orWhere(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), 'like', "%$search%");
+                ->orWhere(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), 'like', "%$search%")
+                ->when($user->role->role === 'Resident', function($q) use($search, $user){
+                    $q->orWhere('requests.requested_by', $user->resident->id);
+                });
             });
             $searchkey = $search;
             array_push($params, ['searchkey']);
+        }
+        else{
+            $query->when($user->role->role == 'Resident', function($q) use($user){
+                $q->where('requests.requested_by', $user->resident->id);
+            });
         }
 
         if($datefrom && !$dateto){
@@ -103,6 +112,8 @@ class RequestsController extends Controller
             $req->requested_by = $request->reqrequestedbyid;
             $req->request_status = $request->reqstatus;
             $req->save();
+
+            return redirect()->back()->with("success", "Request status has been updated.");
         }
         elseif($request->btnapprove){
             $req = Requests::find($request->reqid);

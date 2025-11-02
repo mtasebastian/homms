@@ -515,26 +515,22 @@
         if(arr.chk_by || arr.app_by){
             $("#reqnew").show();
         }
-        if(arr.app_by)
-        {
+        if(arr.app_by){
             $("#reqapprovedbyid").val(arr.app_by.id);
             $("#reqapprovedby").val(arr.app_by.name);
             $("#reqnew .app_by").show();
         }
-        else
-        {
+        else{
             $("#reqapprovedbyid").val("");
             $("#reqapprovedby").val("");
             $("#reqnew .app_by").hide();
         }
-        if(arr.chk_by)
-        {
+        if(arr.chk_by){
             $("#reqcheckedbyid").val(arr.chk_by.id);
             $("#reqcheckedby").val(arr.chk_by.name);
             $("#reqnew .chk_by").show();
         }
-        else
-        {
+        else{
             $("#reqcheckedbyid").val("");
             $("#reqcheckedby").val("");
             $("#reqnew .chk_by").hide();

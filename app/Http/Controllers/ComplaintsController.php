@@ -13,6 +13,7 @@ class ComplaintsController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
         $params = ['complaints', 'refsetup'];
         $refsetup = RefSetup::whereIn("for", ["comptype", "compstatus"])->with("referential")->get();
         
@@ -37,14 +38,22 @@ class ComplaintsController extends Controller
         $dateto = $request->txtcomplaintdateto;
 
         if($search){
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search){
                 $q->where('complaint_type', 'like', "%$search%")
                 ->orWhere('purpose', 'like', "%$search%")
                 ->orWhere('details', 'like', "%$search%")
-                ->orWhere(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), 'like', "%$search%");
+                ->orWhere(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), 'like', "%$search%")
+                ->when($user->role->role === 'Resident', function($q) use($search, $user){
+                    $q->orWhere('complaints.resident_id', $user->resident->id);
+                });
             });
             $searchkey = $search;
             array_push($params, ['searchkey']);
+        }
+        else{
+            $query->when($user->role->role == 'Resident', function($q) use($user){
+                $q->orWhere('complaints.resident_id', $user->resident->id);
+            });
         }
 
         if($datefrom && !$dateto){

@@ -51,6 +51,11 @@ class User extends Authenticatable
         return $this->belongsTo('App\Models\Roles', 'role_id', 'id')->with("permissions");
     }
 
+    public function resident()
+    {
+        return $this->hasOne('App\Models\Residents', 'id', 'resident_id');
+    }
+
     public function status()
     {
         return ($this->status == 1) ? "ACTIVE" : "INACTIVE";

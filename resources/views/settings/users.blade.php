@@ -137,7 +137,7 @@
                 </div>
                 <div class="form-data mb-3">
                     <label for="txtpassword" class="form-label">Default Password</label>
-                    <input type="password" class="form-control py-2 px-3 rounded-3" name="txtpassword" id="txtpassword" placeholder="Enter Default Password" autocomplete="false" required>
+                    <input type="password" class="form-control py-2 px-3 rounded-3" name="txtpassword" id="txtpassword" placeholder="Enter Default Password" autocomplete="false">
                 </div>
             </div>
             <div class="modal-footer px-4 py-3">
@@ -222,6 +222,7 @@
         $("#txtemail").val("");
         $("#txtmobileno").val("");
         $("#txtpassword").val("");
+        $("#txtpassword").prop("required", true);
         $("#adduser").modal("show");
     }
 
@@ -236,6 +237,7 @@
         $("#txtrole").val(obj.find("td").eq(2).attr("id"));
         $("#txtemail").val(obj.find("td").eq(3).text());
         $("#txtmobileno").val(obj.find("td").eq(4).text());
+        $("#txtpassword").prop("required", false);
         $("#adduser").modal("show");
     }
 
