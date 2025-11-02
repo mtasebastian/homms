@@ -154,7 +154,7 @@
                     </div>
                     <div class="form-data">
                         <label class="form-label">Reported to</label>
-                        <span class="ms-2">{{ auth()->user()->name }}</span>
+                        <span class="ms-2">{{ $admin->name }}</span>
                     </div>
                 </div>
                 <div class="modal-footer p-4 py-3">

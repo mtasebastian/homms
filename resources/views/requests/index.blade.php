@@ -146,9 +146,6 @@
                             <label for="reqstatus" class="form-label req">Request Status</label>
                             <select class="form-select py-2 px-3 rounded-3" name="reqstatus" id="reqstatus" required>
                                 <option value="">Select Request Status</option>
-                                <option value="Submitted">Submitted</option>
-                                <option value="Checked">Checked</option>
-                                <option value="Approved">Approved</option>
                             </select>
                         </div>
                     </div>
@@ -213,7 +210,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4">
             <div class="modal-header p-4 py-3">
-                <h5 class="modal-title" id="searchresidentLabel">Search Complainant</h5>
+                <h5 class="modal-title" id="searchresidentLabel">Search Resident</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">

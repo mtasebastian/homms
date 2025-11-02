@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth']], function (){
 
     Route::prefix('/dashboard')->group(function(){
         Route::get('/counts', 'App\Http\Controllers\DashboardController@counts')->name('dashboard.count');
+        Route::get('/predict/visitors', 'App\Http\Controllers\DashboardController@predictVisitors')->name('dashboard.predict_visitors');
     });
 
     Route::prefix('/financials')->group(function(){
@@ -109,7 +110,7 @@ Route::group(['middleware' => ['auth']], function (){
         Route::get('/setup/financials', 'App\Http\Controllers\SettingsController@financials')->name('settings.financials');
         Route::post('/setup/financials/save', 'App\Http\Controllers\SettingsController@savefinancial')->name('settings.save_financial');
         Route::post('/setup/financials/delete', 'App\Http\Controllers\SettingsController@deletefinancial')->name('settings.delete_financial');
-        Route::post('/setup/saveref', 'App\Http\Controllers\SettingsController@saverefsetup')->name('settings.save_refential_setup');
+        Route::post('/setup/saveref', 'App\Http\Controllers\SettingsController@saverefsetup')->name('settings.save_referential_setup');
 
         Route::get('/setup/get', 'App\Http\Controllers\SettingsController@getsettings')->name('settings.get_settings');
         Route::post('/setup/save', 'App\Http\Controllers\SettingsController@systemsettings')->name('settings.save_settings');

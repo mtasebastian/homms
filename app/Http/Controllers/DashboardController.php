@@ -147,4 +147,51 @@ class DashboardController extends Controller
             "counts" => $counts
         ];
     }
+
+    public function predictVisitors()
+    {
+        $monday = Carbon::now()->startOfWeek(Carbon::MONDAY);
+        $currentVisitors = Visitors::whereDate('created_at', $monday->format('Y-m-d'))->count();
+        $growthRate = 0.05;
+        $days = 7;
+
+        $predictedVisitors = $this->predictNumber($currentVisitors, $growthRate, $days);
+
+        // Get Actual Visitors
+        $dates = [];
+        for($i=0; $i<7; $i++){
+            array_push($dates, date('Y-m-d', strtotime($monday->format('Y-m-d') . ' +' . $i . ' days')));
+        }
+        $visited = Visitors::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as total'))
+        ->whereIn(DB::raw('DATE(created_at)'), $dates)
+        ->groupBy('date')
+        ->pluck('total', 'date')
+        ->toArray();
+
+        $arr = [];
+        foreach($predictedVisitors as $day => $visitors){
+            $date = date('Y-m-d', strtotime($monday . ' +' . ($day-1) . ' days'));
+            $arr[$day] = [
+                "date" => $date,
+                "actual_visitors" => $visited[$date] ?? 0,
+                "predicted_visitors" => $visitors
+            ];
+        }
+
+        return $arr;
+    }
+
+    protected function predictNumber($currentVisitors, $growthRate, $days)
+    {
+        $predictions = [];
+        $visitors = $currentVisitors;
+        
+        for ($i = 1; $i <= $days; $i++) {
+            $visitors = $visitors * (1 + $growthRate);
+            $predictions[$i] = round($visitors);
+        }
+        
+        return $predictions;
+    }
+
 }

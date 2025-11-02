@@ -17,6 +17,7 @@ class FinancialsController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
         $params = ['financials', 'refsetup', 'finsetup'];
         $refsetup = RefSetup::whereIn("for", ["mod", "disctype"])->with("referential")->get();
         $finsetup = FinancialSetup::get();
@@ -43,8 +44,16 @@ class FinancialsController extends Controller
         $month = $request->billmonth;
 
         if($searchkey){
-            $query->where(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), "like", "%$searchkey%");
+            $query->where(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), "like", "%$searchkey%")
+            ->when($user->role->role === 'Resident', function ($sub) use ($user){
+                $sub->where('financials.resident_id', $user->resident->id);
+            });
             $params[] = 'searchkey';
+        }
+        else{
+            $query->when($user->role->role == 'Resident', function($q) use($user){
+                $q->where('financials.resident_id', $user->resident->id);
+            });
         }
         
         if($year && !$month){

@@ -37,6 +37,10 @@
                         <div class="box shadow-sm rounded mb-3" id="visitors">
                         </div>
                     </div>
+                    <div class="d-md-flex gap-3">
+                        <div class="box shadow-sm rounded mb-3" id="predict_visitors">
+                        </div>
+                    </div>
                 </div>
             </div>
         @else
@@ -49,6 +53,7 @@
 <script>
     $(function(){
         getDashboard();
+        getPredictVisitors();
     });
 
     function getDashboard(){
@@ -248,6 +253,58 @@
                 name: 'Count',
                 data: data.counts
             }]
+        });
+    }
+
+    function getPredictVisitors(){
+        $.get("{{ route('dashboard.predict_visitors') }}").done(function(data){
+            console.log(data);
+
+            var dates = [];
+            var actualVisitors = [];
+            var predictedVisitors = [];
+
+            $.each(data, function(key, value) {
+                dates.push(value.date);
+                actualVisitors.push(value.actual_visitors);
+                predictedVisitors.push(value.predicted_visitors);
+            });
+
+            // Create the chart
+            Highcharts.chart('predict_visitors', {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: 'Actual vs Predicted Visitors'
+                },
+                xAxis: {
+                    categories: dates,
+                    title: {
+                        text: 'Date'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Number of Visitors'
+                    },
+                    allowDecimals: false
+                },
+                series: [{
+                    name: 'Actual Visitors',
+                    data: actualVisitors
+                }, {
+                    name: 'Predicted Visitors',
+                    data: predictedVisitors
+                }],
+                tooltip: {
+                    shared: true,
+                    crosshairs: true
+                },
+                credits: {
+                    enabled: false
+                }
+            });
         });
     }
 </script>

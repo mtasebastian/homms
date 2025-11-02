@@ -36,7 +36,7 @@
                             <button
                                 type="button"
                                 class="btn btn-info py-2 px-4 rounded-3 btn-sm-50
-                                @if(!$checker->routePermission('report.export'))
+                                @if(!$checker->routePermission('reports.export'))
                                 disabled
                                 @endif
                                 "

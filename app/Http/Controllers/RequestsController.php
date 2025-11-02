@@ -41,12 +41,14 @@ class RequestsController extends Controller
                 ->with(["reqBy", "appBy", "chkBy"]);
         if($search){
             $query->where(function ($q) use ($search, $user){
-                $q->where('requests.request_type', 'like', "%$search%")
-                ->orWhere('requests.details', 'like', "%$search%")
-                ->orWhere('requests.address', 'like', "%$search%")
-                ->orWhere(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), 'like', "%$search%")
-                ->when($user->role->role === 'Resident', function($q) use($search, $user){
-                    $q->orWhere('requests.requested_by', $user->resident->id);
+                $q->where(function ($sub) use($search){
+                    $sub->where('requests.request_type', 'like', "%$search%")
+                        ->orWhere('requests.details', 'like', "%$search%")
+                        ->orWhere('requests.address', 'like', "%$search%")
+                        ->orWhere(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), 'like', "%$search%");
+                })
+                ->when($user->role->role === 'Resident', function ($sub) use ($user){
+                    $sub->where('requests.requested_by', $user->resident->id);
                 });
             });
             $searchkey = $search;

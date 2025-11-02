@@ -63,7 +63,7 @@
                     </select>
                 </div>
             </div>
-            <!-- <div class="row mb-3">
+            <div class="row mb-3">
                 <div class="col-md-6 form-data mb-3 mb-md-0">
                     <label for="refreqstatus" class="form-label">Request Status</label>
                     <select class="form-select py-2 px-3 rounded-3" name="refreqstatus" id="refreqstatus" required>
@@ -73,7 +73,7 @@
                         @endforeach
                     </select>
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
     <div class="col-md-10 sysrefcont p-0" id="sysrefcont3">
@@ -242,7 +242,7 @@
         $.each(arr, function(i, val){
             params[val] = $("#ref" + val).val();
         });
-        $.post("{{ route('settings.save_refential_setup') }}", params).done(function(res){
+        $.post("{{ route('settings.save_referential_setup') }}", params).done(function(res){
             if(res.includes("success")){
                 showtoast("Success", "Referential Setup has been Updated.");
                 $("#btnsaverefs").prop("disabled", false);

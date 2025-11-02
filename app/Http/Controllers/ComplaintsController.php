@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Complaints;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Models\RefSetup;
 use Carbon\Carbon;
@@ -14,7 +15,8 @@ class ComplaintsController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-        $params = ['complaints', 'refsetup'];
+        $admin = User::where('role_id', 1)->first();
+        $params = ['complaints', 'refsetup', 'admin'];
         $refsetup = RefSetup::whereIn("for", ["comptype", "compstatus"])->with("referential")->get();
         
         $columns = \Schema::getColumnListing('residents');
@@ -38,13 +40,15 @@ class ComplaintsController extends Controller
         $dateto = $request->txtcomplaintdateto;
 
         if($search){
-            $query->where(function ($q) use ($search){
-                $q->where('complaint_type', 'like', "%$search%")
-                ->orWhere('purpose', 'like', "%$search%")
-                ->orWhere('details', 'like', "%$search%")
-                ->orWhere(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), 'like', "%$search%")
-                ->when($user->role->role === 'Resident', function($q) use($search, $user){
-                    $q->orWhere('complaints.resident_id', $user->resident->id);
+            $query->where(function ($q) use ($search, $user){
+                $q->where(function ($sub) use ($search){
+                    $sub->where('complaint_type', 'like', "%$search%")
+                        ->orWhere('purpose', 'like', "%$search%")
+                        ->orWhere('details', 'like', "%$search%")
+                        ->orWhere(DB::raw("CONCAT(residents.last_name, ' ', residents.first_name, ' ', residents.middle_name)"), 'like', "%$search%");
+                })
+                ->when($user->role->role === 'Resident', function ($sub) use ($user){
+                    $sub->where('complaints.resident_id', $user->resident->id);
                 });
             });
             $searchkey = $search;
@@ -52,7 +56,7 @@ class ComplaintsController extends Controller
         }
         else{
             $query->when($user->role->role == 'Resident', function($q) use($user){
-                $q->orWhere('complaints.resident_id', $user->resident->id);
+                $q->where('complaints.resident_id', $user->resident->id);
             });
         }
 
@@ -86,7 +90,8 @@ class ComplaintsController extends Controller
         $complaint->complaint_to = $request->compdefid;
         $complaint->purpose = $request->comppurpose;
         $complaint->details = $request->compremarks ?? 'N/A';
-        $complaint->report_to = Auth::user()->id;
+        $admin = User::where('role_id', 1)->first();
+        $complaint->report_to = $admin->id;
         $complaint->save();
 
         return redirect()->back()->with("success", "Complaint has been added.");
@@ -101,7 +106,6 @@ class ComplaintsController extends Controller
         $complaint->complaint_to = $request->compdefid;
         $complaint->purpose = $request->comppurpose;
         $complaint->details = $request->compremarks;
-        $complaint->report_to = Auth::user()->id;
         $complaint->save();
 
         return redirect()->back()->with("success", "Complaint has been updated.");
