@@ -14,7 +14,7 @@ class CascadeDeleteResidentRecords extends Migration
     public function up()
     {
         Schema::table('complaints', function (Blueprint $table) {
-            $table->dropForeign('resident_id');
+            $table->dropForeign('complaints_resident_id_foreign');
             $table->unsignedBigInteger('resident_id')->change();
             $table->foreign('resident_id')
                   ->references('id')
