@@ -15,7 +15,10 @@ class CreateResidentOccupantsTable extends Migration
     {
         Schema::create('resident_occupants', function (Blueprint $table) {
             $table->id();
-            $table->integer("resident_id");
+            $table->foreign('resident_id')
+                  ->references('id')
+                  ->on('residents')
+                  ->onDelete('cascade');
             $table->string("last_name", 100);
             $table->string("first_name", 100);
             $table->string("middle_name", 100)->nullable();

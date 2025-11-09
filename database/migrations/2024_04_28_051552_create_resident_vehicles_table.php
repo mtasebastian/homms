@@ -15,7 +15,10 @@ class CreateResidentVehiclesTable extends Migration
     {
         Schema::create('resident_vehicles', function (Blueprint $table) {
             $table->id();
-            $table->integer("resident_id");
+            $table->foreign('resident_id')
+                  ->references('id')
+                  ->on('residents')
+                  ->onDelete('cascade');
             $table->string("type", 150);
             $table->string("brand", 150);
             $table->string("model", 150);

@@ -15,7 +15,10 @@ class CreateComplaintsTable extends Migration
     {
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
-            $table->integer("resident_id");
+            $table->foreign('resident_id')
+                  ->references('id')
+                  ->on('residents')
+                  ->onDelete('cascade');
             $table->string("complaint_type", 100);
             $table->integer("report_to");
             $table->integer("complaint_to")->nullable();

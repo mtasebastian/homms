@@ -15,7 +15,10 @@ class CreateResidentPetsTable extends Migration
     {
         Schema::create('resident_pets', function (Blueprint $table) {
             $table->id();
-            $table->integer("resident_id");
+            $table->foreign('resident_id')
+                  ->references('id')
+                  ->on('residents')
+                  ->onDelete('cascade');
             $table->string("type", 150);
             $table->string("breed", 150);
             $table->string("name", 100);

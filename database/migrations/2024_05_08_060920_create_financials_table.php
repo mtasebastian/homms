@@ -15,7 +15,10 @@ class CreateFinancialsTable extends Migration
     {
         Schema::create('financials', function (Blueprint $table) {
             $table->id();
-            $table->integer("resident_id");
+            $table->foreign('resident_id')
+                  ->references('id')
+                  ->on('residents')
+                  ->onDelete('cascade');
             $table->date("bill_period");
             $table->decimal("bill_amount", 20, 6)->default(0);
             $table->decimal("balance", 20, 6)->default(0);

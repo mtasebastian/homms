@@ -22,7 +22,10 @@ class CreateRequestsTable extends Migration
             $table->date("pullout_delivery_date");
             $table->date("valid_from");
             $table->date("valid_to");
-            $table->integer("requested_by");
+            $table->foreign('requested_by')
+                  ->references('id')
+                  ->on('residents')
+                  ->onDelete('cascade');
             $table->integer("approved_by")->nullable();
             $table->integer("checked_by")->nullable();
             $table->string("request_status")->default("Pending");
