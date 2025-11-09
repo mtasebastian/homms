@@ -14,6 +14,7 @@ class CascadeDeleteResidentRecords extends Migration
     public function up()
     {
         Schema::table('complaints', function (Blueprint $table) {
+            $table->dropForeign('resident_id');
             $table->unsignedBigInteger('resident_id')->change();
             $table->foreign('resident_id')
                   ->references('id')
@@ -21,6 +22,7 @@ class CascadeDeleteResidentRecords extends Migration
                   ->onDelete('cascade');
         });
         Schema::table('financials', function (Blueprint $table) {
+            $table->dropForeign('resident_id');
             $table->unsignedBigInteger('resident_id')->change();
             $table->foreign('resident_id')
                   ->references('id')
@@ -28,6 +30,7 @@ class CascadeDeleteResidentRecords extends Migration
                   ->onDelete('cascade');
         });
         Schema::table('requests', function (Blueprint $table) {
+            $table->dropForeign('resident_id');
             $table->unsignedBigInteger('requested_by')->change();
             $table->foreign('requested_by')
                   ->references('id')
