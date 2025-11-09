@@ -22,6 +22,7 @@ class CreateRequestsTable extends Migration
             $table->date("pullout_delivery_date");
             $table->date("valid_from");
             $table->date("valid_to");
+            $table->unsignedBigInteger('requested_by');
             $table->foreign('requested_by')
                   ->references('id')
                   ->on('residents')

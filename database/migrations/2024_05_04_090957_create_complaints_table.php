@@ -15,6 +15,7 @@ class CreateComplaintsTable extends Migration
     {
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('resident_id');
             $table->foreign('resident_id')
                   ->references('id')
                   ->on('residents')
