@@ -15,6 +15,7 @@ class CreateResidentPetsTable extends Migration
     {
         Schema::create('resident_pets', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('resident_id');
             $table->foreign('resident_id')
                   ->references('id')
                   ->on('residents')
