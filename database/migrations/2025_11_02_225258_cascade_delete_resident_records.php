@@ -22,7 +22,7 @@ class CascadeDeleteResidentRecords extends Migration
                   ->onDelete('cascade');
         });
         Schema::table('financials', function (Blueprint $table) {
-            $table->dropForeign('resident_id');
+            $table->dropForeign('financials_resident_id_foreign');
             $table->unsignedBigInteger('resident_id')->change();
             $table->foreign('resident_id')
                   ->references('id')
@@ -38,7 +38,7 @@ class CascadeDeleteResidentRecords extends Migration
                   ->onDelete('cascade');
         });
         Schema::table('resident_occupants', function (Blueprint $table) {
-            $table->dropForeign('resident_id');
+            $table->dropForeign('resident_occupants_resident_id_foreign');
             $table->unsignedBigInteger('resident_id')->change();
             $table->foreign('resident_id')
                   ->references('id')
@@ -46,7 +46,7 @@ class CascadeDeleteResidentRecords extends Migration
                   ->onDelete('cascade');
         });
         Schema::table('resident_pets', function (Blueprint $table) {
-            $table->dropForeign('resident_id');
+            $table->dropForeign('resident_pets_resident_id_foreign');
             $table->unsignedBigInteger('resident_id')->change();
             $table->foreign('resident_id')
                   ->references('id')
@@ -54,7 +54,7 @@ class CascadeDeleteResidentRecords extends Migration
                   ->onDelete('cascade');
         });
         Schema::table('resident_vehicles', function (Blueprint $table) {
-            $table->dropForeign('resident_id');
+            $table->dropForeign('resident_vehicles_resident_id_foreign');
             $table->unsignedBigInteger('resident_id')->change();
             $table->foreign('resident_id')
                   ->references('id')
